@@ -4,6 +4,32 @@
 
 ---
 
+<a id="pravesh"></a>
+
+## પ્રવેશ પ્રકરણ — આગાહી અને સ્વ-કસોટી
+
+**આગાહી (રમકડા-agent, tool વગર) 🧪:** `fakeModel` પહેલી જ વાર text આપે છે, તેથી:
+
+```text
+#0 turn/start {}
+#1 step/start {"step":1}
+#2 step/end {"step":1}
+#3 turn/end {"reason":"completed","modelCalls":1,"messagesSentLast":1}
+જવાબ: આજના મેનુમાં 1 વાનગી છે.
+```
+
+(1) **1 step**, (2) `tool/call` **નથી**, (3) `messagesSentLast` = **1** (ફક્ત તમારું task), (4) "**1 વાનગી**" — કારણ કે `last.content` હવે તમારું એક-line નું task છે, મેનુ નહીં. શીખ: model ને જે ન મોકલો તે તેને ખબર જ નથી; tool ન વપરાય તો જવાબ ખોટો પણ આત્મવિશ્વાસુ દેખાઈ શકે.
+
+**સ્વ-કસોટી:**
+
+1. `cd ~/bhojanalay` સફળ થાય એટલે `ls nofile` ચાલે, file ન હોવાથી નિષ્ફળ જાય, અને `echo $?` છેલ્લે `2` છાપે (GNU `ls`). 🧪 `&&` ને બદલે `;` હોત તો `cd` નિષ્ફળ જાય તો પણ `ls` ચાલત — ખોટા folder માં.
+2. JSON: `{"table": 4, "dish": "ગુજરાતી થાળી", "qty": 2}`; YAML: `table: 4` / `dish: ગુજરાતી થાળી` / `qty: 2` (દરેક અલગ line).
+3. `await` Promise પૂરું થાય ત્યાં સુધી એ function ને રોકે છે (બાકીનો program અટકતો નથી). Model call network પર સમય લે છે; જવાબ આવ્યા પહેલાં આગળ વધીએ તો હાથમાં કંઈ ન હોય.
+4. નવો `kind` ઉમેરો અને `switch` માં case ભૂલી જાઓ તો `default` માં value નો type `never` નહીં રહે, તેથી `tsc` compile જ ન કરે — ભૂલ ચલાવતા પહેલાં પકડાય.
+5. સાંકળ ત્યાં જ અટકે; છેલ્લું (default) કામ ચાલે જ નહીં. `waterfall.mjs` માં B નું પરિણામ `undefined` આવ્યું — રસોડા સુધી ઓર્ડર ન પહોંચ્યો. 🧪
+
+---
+
 <a id="lab-0"></a>
 
 ## Lab 0 — આગાહી: `apply` throw કરે ત્યારે
