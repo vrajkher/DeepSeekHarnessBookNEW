@@ -73,8 +73,10 @@ flowchart LR
 > 📦 **Normalize** — જુદી જુદી રીતે લખેલી માહિતીને એક જ ધોરણમાં ફેરવવી. ત્રણ વસ્તુ — **યાદ-ચાવી "રૂતાન" — રૂપિયા, તારીખ, નંબર:**
 >
 > - **રૂ**પિયા → integer **paise**: `1,23,456.50` → `12345650`. **કેમ?** Computer માં `0.1 + 0.2` એ બરાબર `0.3` નથી આવતું (**floating point** ભૂલ); પૈસામાં એક પૈસાની ભૂલ પણ ન ચાલે. પૂર્ણાંક પૈસામાં આ સમસ્યા નથી.
-> - **તા**રીખ → એક જ format, local **timezone** વગર — નહીં તો રાત્રે 11:30 ની entry બીજા દેશના સમય મુજબ બીજા દિવસે ગણાય.
-> - **ન**ંબર (reference) → leading zeros કાઢી: `004512` → `4512`.
+> - **તા**રીખ → **ISO** `YYYY-MM-DD`: `1-Apr-2026` (Tally), `01-04-2026` (bank), `01/04/2026` — બધું `2026-04-01`; `31-02-2026` જેવી અશક્ય તારીખ નકારાય (V1). Local **timezone** વગર — નહીં તો રાત્રે 11:30 ની entry બીજા દેશના સમય મુજબ બીજા દિવસે ગણાય.
+> - **ન**ંબર (reference) → uppercase, ફક્ત અક્ષર-અંક, આંકડાવાળા ref ના આગળના શૂન્ય દૂર (`004512` = `4512`), અને `-` = ખાલી.
+>
+> 📦 **ISO date** — વર્ષ-મહિનો-દિવસ ક્રમવાળું આંતરરાષ્ટ્રીય ધોરણ; text તરીકે sort કરો તો પણ તારીખ-ક્રમ સાચો આવે. ઉદાહરણ: `1500000` paise = ₹15,000.
 
 > **Data notice.** Fixtures ના બધા નામ, reference numbers અને રકમ પુસ્તક માટે બનાવેલાં **synthetic** છે ([fixtures/README.md](../labs/reconcile/fixtures/README.md)). Tally export નો column layout પણ અમે ધારેલો નમૂનો છે; સાચા Tally export સાથે સરખાવ્યો નથી. ⚠️ તેથી column names `Config` માં છે.
 >
@@ -165,9 +167,11 @@ REJECTED [V1] bank L11: COLUMN_COUNT: expected 7 fields, found 3
 
 [plugin.ts](../labs/reconcile/src/plugin.ts) એ પ્રકરણ 4 નો જ નમૂનો છે, ત્રણ ઉમેરા સાથે:
 
-1. **Column names config માં** (`bankColumns`, `tallyColumns`) — બીજી bank નું export? Overlay માં names બદલો, code નહીં. ખોટું નામ હોય તો fail loud: matching શરૂ થાય તે પહેલાં `assertColumns` દરેક configured column header માં છે કે નહીં તે તપાસે છે. નહીં તો ખૂટતો `Debit` column ચૂપચાપ શૂન્ય ગણાય — ₹900 નું withdrawal ગાયબ થઈ entry ખોટી રીતે R1 match થાય. (પ્રકરણ 4.4 ની ત્રીજી review finding — "ચૂપ સાચું = ખતરનાક".)
+1. **Column names config માં** (`bankColumns`, `tallyColumns`) — બીજી bank નું export? Overlay માં names બદલો, code નહીં. ખોટું નામ હોય તો fail loud: matching શરૂ થાય તે પહેલાં `assertColumns` દરેક configured column header માં છે કે નહીં તે તપાસે છે, અને ન હોય તો `ReconcileConfigError` ("bank export is missing configured column(s) … header is (…)"). નહીં તો ખૂટતો `Debit` column ચૂપચાપ શૂન્ય ગણાય — ₹900 નું withdrawal ગાયબ થઈ entry ખોટી રીતે R1 match થાય. (પ્રકરણ 4.4 ની ત્રીજી review finding — "ચૂપ સાચું = ખતરનાક".)
 2. **`windowDays`** — config default 3, અને model દરેક call માં `window_days` (integer) આપી શકે. Negative value schema-level validation માં error બને છે (test).
 3. **Canonical JSON report** — દરેક `ResultRow` માં `status`, `rule`, `bankLines`, `tallyLines`, `amount`, `reason`. UI કે બીજો tool line-level trace આ JSON માંથી બનાવી શકે.
+
+> 📦 **Traceability** — દરેક પરિણામથી તેની input lines અને નિયમ સુધી પાછા પહોંચી શકાય. ઉદાહરણ: `bank L5 ↔ tally L5,L6 [A1]`. 🍽️ પગેરું — મુનીમજી આંગળી મૂકી ચકાસી શકે.
 
 ## Source map: આ ક્રમમાં ખોલો
 
@@ -275,6 +279,8 @@ node --import tsx --test reconcile/test/*.test.ts
 > 💡 **મીરાદીદીની ટીપ (જવાબ નહીં, દિશા):** reviewer ના વાક્યમાં ત્રણ શબ્દ પર ગોળ કરો — "**આપ્યો**", "**મળ્યા**", "**R2**". પછી 7.2 ની R2 શરતનો **દરેક** શબ્દ વાંચો, અને 7.1 નું sign convention યાદ કરો.
 
 અમારો solution test: [challenge/sign.test.ts](../labs/reconcile/challenge/sign.test.ts) (🧪 bug સાથે `fail 1`: `actual: ['matched']`, fix સાથે `pass 1`). સમજૂતી: [પરિશિષ્ટ D — challenge](../appendix/D-lab-solutions.md#challenge).
+
+**શીખ (પરીક્ષા પછી વાંચો):** tests ફક્ત fixtures પરથી નહીં, **દરેક નિયમની દરેક શરત** (amount, **sign**, window, uniqueness) પરથી લખો — દરેક શરત માટે એક "ના" વાળો case. 📦 **Property-based test** — હજારો random inputs પર એક નિયમ ચકાસતો test (દા.ત. "કોઈ match માં બંને amounts નું sign સરખું હોય"); repository ની devDependencies માં `fast-check` આ માટે છે. ⚠️ અમે property test લખ્યો નથી.
 
 ## 7.8 🔴 Design review
 

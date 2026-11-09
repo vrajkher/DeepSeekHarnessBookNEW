@@ -12,11 +12,12 @@ const [markedPath, outPath] = process.argv.slice(2)
 if (!markedPath || !outPath) { console.error('usage: build-artifact.mjs <marked.esm.js> <out.html>'); process.exit(2) }
 const { Marked } = await import(pathToFileURL(resolve(markedPath)).href)
 const ROOT = resolve(import.meta.dirname, '..')
-const REPO = 'https://github.com/vrajkher/DeepSeekHarnessBook/blob/main/'
+const REPO = 'https://github.com/vrajkher/DeepSeekHarnessBookNEW/blob/main/'
 
 const VIEWS = [
   ['README.md', 'top', 'શરૂઆત', 'Cover'],
   ['book/overview-samagra-naksho.md', 'overview', 'સમગ્ર નકશો', 'પહેલાં વાંચો'],
+  ['book/pravesh-shunya-thi-shuruaat.md', 'pravesh', 'પ્રવેશ — શૂન્યથી શરૂઆત', 'Level −1'],
   ['book/00-paayo-ane-pratham-run.md', 'ch0', 'પાયો અને પ્રથમ run', 'Level 0'],
   ['book/01-request-ni-musafari.md', 'ch1', 'એક requestની આખી મુસાફરી', 'Level 1'],
   ['book/02-cordis-plugin-architecture.md', 'ch2', 'Cordis અને plugin architecture', 'Level 2'],
@@ -61,7 +62,7 @@ for (const [file, view, title, eyebrow] of VIEWS) {
       heading({ tokens, depth }) {
         const text = this.parser.parseInline(tokens)
         const id = `${view}-h${++h}`
-        if (depth === 2) heads.push({ id, text: text.replace(/<[^>]+>/g, '') })
+        if (depth === 2) heads.push({ id, text: text.replace(/<[^>]+>/g, '') }) // already HTML-escaped by marked
         const level = Math.min(depth + 1, 6)
         return depth === 1
           ? `<h2 class="chapter-title" id="${id}"><span class="eyebrow">${esc(eyebrow)}</span>${text}</h2>\n`
@@ -88,9 +89,9 @@ for (const [file, view, title, eyebrow] of VIEWS) {
 }
 
 const navItem = t => `<li><a href="#${t.view}" data-view="${t.view}"><span class="nav-eyebrow">${esc(t.eyebrow)}</span><span class="nav-title">${esc(t.title)}</span></a>${
-  t.heads.length && (t.view.startsWith('ch') || t.view === 'overview') ? `<ol class="sub">${t.heads.map(x => `<li><a href="#${x.id}">${esc(x.text)}</a></li>`).join('')}</ol>` : ''}</li>`
+  t.heads.length && (t.view.startsWith('ch') || t.view === 'overview' || t.view === 'pravesh') ? `<ol class="sub">${t.heads.map(x => `<li><a href="#${x.id}">${x.text}</a></li>`).join('')}</ol>` : ''}</li>`
 const groups = [
-  ['પ્રકરણો', toc.filter(t => t.view === 'top' || t.view === 'overview' || t.view.startsWith('ch'))],
+  ['પ્રકરણો', toc.filter(t => t.view === 'top' || t.view === 'overview' || t.view === 'pravesh' || t.view.startsWith('ch'))],
   ['પરિશિષ્ટ', toc.filter(t => t.view.startsWith('appendix') || t.view === 'citations' || t.view === 'labs')],
 ]
 const nav = groups.map(([label, items]) => `<p class="nav-group">${label}</p><ol class="nav-list">${items.map(navItem).join('')}</ol>`).join('')

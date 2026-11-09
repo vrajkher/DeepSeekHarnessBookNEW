@@ -3,6 +3,17 @@
 બધા commands harness checkout ના root માંથી, સિવાય કે અલગ લખ્યું હોય. Placeholders: `<harness>` = checkout path, `<book>` = આ પુસ્તકનો checkout.
 🧪 = આ પુસ્તક માટે ચલાવ્યું.
 
+## પ્રવેશ પ્રકરણ (harness વગર, આ પુસ્તકના checkout ના root માંથી)
+
+| હેતુ | Command | |
+|---|---|---|
+| Object, array, function | `node labs/pravesh/thali.mjs` | 🧪 Node v22.23.4 |
+| `async`/`await` + `AbortController` | `node labs/pravesh/rasoi-async.mjs` | 🧪 |
+| Waterfall અને `next()` નું રમકડું | `node labs/pravesh/waterfall.mjs` | 🧪 |
+| 40-line રમકડા-agent | `node labs/pravesh/toy-agent.mjs` | 🧪 |
+| TypeScript types (type stripping) | `node labs/pravesh/types.ts` | 🧪 |
+| છેલ્લા command નો exit code | `echo $?` | 🧪 |
+
 ## Setup
 
 | હેતુ | Command | |

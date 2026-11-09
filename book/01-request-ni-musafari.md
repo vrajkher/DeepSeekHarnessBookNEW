@@ -200,7 +200,7 @@ session.append('turn/end', { turn, reason })            // turn અહીં પ
 - **`turn/end`** એ `finally` block માં ([line 422][loop-turn-end]) લખાય છે, તેથી error, abort કે success — દરેક રસ્તે turn બંધ થાય છે. Reason `completed`, `error`, `aborted`, `blocked`, કે `max-tokens` હોય છે.
 - Step નિષ્ફળ જાય અને કોઈ tool call નું પરિણામ બાકી હોય, તો loop [`toolRecovery.results()`][loop-recovery] વડે ખૂટતા `tool/result` લખે છે, જેથી log માં દરેક call ને જવાબ મળે.
 
-> 🍽️ **ભોજનાલયમાં:** પપ્પાનો નિયમ છે — "ચોપડામાં જે ઓર્ડર શરૂ થયો, તેનો અંત પણ લખાવો જોઈએ: પીરસાયો, ગ્રાહક ચાલ્યો ગયો, કે લાઈટ ગઈ." `finally` એ જ નિયમ છે.
+> 🍽️ **ભોજનાલયમાં:** પપ્પાનો નિયમ છે — "ચોપડામાં જે ઓર્ડર શરૂ થયો, તેનો અંત પણ લખાવો જોઈએ: પીરસાયો, ગ્રાહક ચાલ્યો ગયો, કે લાઈટ ગઈ." `finally` એ જ નિયમ છે. પ્રકરણ 3 અને 5 માં Ctrl+C પછી પણ `turn/end {"kind":"aborted"}` દેખાશે, અને resume આ જ જોડ પર આધાર રાખે છે.
 
 **Turn ના પાંચ અંત — યાદ-ચાવી "પૂ-ભૂ-ર-રો-મ":** **પૂ**ર્ણ (completed), **ભૂ**લ (error), **ર**દ (aborted), **રો**ક (blocked), **મ**ર્યાદા (max-tokens).
 

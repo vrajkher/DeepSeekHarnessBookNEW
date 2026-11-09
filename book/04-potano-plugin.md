@@ -319,7 +319,10 @@ book-csv-compare (file:///…/csv-inspect/src/plugin.ts): ValidationError: inval
 | Deterministic | એ જ input → એ જ output | sorted report | "સો વાર, એ જ હિસાબ" |
 | Duplicate key | એક key એકથી વધુ વાર | `INV-1004` | "બે વાર લખ્યું" |
 | Invariant | હંમેશા સાચી રહેતી શરત | "દરેક line બરાબર એક વાર" | "હિસાબ પૂરો" |
+| Header | CSV ની પહેલી line, column નામો | `Ref,Date,Party,Amount` | "કોષ્ટકનું માથું" |
 | Pure logic | બહારની દુનિયા વગરની ગણતરી | `compareTables` | "કાગળ પર ગણતરી" |
+| Unit test | એક નાનો ભાગ એકલો ચકાસતો test | `compare.test.ts` | "એક પૈડું તપાસો" |
+| `node:test` | Node નો built-in test runner | `node --test` | "ઘરનો પરીક્ષક" |
 | Integration test | ઘણા ભાગ જોડીને તપાસ | `plugin.test.ts` | "આખું કાઉન્ટર ચલાવી જોવું" |
 | `isConcurrencySafe` | બીજા સાથે parallel ચાલી શકે | `() => true` | "વાંચવા સાથે, લખવા એકલા" |
 | Fail loud | ખોટી config પર load વખતે જ ભૂલ | `ValidationError` | "સવારે જ બૂમ" |
@@ -360,6 +363,11 @@ book-csv-compare (file:///…/csv-inspect/src/plugin.ts): ValidationError: inval
 <details><summary>4. Disable કર્યા પછી model `csv_compare` માંગે તો?</summary>
 
 `Error: unknown tool "csv_compare"`, code `UNKNOWN_TOOL`; turn ચાલુ રહે.
+</details>
+
+<details><summary>5. Header માં `Amount,Amount` હોય તો?</summary>
+
+કોઈ row સ્વીકારાતી નથી: header માટે `DUPLICATE_HEADER` problem, અને દરેક data row માટે `INVALID_HEADER` — નહીં તો બીજો `Amount` પહેલાને ચૂપચાપ ઢાંકી દે.
 </details>
 
 ### મિત્રને સમજાવો (3 મિનિટ)

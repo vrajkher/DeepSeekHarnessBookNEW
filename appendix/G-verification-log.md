@@ -19,6 +19,23 @@
 1. **`cdn.sheetjs.com` blocked.** Client package `ui-sidebar-documentpreview` એ `xlsx` ને `https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz` થી માંગે છે; અમારું network `403` આપે છે. અમે `pnpm-workspace.yaml` ના `overrides` માં `'xlsx': '0.18.5'` ઉમેરી `pnpm install --no-frozen-lockfile` ચલાવ્યું, અને `packages/client/ui-sidebar-documentpreview/src/client/excel/xlsx-sandbox-shim.d.ts` માં `declare module 'xlsx/dist/cpexcel.full.mjs'` ઉમેર્યું. આ ફક્ત Web document preview ને અસર કરે છે; agent/Host path ને નહીં. **તમારું network CDN સુધી પહોંચે તો આ ન કરશો.**
 2. Citations બીજા, **અસ્પૃશ્ય** `git worktree` (pinned SHA) માંથી બનાવ્યાં, જેથી scratch ફેરફારો line numbers ન બદલે.
 
+## 2026-11-09 નું પુનર્લેખન (12મા ધોરણના વાચક માટે)
+
+પુસ્તકનો text વાર્તા-આધારિત રીતે ફરી લખાયો; technical દાવા, commands, outputs, evidence અને source links મૂળ પુસ્તક જેવા જ રાખ્યા છે. આ પુનર્લેખન દરમિયાન નવું શું ચલાવ્યું:
+
+| દાવો | પુરાવો |
+|---|---|
+| `labs/pravesh/*.mjs` અને `types.ts` ના outputs પ્રવેશ પ્રકરણમાં છાપ્યા મુજબ | 🧪 Node v22.23.4 (Linux x64) પર ચલાવ્યા, exit 0 |
+| `types.ts` strict type-check સ્વચ્છ; `const n: number = 'x'` → `TS2322` | 🧪 TypeScript 6.0.3 `tsc --noEmit --strict` |
+| ખોટા folder માંથી `node labs/pravesh/thali.mjs` → `Cannot find module`, exit 1 | 🧪 |
+| `ls nofile` → exit 2 | 🧪 GNU coreutils |
+| પ્રવેશ આગાહી: tool વગરનો રમકડા-agent → 1 step, `messagesSentLast: 1` | 🧪 |
+| Fiber states ના નામ (`PENDING` … `UNLOADING`) | ✅ `vendor/cordis/src/fiber.ts`; પ્રકરણ 2 નું state ચિત્ર transitions સરળ કરે છે ⚠️ |
+| Retryable codes (`RATE_LIMIT`, `SERVER`, `TIMEOUT`, `TRANSPORT`, empty response) | ✅ `packages/llm/llm/src/retry-policy.ts#L14-L24` |
+| `tools/verify_book.py` (pinned shallow clone સામે) અને `tools/verify-mermaid.mjs` (mermaid 11.17.2, jsdom 29.1.1) | 🧪 બંને 0 errors |
+
+આ પુનર્લેખનમાં harness labs (`run-mock.sh`, tests) **ફરી ચલાવ્યા નથી**; તેમનો code બદલાયો નથી, અને તેમના outputs મૂળ 2026-11-04 ના runs ([evidence/](../evidence/)) માંથી છે.
+
 ## Runtime-verified (🧪)
 
 | દાવો | પુરાવો |

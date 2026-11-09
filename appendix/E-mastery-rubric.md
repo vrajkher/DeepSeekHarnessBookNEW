@@ -15,6 +15,7 @@
 
 | # | કુશળતા | 2 (સ્વતંત્ર) માટે પુરાવો | 3 (maintainer) માટે વધારાનો પુરાવો | પ્રકરણ |
 |---|---|---|---|---|
+| 0 | પાયાની સમજ | પ્રવેશ પ્રકરણના પાંચેય programs નું output ચલાવતા પહેલાં સાચું ધારો; shell નિશાન (`&&`, `\|`, `$( )`, `VAR=value`) સમજાવો | રમકડા-agent માં બીજો tool ઉમેરી તેના turn/step events ધારો અને ચકાસો | પ્રવેશ |
 | 1 | Setup અને pin | clone, pin, install, build — output સાથે; pin ચકાસો | નવા commit પર setup ના ફેરફારો શોધી નોંધો | 0 |
 | 2 | Architecture સમજાવવું | 5 મિનિટમાં profile → bundle → rows → services → loop સમજાવો, links સાથે | Cordis vs Harness ની સીમા ખોટી હોય તેવું ઉદાહરણ ઓળખો | 2 |
 | 3 | Request trace | README ઉદાહરણનો sequence diagram, દરેક node નો file/symbol, trace output સાથે | ત્રીજો (title) call અને retries diagram માં ઉમેરો | 1 |
@@ -28,11 +29,12 @@
 
 ## પાસ થવાના નિયમ
 
-- **Level 7 પૂર્ણ:** બધી 10 dimensions માં ઓછામાં ઓછું 2, અને 5, 6, 9 માં 3.
+- **Level 7 પૂર્ણ:** બધી 11 dimensions (0–10) માં ઓછામાં ઓછું 2, અને 5, 6, 9 માં 3.
 - કોઈ dimension માં 0 હોય તો આગળના પ્રકરણ પર જતાં પહેલાં તે પ્રકરણનો lab ફરી કરો.
 
 ## Self-check checklist (પરીક્ષા પહેલાં)
 
+- [ ] `node labs/pravesh/toy-agent.mjs` નું output ચલાવતા પહેલાં લખી શકો છો (2 model calls, છેલ્લે 3 messages).
 - [ ] `git log -1` pinned SHA બતાવે છે.
 - [ ] `run-mock.sh` બે `llm/stream` calls અને `turn/end completed` બતાવે છે.
 - [ ] `--dump-config` માં 101 rows; `tools`, `agent-loop`, `fs-sandbox` નું મૂળ layer ખબર છે.

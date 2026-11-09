@@ -12,6 +12,7 @@ cp -r labs <harness>/tmp/book-labs
 
 | Folder | Chapter | What it is |
 |---|---|---|
+| `pravesh/` | પ્રવેશ | harness-free beginner programs: `thali.mjs` (objects/functions), `rasoi-async.mjs` (async/await, AbortController), `waterfall.mjs` (toy `next()` chain), `toy-agent.mjs` (40-line toy agent with turn/step/log), `types.ts` (TypeScript types). Run directly with `node` from the book root; no harness checkout needed. |
 | `cordis-basics/` | 0, 2 | `bin-with-logs.ts` (launcher that shows entry failures), deterministic tutorial ch.7 `greet` |
 | `greet/` | 4 | the user-guide `greet` tool with a configurable greeting |
 | `request-trace/` | 1, 3, 5 | `run-mock.sh` (keyless headless run), `trace-events.ts` observer, `capture-wire.ts`, `print-session.mjs` |

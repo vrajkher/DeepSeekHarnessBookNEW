@@ -190,7 +190,7 @@ sequenceDiagram
 
 Design: runner નું પોતાનું fiber `ACTIVE` ન હોય ([`FiberState`][cordis-fiberstate]) તો tree teardown માં છે; ત્યારે exit status launcher નો છે, runner નો નહીં. ત્રણ lines, એક જ package. 🍽️ "દુકાન બંધ થઈ રહી હોય (મારું હાજરી-કાર્ડ હવે 'કામ પર' નથી), તો તિજોરી ખોલવા ન જાઓ, બૂમ ન પાડો — દરવાજાનો નિર્ણય મેનેજરનો."
 
-**યાદ-ચાવી "દુકાન બંધ ≠ ઓર્ડર રદ":** `signal.aborted` એ **ઓર્ડર** (turn) રદ થયાનો સંકેત છે; `ctx.fiber.state` એ **કાઉન્ટર** (runner plugin) ખુદ જીવંત છે કે નહીં તે કહે છે. અહીં પ્રશ્ન કાઉન્ટરના જીવનનો છે, તેથી fiber state. (Mastery check પ્રશ્ન 4.)
+**યાદ-ચાવી "દુકાન બંધ ≠ ઓર્ડર રદ":** `signal.aborted` એ **ઓર્ડર** (turn) રદ થયાનો સંકેત છે; `ctx.fiber.state` એ **કાઉન્ટર** (runner plugin) ખુદ જીવંત છે કે નહીં તે કહે છે. અહીં પ્રશ્ન કાઉન્ટરના જીવનનો છે, તેથી fiber state. ઊલટું વિચારો: user ફક્ત **એક turn** રદ કરે અને app ચાલુ રહે, ત્યારે runner એ report કરવું **જ** જોઈએ — `signal.aborted` વાપર્યું હોત તો એ સાચો report પણ ચૂપ થઈ જાત. (Mastery check પ્રશ્ન 4.)
 
 ### 5. Regression test — સાબિતી
 
@@ -203,7 +203,7 @@ Design: runner નું પોતાનું fiber `ACTIVE` ન હોય ([`F
 
 > 📦 **Assertion** — "આ સાચું હોવું જ જોઈએ" ની ચકાસણી; ખોટું હોય તો test fail. અહીં: stderr ખાલી, અને runner એ કોઈ exit માંગ્યો નથી.
 
-**પ્રામાણિક નોંધ:** પહેલા draft માં અમે `session/flush` listener stub કરી "closed handle" ઉત્પન્ન કરવા માંગતા હતા, પણ root dispose એ stub listener ને પણ કાઢી નાખે છે. તેથી test **flush error** નહીં, પણ એ જ root cause નું બીજું લક્ષણ પકડે છે: patch વગર runner `io.exit(1)` માંગે છે (aborted summary). Test નું નામ એ જ બતાવે છે: "leaves reporting and exit status to the launcher when the tree is disposed mid-turn".
+**પ્રામાણિક નોંધ:** પહેલા draft માં અમે `session/flush` listener stub કરી "closed handle" ઉત્પન્ન કરવા માંગતા હતા, પણ root dispose એ stub listener ને પણ કાઢી નાખે છે. તેથી test **flush error** નહીં, પણ એ જ root cause નું બીજું લક્ષણ પકડે છે: patch વગર runner `io.exit(1)` માંગે છે (aborted summary). Test નું નામ એ જ બતાવે છે: "leaves reporting and exit status to the launcher when the tree is disposed mid-turn". **શીખ:** test ખરેખર શું ચકાસે છે તે તેના નામમાં પ્રામાણિકપણે લખો — ઇચ્છેલું નહીં, થયેલું.
 
 > 📦 **Stub** — ખરા ભાગની જગ્યાએ મૂકેલો નકલી, સાદો ભાગ — test માટે. 🍽️ પૂતળું.
 
