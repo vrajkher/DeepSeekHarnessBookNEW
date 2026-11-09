@@ -1,18 +1,44 @@
 # પ્રકરણ 6 — Maintainer અને architecture level
 
-> 🧭 **નવું:** આ પ્રકરણ અઘરું લાગે તો પહેલાં નીચેનો [સરળ સમજ](#saral-samaj) વિભાગ વાંચો (ઉપમા, નવા શબ્દો, યાદ રાખવાની રીતો). આખા પુસ્તકનો નકશો: [સમગ્ર નકશો](overview-samagra-naksho.md).
+> **Level 6 · 🟡 ત્રણ માર્ગ અને માપન, 🔴 contribution ની ઝીણી વિગતો.** વાર્તાનો દિવસ 12–13.
+> હવે "કેવી રીતે ચાલે છે" થી આગળ વધી "ક્યાં બદલવું" પૂછીએ. ત્રણ extension માર્ગ સરખાવીએ,
+> એક વર્તન માપીએ, અને problem statement થી patch, regression test અને review notes સુધીનું એક સાચું contribution કરીએ. આખો નકશો: [સમગ્ર નકશો](overview-samagra-naksho.md).
 
-> **Level 6.** હવે "કેવી રીતે ચાલે છે" થી આગળ વધી "ક્યાં બદલવું" પૂછીએ. ત્રણ extension માર્ગ સરખાવીએ,
-> એક વર્તન માપીએ, અને problem statement થી patch, regression test અને review notes સુધીનું એક સાચું contribution કરીએ.
+## 🎬 વાર્તા: મુખ્ય કચેરીને સૂચન-પત્ર
 
-## આ પ્રકરણ પછી તમે શું કરી શકશો
+અન્નપૂર્ણા થાળી ઘર એક મોટી chain ની શાખા છે. રસોડાના નિયમો, મશીનો, ફોર્મ — બધું **મુખ્ય કચેરી** નક્કી કરે છે. શાખા પોતાની રીતે મેનુ પર ચિઠ્ઠી ચોંટાડી શકે, નવું કાઉન્ટર ખોલી શકે, પણ **ઇમારતની દીવાલ** તોડવી હોય તો મુખ્ય કચેરીની મંજૂરી જોઈએ.
+
+આરવ ઉત્સાહમાં છે: "`flush on a closed handle` ની ખોટી બૂમ સુધારવા હું સીધો મૂળ code બદલી નાખું!"
+
+મીરાદીદી શાંતિથી ત્રણ આંગળી બતાવે છે:
+
+1. "**ચિઠ્ઠી** (config) થી કામ થાય? — સૌથી સસ્તું."
+2. "નહીં તો **નવો કર્મચારી** (plugin) — દીવાલ અડ્યા વગર."
+3. "એ પણ ન ચાલે ત્યારે જ **કડિયો** (core patch) — અને ત્યારે મુખ્ય કચેરીને પુરાવા સાથેનો પત્ર."
+
+"અને પત્રમાં લાગણી નહીં, **આંકડા**. પહેલાં માપતાં શીખ — પણ પ્રામાણિકપણે: શું પાકું છે અને શું ફક્ત અંદાજ."
+
+## 🎯 આ પ્રકરણ પછી તમે શું કરી શકશો
 
 - Configuration change, plugin, અને core patch વચ્ચે source પુરાવા સાથે પસંદગી કરી શકશો.
 - Model call count અને tool latency ને વર્તન બદલ્યા વગર માપી, પરિણામની મર્યાદા પ્રામાણિકપણે લખી શકશો.
 - એક નાની ખામી માટે reproduce → root cause → patch → regression test → verification → review notes નો આખો ક્રમ પૂરો કરી શકશો.
 - ફેરફારની હાલના callers અને plugins પર અસર લખી શકશો — ખાસ કરીને machine-readable outputs પર.
 
-## 6.1 ત્રણ extension માર્ગ
+## 🗺️ આ પ્રકરણનો નકશો
+
+```mermaid
+flowchart LR
+  A["6.1 ત્રણ માર્ગ<br/>ચિઠ્ઠી · કર્મચારી · કડિયો"] --> B["6.2 માપન<br/>ગણતરી પાકી, સમય કાચો"]
+  B --> C["6.3 Contribution"]
+  C --> C1["પ્રશ્ન"] --> C2["ફરી ઉત્પન્ન"] --> C3["મૂળ કારણ"] --> C4["સુધાર (patch)"] --> C5["સાબિતી (test)"] --> C6["અસર (review notes)"]
+```
+
+> 📦 **Maintainer** — project ની સંભાળ રાખનાર: ફેરફારો review કરે, નિયમો ઘડે, લાંબા ગાળાની ગુણવત્તા જાળવે. 🍽️ મુખ્ય કચેરીના અનુભવી રસોઇયા-નિરીક્ષક.
+>
+> 📦 **Extension point** — જ્યાં મૂળ code બદલ્યા વગર નવું વર્તન જોડી શકાય તેવી જાહેર જગ્યા (service, waterfall event, seam). 🍽️ દીવાલમાં પહેલેથી મૂકેલું plug-point — નવું મશીન લાવો, દીવાલ ન તોડો.
+
+## 6.1 🟡 ત્રણ extension માર્ગ — "ચિઠ્ઠી-કર્મચારી-કડિયો"
 
 Repository ના પોતાના નિયમો દિશા બતાવે છે ([AGENTS.md][agents-conventions]):
 
@@ -23,11 +49,13 @@ Repository ના પોતાના નિયમો દિશા બતાવ�
 
 આ પુસ્તકમાં આપણે ત્રણેય માર્ગ **ખરેખર** વાપર્યા છે:
 
-| માર્ગ | આપણું ઉદાહરણ | શું બદલાયું | Restart/ship | Risk |
-|---|---|---|---|---|
-| **1. Configuration change** | `session-title-llm` row disable (પ્રકરણ 1); `maxBytes` config (પ્રકરણ 4) | YAML patch, કોઈ code નહીં | overlay/profile patch | સૌથી ઓછું — ફક્ત હાલનાં knobs |
-| **2. Plugin** | `trace-events`, `metrics` (observers), `csv_compare`, `reconcile_bank_tally` (tools) | નવો module + overlay row | overlay; unload પર બધું પાછું | ઓછું — documented extension points પર જ |
-| **3. Core patch** | headless runner teardown fix (6.3) | upstream package source | upstream PR, release | વધુ — હાલના callers પર અસર, review જરૂરી |
+| માર્ગ | 🍽️ | આપણું ઉદાહરણ | શું બદલાયું | Restart/ship | Risk |
+|---|---|---|---|---|---|
+| **1. Configuration change** | ચિઠ્ઠી | `session-title-llm` row disable (પ્રકરણ 1); `maxBytes` config (પ્રકરણ 4) | YAML patch, કોઈ code નહીં | overlay/profile patch | સૌથી ઓછું — ફક્ત હાલનાં knobs |
+| **2. Plugin** | નવો કર્મચારી | `trace-events`, `metrics` (observers), `csv_compare`, `reconcile_bank_tally` (tools) | નવો module + overlay row | overlay; unload પર બધું પાછું | ઓછું — documented extension points પર જ |
+| **3. Core patch** | કડિયો | headless runner teardown fix (6.3) | upstream package source | upstream PR, release | વધુ — હાલના callers પર અસર, review જરૂરી |
+
+> 📦 **Core patch** — project ના મૂળ code માં ફેરફાર. 📦 **Caller** — કોઈ function/program ને વાપરનાર બીજો code. 📦 **Release** — નવું version બહાર પાડવું.
 
 ### ક્યારે કયો? — source આધારિત નિર્ણય
 
@@ -43,13 +71,19 @@ flowchart TD
 
 ત્રણ ઉદાહરણ પર લાગુ:
 
-- **"Title call બંધ કરવો છે."** `--dump-config` માં `session-title-llm` row છે ([row][bundle-base-title]) → configuration. Plugin લખવો વધારે પડતું ગણાય.
-- **"દરેક model request ગણવો છે."** કોઈ config નથી, પણ `llm/stream` waterfall છે ([decl][llm-stream-decl]) → plugin ([metrics.ts](../labs/measure/metrics.ts)). Loop બદલવાની જરૂર નથી.
-- **"SIGINT પછી headless ખોટી error છાપે છે."** આ headless runner ના `run()` ની ખામી છે ([source][headless-flush]); બહારથી plugin તેને સુધારી ન શકે → core patch.
+- **"Title call બંધ કરવો છે."** `--dump-config` માં `session-title-llm` row છે ([row][bundle-base-title]) → configuration. Plugin લખવો વધારે પડતું ગણાય. 🍽️ "Title લખનાર રજા પર" — એક ચિઠ્ઠી પૂરતી.
+- **"દરેક model request ગણવો છે."** કોઈ config નથી, પણ `llm/stream` waterfall છે ([decl][llm-stream-decl]) → plugin ([metrics.ts](../labs/measure/metrics.ts)). Loop બદલવાની જરૂર નથી. 🍽️ ફોન-રૂમના દરવાજે ગણતરી કરતો નવો કર્મચારી.
+- **"SIGINT પછી headless ખોટી error છાપે છે."** આ headless runner ના `run()` ની ખામી છે ([source][headless-flush]); બહારથી plugin તેને સુધારી ન શકે → core patch. 🍽️ ભૂલ દીવાલની અંદર છે — કડિયો જ સુધારે.
 
-## 6.2 એક વર્તન માપો: model calls અને tool latency
+**યાદ-ચાવી "ચિઠ્ઠી-કર્મચારી-કડિયો":** પહેલાં ચિઠ્ઠી, પછી કર્મચારી, છેલ્લે કડિયો — નાનાથી મોટું, સસ્તાથી મોંઘું.
 
-**Measurement** એટલે વર્તન બદલ્યા વગર સંખ્યા ભેગી કરવી. [`metrics.ts`](../labs/measure/metrics.ts) બે listener મૂકે છે, બંને `next()` ને delegate કરે છે:
+## 6.2 🟡 એક વર્તન માપો: model calls અને tool latency
+
+> 📦 **Measurement** — વર્તન બદલ્યા વગર સંખ્યા ભેગી કરવી. 🍽️ ઘડિયાળ અને કાગળ લઈ ખૂણામાં બેઠેલો નિરીક્ષક — તે ઓર્ડર લેતો નથી, રાંધતો નથી, ફક્ત નોંધે છે.
+>
+> 📦 **Latency** — કામ શરૂ થી પૂરું થવા સુધીનો સમય. 📦 **ms** — millisecond, સેકન્ડનો હજારમો ભાગ.
+
+[`metrics.ts`](../labs/measure/metrics.ts) બે listener મૂકે છે, બંને `next()` ને delegate કરે છે:
 
 ```ts
   ctx.on('llm/stream', (options, next) => {
@@ -65,6 +99,8 @@ flowchart TD
   })
 ```
 
+પ્રવેશ પ્રકરણના `waterfall.mjs` નો "ચોકીદાર" યાદ છે? એ જોતો, નોંધતો, અને `return next()` કરતો — બરાબર આ જ. બીજો listener **around-wrapper** છે: `next()` પહેલાં ઘડિયાળ ચાલુ, પછી બંધ.
+
 `tools/execute` એ around-dispatch waterfall છે ([decl][tools-events]); તેથી માપ tool body + તેની અંદરના wrappers નું છે, `tools/pre-execute` policy કે post-processing નું નહીં. `options.purpose` એ auxiliary requests ને અલગ પાડે છે (title generator `session-title` purpose મોકલે છે).
 
 **પ્રયોગ:** title row off vs on, દરેક 5 runs, દરેક run નવા `DSH_HOME` સાથે (પૂરા commands: [પરિશિષ્ટ B](../appendix/B-command-reference.md#measure)). 🧪 ([evidence/measure.jsonl](../evidence/measure.jsonl))
@@ -74,18 +110,32 @@ flowchart TD
 | title **off** | 2, 2, 2, 2, 2 | `agent` | 8.32, 10.11, 11.39, 9.34, 9.23 | 9.34 |
 | title **on** | 3, 3, 3, 3, 3 | `agent`, `session-title` | 16.35, 14.12, 15.55, 14.89, 16.41 | 15.55 |
 
+> 📦 **Median** — સંખ્યાઓને ક્રમમાં ગોઠવો, વચ્ચેની સંખ્યા. (8.32, 9.23, **9.34**, 10.11, 11.39 → 9.34.) Average કરતાં એક-બે વિચિત્ર સંખ્યાથી ઓછું હલે છે. 📦 **Sample** — એક માપ; 5 runs = 5 samples.
+
 **અર્થઘટન — પ્રામાણિક મર્યાદાઓ સાથે:**
 
 - Model call count deterministic છે: base bundle નું title generator દરેક નવા session માં એક વધારાનો call કરે છે. Real provider પર આનો અર્થ વધારાના tokens અને ખર્ચ છે.
 - Latency નો તફાવત **ફક્ત એક અવલોકન** છે: 5 samples, mock server એ જ machine પર, એક જ 4-CPU container. સંભવિત કારણ — title request નું serialization/streaming એ જ Node event loop પર tool execution સાથે overlap થાય છે — પણ અમે તેને profile કરીને સાબિત કર્યું નથી. ⚠️ દાવો કરવા પહેલાં: વધુ samples, CPU profile (`node --cpu-prof`), અને mock server ને બીજા process/machine પર.
 
-## 6.3 એક સાચું contribution: headless SIGINT teardown
+> 📦 **CPU profile** — program નો સમય કયા function માં ગયો તેનો વિગતવાર નકશો. 📦 **Event loop** — Node નો એક જ "કામ-દોર", જે વારાફરતી બધાં કામ ચલાવે; બે કામ એક સાથે ભીડ કરે તો બંને ધીમાં.
 
-### Problem statement
+**યાદ-ચાવી "ગણતરી પાકી, સમય કાચો":** count (2 vs 3) ભરોસાપાત્ર; timing (9 vs 15 ms) ફક્ત સંકેત — પુરાવો નહીં.
+
+## 6.3 🔴 એક સાચું contribution: headless SIGINT teardown
+
+> 📦 **Contribution** — open-source project માં સુધારો આપવો: problem → patch → test → review. 🍽️ મુખ્ય કચેરીને પુરાવા સાથેનો સૂચન-પત્ર.
+>
+> 📦 **Teardown** — બંધ થતી વખતે બધું વ્યવસ્થિત સમેટવું. 🍽️ રાત્રે દુકાન બંધ કરવાની વિધિ.
+
+**છ પગલાં — યાદ-ચાવી "પ્રફુલ મૂળ સુધારી સાબિત અસર કરે":** **પ્ર**શ્ન (problem statement) → **ફ**રી ઉત્પન્ન (reproduction) → **મૂળ** કારણ (root cause) → **સુધાર** (patch) → **સાબિ**તી (regression test + verification) → **અસર** (review notes).
+
+### 1. Problem statement — પ્રશ્ન
 
 `dsh --profile headless` ચાલુ model stream દરમિયાન `SIGINT` મળે ત્યારે interruption સાચું record થાય છે (durable `turn/end` reason `aborted`/`disposed`, exit 130), પણ runner પછી `stderr` પર `dsh: session "…": flush on a closed handle` છાપે છે, અને `--json` mode માં `{"type":"error","message":"…flush on a closed handle"}` line લખે છે. User ને આ "data નષ્ટ થયો?" એવી ગેરસમજ આપે છે, જ્યારે ખરેખર કંઈ ખોટું થયું નથી.
 
-### Reproduction (🧪 patch વગર 2/2 runs)
+> 📦 **`--json` mode** — માણસ માટેના text ને બદલે program વાંચી શકે તેવા JSON lines માં output. 📦 **Machine-readable output** — બીજા programs (automation) જેના પર આધાર રાખે; તેમાં ફેરફાર = તેમને તોડવાનું જોખમ.
+
+### 2. Reproduction — ફરી ઉત્પન્ન (🧪 patch વગર 2/2 runs)
 
 ```text
 dsh exit=130
@@ -94,7 +144,24 @@ dsh: session "session-…": flush on a closed handle
 
 ([evidence/sigint-unpatched.err](../evidence/sigint-unpatched.err), [evidence/json-sigint-orig.jsonl](../evidence/json-sigint-orig.jsonl))
 
-### Root cause (✅ source)
+### 3. Root cause — મૂળ કારણ (✅ source)
+
+```mermaid
+sequenceDiagram
+  participant L as launcher
+  participant R as root fiber
+  participant A as Agent (loop)
+  participant H as headless run()
+  participant P as persistence
+  L->>R: SIGINT → interrupt(130) → dispose
+  R->>A: cancel
+  A->>A: turn/end aborted
+  A-->>H: whenIdle() resolves
+  R->>P: teardown: handle closed
+  H->>P: sessions.flush(agent.session)
+  P-->>H: SessionHandleClosedError
+  H->>H: fail(): stderr line, json error, io.exit(1)
+```
 
 1. SIGINT → launcher `interrupt(130)` → root fiber dispose ([`runProfile`][cli-runProfile]).
 2. Dispose agent ને cancel કરે છે; turn `aborted` થઈ `turn/end` લખે છે; `agent.whenIdle()` resolve થાય છે.
@@ -102,7 +169,11 @@ dsh: session "session-…": flush on a closed handle
 4. ત્યાં સુધીમાં persistence handle teardown માં બંધ થઈ ગયું છે, એટલે [`SessionHandleClosedError`][persistence-closed] — `session "…": flush on a closed handle`.
 5. Error runner ના `.catch` થી [`fail`][headless-fail] સુધી પહોંચે છે: `stderr` line, `--json` હોય તો error event, અને `io.exit(1)` — જે launcher ના 130 સાથે સ્પર્ધા કરે છે.
 
-### Patch (book lab code, [labs/contribution/headless-teardown.patch](../labs/contribution/headless-teardown.patch); pinned commit પર `git apply --check` સ્વચ્છ 🧪)
+🍽️ લાઈટ ગઈ (SIGINT) → મેનેજરે દુકાન બંધ જાહેર કરી (dispose) → રમેશભાઈએ ઓર્ડર "રદ" લખ્યો → કાઉન્ટરવાળાએ વિચાર્યું "ઓર્ડર પૂરો, હવે ચોપડો તિજોરીમાં" (flush) → પણ તિજોરી પહેલેથી બંધ → બૂમ: "તિજોરી બંધ છે!" — અને "બહાર નીકળવાનો દરવાજો" (exit code) માટે મેનેજર સાથે ધક્કામુક્કી.
+
+### 4. Patch — સુધાર (book lab code, [labs/contribution/headless-teardown.patch](../labs/contribution/headless-teardown.patch); pinned commit પર `git apply --check` સ્વચ્છ 🧪)
+
+> 📦 **Patch / diff** — ફેરફારની નોંધ: `-` થી શરૂ થતી line કાઢી, `+` થી શરૂ થતી ઉમેરી. 📦 **`git apply --check`** — "આ patch લાગી શકે છે?" ની ચકાસણી, ખરેખર લગાવ્યા વગર.
 
 ```diff
 -import type { Context } from '@deepseek-ai/cordis'
@@ -117,9 +188,11 @@ dsh: session "session-…": flush on a closed handle
      await sessions.flush(agent.session)
 ```
 
-Design: runner નું પોતાનું fiber `ACTIVE` ન હોય ([`FiberState`][cordis-fiberstate]) તો tree teardown માં છે; ત્યારે exit status launcher નો છે, runner નો નહીં. ત્રણ lines, એક જ package.
+Design: runner નું પોતાનું fiber `ACTIVE` ન હોય ([`FiberState`][cordis-fiberstate]) તો tree teardown માં છે; ત્યારે exit status launcher નો છે, runner નો નહીં. ત્રણ lines, એક જ package. 🍽️ "દુકાન બંધ થઈ રહી હોય (મારું હાજરી-કાર્ડ હવે 'કામ પર' નથી), તો તિજોરી ખોલવા ન જાઓ, બૂમ ન પાડો — દરવાજાનો નિર્ણય મેનેજરનો."
 
-### Regression test
+**યાદ-ચાવી "દુકાન બંધ ≠ ઓર્ડર રદ":** `signal.aborted` એ **ઓર્ડર** (turn) રદ થયાનો સંકેત છે; `ctx.fiber.state` એ **કાઉન્ટર** (runner plugin) ખુદ જીવંત છે કે નહીં તે કહે છે. અહીં પ્રશ્ન કાઉન્ટરના જીવનનો છે, તેથી fiber state. (Mastery check પ્રશ્ન 4.)
+
+### 5. Regression test — સાબિતી
 
 નવો `packages/bundle/headless/tests/teardown-flush.spec.ts` upstream ના `terminal-failures.spec.ts` જેવો જ harness વાપરે છે: real `AgentLoop` + mock adapter નું `'hang'` script, પહેલો chunk આવે ત્યારે `ctx.fiber.dispose()`, અને પછી assertion:
 
@@ -128,7 +201,11 @@ Design: runner નું પોતાનું fiber `ACTIVE` ન હોય ([`F
     expect(exits).toEqual([])
 ```
 
+> 📦 **Assertion** — "આ સાચું હોવું જ જોઈએ" ની ચકાસણી; ખોટું હોય તો test fail. અહીં: stderr ખાલી, અને runner એ કોઈ exit માંગ્યો નથી.
+
 **પ્રામાણિક નોંધ:** પહેલા draft માં અમે `session/flush` listener stub કરી "closed handle" ઉત્પન્ન કરવા માંગતા હતા, પણ root dispose એ stub listener ને પણ કાઢી નાખે છે. તેથી test **flush error** નહીં, પણ એ જ root cause નું બીજું લક્ષણ પકડે છે: patch વગર runner `io.exit(1)` માંગે છે (aborted summary). Test નું નામ એ જ બતાવે છે: "leaves reporting and exit status to the launcher when the tree is disposed mid-turn".
+
+> 📦 **Stub** — ખરા ભાગની જગ્યાએ મૂકેલો નકલી, સાદો ભાગ — test માટે. 🍽️ પૂતળું.
 
 ### Verification (બધું 🧪)
 
@@ -141,12 +218,18 @@ Design: runner નું પોતાનું fiber `ACTIVE` ન હોય ([`F
 | `tsc -p packages/bundle/headless/tsconfig.json --noEmit` | — | exit 0 |
 | `scripts/run-oxlint.ts` on both files | — | exit 0 (પહેલાં `Promise.withResolvers<void>` પર `no-invalid-void-type` પકડાયું, સુધાર્યું) |
 
-### Review notes: હાલના callers અને plugins પર અસર
+> 📦 **Coverage** — tests એ code ની કેટલી lines/branches ખરેખર ચલાવી તેની ટકાવારી. 📦 **Lint (oxlint)** — code ની શૈલી અને સામાન્ય ભૂલો આપોઆપ પકડતું tool.
+
+### 6. Review notes — હાલના callers અને plugins પર અસર
 
 - **Scope.** ફક્ત `@deepseek-ai/dsh-headless` નો runner. Agent loop, session store, persistence, અને બીજા profiles (web, sdk, acp) બદલાતા નથી.
 - **Exit status.** Interrupted runs માં પહેલાં પણ process exit 130 હતો (launcher જીતતો). હવે runner exit request જ નથી કરતો — ખરો exit code બદલાતો નથી, પણ race ઘટે છે.
 - **`--json` consumers — વર્તન બદલાય છે.** પહેલાં SIGINT પર છેલ્લી line `{"type":"error",…closed handle}` હતી; હવે કોઈ terminal line નથી, stream `session`/`status` events પછી અટકે છે ([evidence/json-sigint-patched.jsonl](../evidence/json-sigint-patched.jsonl)). કોઈ automation "છેલ્લી line terminal હોય જ" એમ માનતું હોય તો તે ભાંગી શકે. **Reviewer માટે પ્રશ્ન:** શું `{"type":"interrupted"}` જેવો સ્પષ્ટ terminal event ઉમેરવો? એ JSON vocabulary નો additive ફેરફાર છે, જેને `json-stream.ts` docs અને tests જોઈએ — અલગ PR માં સારું.
 - **Repository process.** Upstream PR માટે AGENTS.md મુજબ: `dsh-pr-description` skill થી PR description, એક `kind/*` અને લાગુ `area/*` labels, product-user-visible ફેરફાર હોવાથી maintainer સાથે keyless recorded-session snapshot ની જરૂર ચર્ચવી, અને externally perceptible breaking change ગણાય તો upgrade guide. આ પુસ્તક upstream માં PR **ખોલતું નથી**; patch શીખવા માટે છે.
+
+> 📦 **Breaking change** — એવો ફેરફાર જેનાથી જૂનો caller તૂટી શકે. 📦 **Additive change** — ફક્ત ઉમેરો; જૂનું વર્તન જેમનું તેમ. 🍽️ "નવી વાનગી ઉમેરવી" (additive) vs "જૂની વાનગીની રેસીપી બદલવી" (breaking — નિયમિત ગ્રાહકો ફરિયાદ કરી શકે).
+>
+> 💡 **મીરાદીદીની ટીપ:** સારો maintainer ફક્ત "મારો fix ચાલે છે" નથી કહેતો; "મારા fix થી **કોને** શું બદલાશે" પણ લખે છે — ખાસ કરીને જેઓ ચૂપચાપ આપણા output પર આધાર રાખે છે.
 
 ## Source map: આ ક્રમમાં ખોલો
 
@@ -159,7 +242,7 @@ Design: runner નું પોતાનું fiber `ACTIVE` ન હોય ([`F
 | 5 | `packages/bundle/headless/src/index.ts` | [`run`][headless-run], [`flush`][headless-flush], [`fail`][headless-fail] | contribution |
 | 6 | `packages/session/session-persistence/src/errors.ts` | [`SessionHandleClosedError`][persistence-closed] | error નો સ્રોત |
 
-## Lab 6 — patch લગાવો, test ને fail/pass કરાવો
+## 🧪 Lab 6 — patch લગાવો, test ને fail/pass કરાવો
 
 Pinned checkout માં:
 
@@ -171,7 +254,7 @@ git apply <book>/labs/contribution/headless-teardown.patch
 pnpm exec vitest run packages/bundle/headless/tests/teardown-flush.spec.ts
 ```
 
-અપેક્ષિત: `Tests 1 passed (1)`. પછી ફક્ત source ફેરફાર ઉલટાવો:
+અપેક્ષિત: `Tests 1 passed (1)`. પછી ફક્ત source ફેરફાર ઉલટાવો (test file રહેવા દો):
 
 ```bash
 git checkout -- packages/bundle/headless/src/index.ts
@@ -181,19 +264,89 @@ git checkout -- packages/bundle/headless/src/index.ts
 pnpm exec vitest run packages/bundle/headless/tests/teardown-flush.spec.ts
 ```
 
-અપેક્ષિત: `Tests 1 failed (1)` અને `AssertionError: expected [ 1 ] to deeply equal []`. આ "test ખરેખર fix ને પકડે છે" નો પુરાવો છે.
+અપેક્ષિત: `Tests 1 failed (1)` અને `AssertionError: expected [ 1 ] to deeply equal []`. આ "test ખરેખર fix ને પકડે છે" નો પુરાવો છે — પ્રકરણ 5 નું "ફરી-સુધાર-ફરી-**ઉલટ**".
 
-## આગાહી કસોટી
+## 🔮 આગાહી કસોટી
 
-Metrics overlay સાથે પ્રકરણ 4 નો `csv_compare` run કરો. **ચલાવતા પહેલાં લખો:** `modelCalls`, `toolCalls`, અને `csv_compare` નું latency `read` કરતાં વધુ હશે કે ઓછું — અને કેમ. જવાબ: [પરિશિષ્ટ D — Lab 6](../appendix/D-lab-solutions.md#lab-6).
+Metrics overlay સાથે પ્રકરણ 4 નો `csv_compare` run કરો. **ચલાવતા પહેલાં લખો:** `modelCalls`, `toolCalls`, અને `csv_compare` નું latency `read` કરતાં વધુ હશે કે ઓછું — અને કેમ. (સંકેત: `csv_compare` કેટલી files વાંચે છે, અને પછી શું વધારાનું કરે છે?) જવાબ: [પરિશિષ્ટ D — Lab 6](../appendix/D-lab-solutions.md#lab-6).
 
-## નિષ્ફળતા: "મારો observer plugin વર્તન બદલી નાખે છે"
+## 🩺 નિષ્ફળતા: "મારો observer plugin વર્તન બદલી નાખે છે"
+
+**વાર્તામાં.** આરવે પોતાનો નિરીક્ષક-plugin લખ્યો. તે ચાલુ કર્યો — અને અચાનક કોઠારમાંથી ખાલી ચિઠ્ઠીઓ પાછી આવવા લાગી. "દીદી, મારો નિરીક્ષક તો ફક્ત **જુએ** છે! એ કેવી રીતે કંઈ બગાડે?"
 
 **લક્ષણ.** Metrics plugin ઉમેર્યા પછી tool calls નાં પરિણામ ખાલી આવે છે અથવા model requests થતા જ નથી.
 
-**ટૂંકો નિદાન માર્ગ.** Waterfall listener એ `next()` બોલાવ્યું? `return next()` ભૂલી જાઓ તો સાંકળ ત્યાં અટકે છે — "Waterfall listeners MUST call `next()` to delegate; returning without it short-circuits the chain" ([AGENTS.md][agents-conventions]). `tools/execute` માં `await next()` નું પરિણામ **return** કરો, નહીં તો pipeline ને `undefined` result મળે.
+**ટૂંકો નિદાન માર્ગ.** Waterfall listener એ `next()` બોલાવ્યું? `return next()` ભૂલી જાઓ તો સાંકળ ત્યાં અટકે છે — "Waterfall listeners MUST call `next()` to delegate; returning without it short-circuits the chain" ([AGENTS.md][agents-conventions]). `tools/execute` માં `await next()` નું પરિણામ **return** કરો, નહીં તો pipeline ને `undefined` result મળે. — પ્રવેશ પ્રકરણના `waterfall.mjs` નો "ભૂલકણો" listener અને તેનું `B: undefined` — બરાબર આ જ.
 
-## Mastery check
+> 📦 **Short-circuit** — સાંકળ વચ્ચેથી જ ટૂંકી થઈ જવી; આગળના કોઈ સુધી વાત ન પહોંચે.
+
+<a id="saral-samaj"></a>
+
+## ✅ સાર — પ્રકરણ 6 એક પાનામાં
+
+**એક વાક્યમાં:** maintainer ની જેમ વિચારવું — પહેલાં ચિઠ્ઠી (config), પછી કર્મચારી (plugin), છેલ્લે કડિયો (core patch); વર્તન બદલ્યા વગર માપવું અને પ્રામાણિકપણે લખવું કે ગણતરી પાકી પણ સમય કાચો; અને મુખ્ય કચેરીને સૂચન છ પગલાંમાં — પ્રશ્ન, ફરી ઉત્પન્ન, મૂળ કારણ, ત્રણ-લીટીનો સુધાર, fix વગર fail/સાથે pass થતો test, અને `--json` વાપરનારાઓ પરની અસર.
+
+> ⚠️ **ઉપમા અહીં તૂટે છે:** ઇમારતમાં ફેરફાર કોઈ પણ કડિયો કરી શકે; અહીં core patch માટે upstream ના નિયમો (tests, coverage, snapshot, PR description, labels) પાળવા પડે, અને આ પુસ્તક upstream માં PR ખોલતું **નથી** — patch ફક્ત શીખવા માટે છે.
+
+### નવા ટેકનિકલ શબ્દો — એક નજરે
+
+| શબ્દ | સરળ અર્થ | ઉદાહરણ | યાદ-ચાવી |
+|---|---|---|---|
+| Extension point | મૂળ code બદલ્યા વગર જોડાણની જગ્યા | `llm/stream` waterfall | "દીવાલમાં plug-point" |
+| Configuration change | ફક્ત YAML બદલવું | `disabled: true` | "ચિઠ્ઠી" |
+| Core patch | મૂળ code માં ફેરફાર | headless runner fix | "કડિયો" |
+| Measurement | વર્તન બદલ્યા વગર ગણવું | `metrics.ts` | "ખૂણાનો નિરીક્ષક" |
+| Median | ક્રમમાં ગોઠવી વચ્ચેની સંખ્યા | 9.34 ms | "વચ્ચેનો" |
+| Root cause | ભૂલનું મૂળ કારણ | closed handle પર flush | "મૂળ" |
+| Regression test | ભૂલ પાછી ન આવે તેની ચોકી | `teardown-flush.spec.ts` | "સાબિતી" |
+| Coverage | tests એ કેટલો code ચલાવ્યો | 100% | "કેટલું તપાસ્યું" |
+| Breaking change | જૂના callers તૂટી શકે | `--json` છેલ્લી line | "રેસીપી બદલી" |
+| Short-circuit | `next()` વગર સાંકળ અટકે | ભૂલકણો listener | "ધોધ અટક્યો" |
+
+### યાદ રાખવાની રીતો
+
+- **"ચિઠ્ઠી-કર્મચારી-કડિયો"** — ત્રણ extension માર્ગ, નાનાથી મોટો.
+- **"ગણતરી પાકી, સમય કાચો"** — માપનની પ્રામાણિકતા.
+- **"પ્રફુલ મૂળ સુધારી સાબિત અસર કરે"** — contribution ના છ પગલાં.
+- **"દુકાન બંધ ≠ ઓર્ડર રદ"** — fiber vs signal.
+
+### સામાન્ય ગેરસમજો
+
+| ગેરસમજ | સાચું |
+|---|---|
+| "નવું વર્તન = loop બદલો." | Plugins, not loop changes — documented extension points પર. |
+| "5 runs માં ફરક દેખાયો એટલે સાબિત." | વધુ samples, profile, અલગ machine — પછી જ દાવો. |
+| "Test pass થાય એટલે fix સાચો." | Fix ઉલટાવી test **fail** થાય તે પણ બતાવો. |
+| "Exit code ન બદલાયો એટલે કોઈ અસર નથી." | `--json` ની છેલ્લી line બદલાઈ — automation પર અસર. |
+| "Observer plugin કંઈ બગાડી ન શકે." | `next()` ભૂલો તો આખી સાંકળ અટકે. |
+
+### પુનરાવર્તન કાર્ડ
+
+<details><summary>1. Title call બંધ કરવો — કયો માર્ગ અને કેમ?</summary>
+
+Configuration: `session-title-llm` row પહેલેથી છે; `disabled: true` પૂરતું.
+</details>
+
+<details><summary>2. `tools/execute` પર માપેલું latency શું સમાવે?</summary>
+
+Tool body + તેની અંદરના wrappers; `tools/pre-execute` policy અને post-processing નહીં.
+</details>
+
+<details><summary>3. Patch માં fiber state કેમ, `signal.aborted` કેમ નહીં?</summary>
+
+પ્રશ્ન runner plugin ના પોતાના જીવનનો છે (tree teardown), turn ના cancel નો નહીં — "દુકાન બંધ ≠ ઓર્ડર રદ".
+</details>
+
+<details><summary>4. Fix ઉલટાવ્યા પછી test નું output?</summary>
+
+`Tests 1 failed (1)`, `AssertionError: expected [ 1 ] to deeply equal []`.
+</details>
+
+### મિત્રને સમજાવો (3 મિનિટ)
+
+"ઘરમાં નળ ટપકે છે" — ક્યારે વાલ્વ ફેરવવો (config), ક્યારે નવું ફિલ્ટર જોડવું (plugin), અને ક્યારે plumber બોલાવી દીવાલ ખોલવી (core patch)? આ ઉપમાથી ત્રણ માર્ગ સમજાવો, અને પછી headless fix કેમ ત્રીજો માર્ગ હતો તે કહો.
+
+## 🧠 Mastery check
 
 1. ત્રણ extension માર્ગ અને દરેકનું એક ઉદાહરણ, આ પુસ્તકમાંથી.
 2. `tools/execute` પર માપેલું latency શું સમાવે છે અને શું નહીં?
@@ -204,145 +357,11 @@ Metrics overlay સાથે પ્રકરણ 4 નો `csv_compare` run ક�
 
 જવાબો: [પરિશિષ્ટ D — પ્રકરણ 6](../appendix/D-lab-solutions.md#ch6).
 
-<a id="saral-samaj"></a>
+## 🎬 આગળ શું
 
-## સરળ સમજ — પ્રકરણ 6 સાદી ગુજરાતીમાં
+સૂચન-પત્ર તૈયાર છે. આરવ ગર્વથી પપ્પાને બતાવે છે. પપ્પા માથું હલાવે છે, પછી ગલ્લા પાછળ બેઠેલા **મુનીમજી** તરફ ઈશારો કરે છે: "આ બધું સરસ. પણ દર મહિનાના અંતે મુનીમજી બે દિવસ bank statement અને Tally નો ચોપડો આંગળીથી મેળવે છે. ક્યારેક 59 રૂપિયા ખૂટે, ક્યારેક એક જ દિવસે બે સરખી entry. **એ** તારું agent કરી શકે?"
 
-> આ વિભાગ નવો ઉમેરેલો છે; ઉપરનું પ્રકરણ જેમ હતું તેમ જ છે. આખો નકશો: [સમગ્ર નકશો](overview-samagra-naksho.md).
-
-### એક વાક્યમાં
-
-**પ્રકરણ 6 = ભોજનાલયના સંચાલક બનવું: કોઈ ફેરફાર જોઈએ ત્યારે નક્કી કરો કે ફક્ત મેનુ બદલવું (config), નવો કર્મચારી રાખવો (plugin), કે ઇમારતમાં ફેરફાર (core patch); ફેરફાર પહેલાં-પછી માપો; અને સુધારો પુરાવા સાથે માલિક સામે મૂકો.**
-
-### ભોજનાલયની ઉપમામાં
-
-| જરૂર | નાનો ઉપાય (પહેલાં આ) | મધ્યમ | મોટો (છેલ્લે) |
-|---|---|---|---|
-| કોઈ કાઉન્ટર બંધ કરવું | મેનુ પર ચિઠ્ઠી (config) | — | — |
-| દરેક ઓર્ડર ગણવો | — | નવો ગણતરીકાર કર્મચારી (observer plugin) | — |
-| દરવાજાનું તાળું ખોટું વર્તન કરે | — | — | ઇમારતમાં સુધારો (core patch, upstream PR) |
-
-**નિયમ:** હંમેશા સૌથી નાનો ઉપાય પહેલાં. Repository પોતે કહે છે: "Plugins, not loop changes".
-
-**ઉપમા ક્યાં તૂટે છે:** ઇમારતમાં ફેરફાર કોઈ પણ કડિયો કરી શકે; અહીં core patch માટે upstream ના નિયમો (tests, coverage, snapshot, PR description, labels) પાળવા પડે, અને આ પુસ્તક upstream માં PR ખોલતું **નથી** — patch ફક્ત શીખવા માટે છે.
-
-### વિષય-વાર ઊંડી સમજ
-
-#### (1) ત્રણ extension માર્ગ — નિર્ણય-વૃક્ષ
-
-1. **હાલની config row/field થી થાય છે?** (`--dump-config`) → **Configuration change.** ઉદાહરણ: title call બંધ કરવો = `session-title-llm` disable.
-2. **ના — તો documented extension point છે?** (service registry, waterfall event, provider seam) → **Plugin.** ઉદાહરણ: દરેક model request ગણવો = `llm/stream` પર metrics plugin.
-3. **ના — ખામી upstream code માં જ છે?** → **Core patch.** ઉદાહરણ: headless runner નો teardown સંદેશ.
-
-**યાદ-ચાવી "ચિઠ્ઠી-કર્મચારી-કડિયો":** પહેલાં ચિઠ્ઠી, પછી કર્મચારી, છેલ્લે કડિયો.
-
-#### (2) માપન — વર્તન બદલ્યા વગર
-
-Metrics plugin બે listeners મૂકે છે અને **બંને `next()` ને સોંપે છે** — એટલે વર્તન બદલાતું નથી:
-
-- `llm/stream` પર: દરેક model call ગણો, `purpose` સાથે (`agent` કે `session-title`).
-- `tools/execute` પર: tool body નો સમય માપો (around-dispatch: policy અને post-processing બાદ).
-
-**પરિણામ (5+5 runs):** title બંધ → દરેક run માં 2 calls; title ચાલુ → દરેકમાં 3. `read` latency median 9.34 ms vs 15.55 ms.
-
-**પ્રામાણિકતાનો નિયમ:** call count નિશ્ચિત (deterministic) છે. Latency નો તફાવત **ફક્ત અવલોકન** છે (5 samples, એક machine); કારણ સાબિત કરવા વધુ samples, CPU profile, અને mock server અલગ machine પર જોઈએ.
-
-**યાદ-ચાવી "ગણતરી પાકી, સમય કાચો":** count ભરોસાપાત્ર, timing ફક્ત સંકેત.
-
-#### (3) એક ખરો સુધારો — છ પગલાંની સીડી
-
-| પગલું | આ પ્રકરણમાં | યાદ-શબ્દ |
-|---|---|---|
-| 1. Problem statement | Ctrl+C પછી ભ્રામક `flush on a closed handle` અને `--json` માં ખોટો `error` | **પ્રશ્ન** |
-| 2. Reproduction | patch વગર 2/2 runs માં સંદેશ | **ફરી** |
-| 3. Root cause | teardown પછી runner "idle" ને સામાન્ય અંત માને, બંધ handle પર `flush` | **મૂળ** |
-| 4. Patch | runner નું fiber `ACTIVE` ન હોય તો report/exit launcher પર છોડો (3 lines) | **સુધાર** |
-| 5. Regression test | patch વગર fail (`expected [ 1 ] to deeply equal []`), સાથે pass | **સાબિતી** |
-| 6. Review notes | `--json` consumers ને હવે terminal line નથી — reviewer માટે પ્રશ્ન | **અસર** |
-
-**યાદ-ચાવી "પ્રશ્ન-ફરી-મૂળ-સુધાર-સાબિતી-અસર" — "પ્રફુલ મૂળ સુધારી સાબિત અસર કરે".**
-
-#### (4) `ctx.fiber.state` કેમ, `signal.aborted` કેમ નહીં?
-
-- **Fiber state** = runner **plugin** નું જીવન. `ACTIVE` ન હોય = આખું tree બંધ થઈ રહ્યું છે → exit status launcher નો.
-- **Signal** = agent ના **turn** નું. User ફક્ત turn રદ કરે અને app ચાલુ રહે, ત્યારે runner એ report કરવું જ જોઈએ.
-
-**ઉપમા:** "દુકાન બંધ થાય છે" (fiber) અને "એક ઓર્ડર રદ થયો" (signal) — બે જુદી ઘટના.
-
-#### (5) Regression test નું પ્રામાણિક સત્ય
-
-પહેલા draft માં test "flush error" પકડવા માંગતો હતો, પણ root dispose એ stub listener ને પણ કાઢી નાખે. તેથી test એ જ root cause નું **બીજું લક્ષણ** પકડે છે: patch વગર runner `exit(1)` માંગે. Test નું નામ એ જ કહે છે. **શીખ:** test શું ખરેખર ચકાસે છે તે નામમાં પ્રામાણિકપણે લખો.
-
-#### (6) Verification ચેકલિસ્ટ
-
-Real SIGINT run, નવો test (fail/pass), આખું headless suite (136/136), coverage 100%, `tsc` exit 0, lint exit 0, pristine tree પર `git apply --check`. **દરેક દાવો એક command થી.**
-
-### નવા ટેકનિકલ શબ્દો — સરળ ગુજરાતીમાં
-
-| શબ્દ | સરળ અર્થ | ઉદાહરણ | યાદ-ચાવી |
-|---|---|---|---|
-| Extension point | બદલ્યા વગર જોડાવાની દસ્તાવેજી જગ્યા | `llm/stream` | "ખીંટી" |
-| Core patch | upstream ના source માં ફેરફાર | headless runner fix | "ઇમારતમાં કડિયો" |
-| Observer | ફક્ત જોનાર, બદલનાર નહીં | metrics plugin | "CCTV" |
-| Latency | કામ પૂરું થવામાં લાગતો સમય | 9.34 ms | "રાહ" |
-| Median | ક્રમમાં ગોઠવેલી સંખ્યાઓમાં વચ્ચેની | 5 runs માંથી 3જી | "વચલો" |
-| Sample | માપનું એક ઉદાહરણ | એક run | "એક ચમચી ચાખવું" |
-| Profiling | સમય ક્યાં જાય છે તે માપવું | `node --cpu-prof` | "સમયનો એક્સ-રે" |
-| Problem statement | ખામીનું સ્પષ્ટ, ચકાસી શકાય તેવું વર્ણન | ભ્રામક flush સંદેશ | "ફરિયાદ" |
-| Root cause | ખામીનું મૂળ કારણ | બંધ handle પર flush | "મૂળ" |
-| Patch / diff | ફેરફારની લાઇન-વાર યાદી | `+ if (...) return` | "સુધારાની ચિઠ્ઠી" |
-| Regression test | ભૂલ પાછી ન આવે તેની ખાતરી | `teardown-flush.spec.ts` | "ચોકીદાર" |
-| Coverage | tests એ કેટલો code ચલાવ્યો | 100% | "કેટલું તપાસ્યું" |
-| Lint | style અને સામાન્ય ભૂલો શોધતું tool | oxlint | "જોડણી તપાસ" |
-| Review notes | ફેરફારની અસરનું વર્ણન reviewer માટે | `--json` અસર | "માલિકને પત્ર" |
-| Backward compatibility | જૂના વાપરનારાઓ ભાંગે નહીં | JSON terminal line | "જૂના ગ્રાહક ખુશ" |
-
-### યાદ રાખવાની રીતો
-
-- **"ચિઠ્ઠી-કર્મચારી-કડિયો"** — ત્રણ extension માર્ગ, નાનાથી મોટો.
-- **"ગણતરી પાકી, સમય કાચો"** — માપનની પ્રામાણિકતા.
-- **"પ્રફુલ મૂળ સુધારી સાબિત અસર કરે"** — contribution ના છ પગલાં.
-- **"દુકાન બંધ ≠ ઓર્ડર રદ"** — fiber vs signal.
-- **ચિત્ર:** સીડીનાં છ પગથિયાં; છેલ્લા પગથિયે "અસર" લખેલું — કારણ કે સારો maintainer હંમેશા પૂછે, "આથી કોણ ભાંગે?"
-
-### સામાન્ય ગેરસમજો
-
-| ગેરસમજ | સાચું |
-|---|---|
-| "નવી વસ્તુ માટે loop બદલો." | પહેલાં config, પછી plugin; loop છેલ્લે. |
-| "એક run નું timing પૂરતું." | વધુ samples + median + મર્યાદાઓ. |
-| "Test pass થયો એટલે પૂરું." | Fix વગર test fail થાય છે તે પણ બતાવો. |
-| "નાનો patch = કોઈ અસર નહીં." | `--json` consumers નું વર્તન બદલાયું; review notes માં લખો. |
-
-### પુનરાવર્તન કાર્ડ
-
-<details><summary>1. ત્રણ extension માર્ગ અને દરેકનું ઉદાહરણ?</summary>
-
-Config (title row disable), plugin (metrics/csv_compare), core patch (headless teardown).
-</details>
-
-<details><summary>2. `tools/execute` પરનું માપ શું સમાવે છે?</summary>
-
-Tool body અને અંદરના wrappers; pre-execute policy, approval, guards, post-execute નહીં.
-</details>
-
-<details><summary>3. Title ચાલુ/બંધ — model calls?</summary>
-
-બંધ: 2; ચાલુ: 3 (`purpose: session-title`).
-</details>
-
-<details><summary>4. Patch નો `--json` પર શો પ્રભાવ?</summary>
-
-SIGINT પર terminal JSON line નથી (પહેલાં ભ્રામક `error` હતું); વિકલ્પ: `{"type":"interrupted"}` અલગ PR માં.
-</details>
-
-### મિત્રને સમજાવો (3 મિનિટ)
-
-"ફેરફાર કર્યો અને test pass થયો" — આ maintainer માટે કેમ પૂરતું નથી? છ પગલાંની સીડીથી મિત્રને સમજાવો.
-
-### આગલા પ્રકરણ સાથે જોડાણ
-
-હવે તમારી પાસે બધાં સાધનો છે: ચલાવવું (0), અનુસરવું (1), જોડવું (2), અંદર જોવું (3), ઉમેરવું (4), તોડીને સમજવું (5), અને પુરાવા સાથે બદલવું (6). પ્રકરણ 7 માં આ બધું ભેગું કરી **આખો workflow જાતે બનાવશો**: bank statement ↔ Tally reconciliation, દરેક પરિણામ trace સાથે.
+મીરાદીદી કહે છે: "આ તારી અંતિમ પરીક્ષા છે. છેલ્લા બે દિવસ — પ્રકરણ 0 થી 6 નું બધું એક સાથે: read-only tool, deterministic નિયમો, દરેક પરિણામનો પુરાવો, ભવિષ્યનો Tally connector ની ડિઝાઇન, અને એક છુપાયેલી ભૂલ જે બધા tests પાસ કરે છે."
 
 ---
 
