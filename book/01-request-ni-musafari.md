@@ -1,22 +1,59 @@
 # પ્રકરણ 1 — એક requestની આખી મુસાફરી
 
-> 🧭 **નવું:** આ પ્રકરણ અઘરું લાગે તો પહેલાં નીચેનો [સરળ સમજ](#saral-samaj) વિભાગ વાંચો (ઉપમા, નવા શબ્દો, યાદ રાખવાની રીતો). આખા પુસ્તકનો નકશો: [સમગ્ર નકશો](overview-samagra-naksho.md).
-
-> **Level 1.** આખા પ્રકરણમાં એક જ ઉદાહરણ: **"આ repositoryનું README વાંચીને ગુજરાતી સાર આપો."**
+> **Level 1 · 🟢 વાર્તા સૌ માટે, 🟡 code ધ્યાનથી.** વાર્તાનો દિવસ 3–4.
+> આખા પ્રકરણમાં એક જ ઉદાહરણ: **"આ repositoryનું README વાંચીને ગુજરાતી સાર આપો."**
 > આપણે તેને terminal થી લઈને બે model calls, એક `read` tool call અને final answer સુધી, code ની દરેક માલિકી સાથે અનુસરીશું.
+> પ્રવેશ પ્રકરણનો [રમકડા-agent](pravesh-shunya-thi-shuruaat.md) યાદ છે? આ પ્રકરણ એ જ આકાર ખરા harness માં બતાવે છે. આખો નકશો: [સમગ્ર નકશો](overview-samagra-naksho.md).
 
-## આ પ્રકરણ પછી તમે શું કરી શકશો
+## 🎬 વાર્તા: ટેબલ 4 નો ઓર્ડર
+
+બપોરે એક વાગ્યે ટેબલ 4 પરથી ઓર્ડર આવે છે: "એક થાળી, પણ આજની ખાસ દાળની રેસીપી પ્રમાણે."
+
+આરવ રમેશભાઈની પાછળ પાછળ ફરે છે અને નોટબુકમાં લખતો જાય છે:
+
+1. રમેશભાઈ ઓર્ડર-ચોપડામાં લખે છે: "ઓર્ડર નં. 1 શરૂ."
+2. મહારાજ પાસે જાય છે — સાથે ભોજનાલયના નિયમો, ગ્રાહકનો ઓર્ડર, અને "આજે કોઠારમાં શું શું છે" તેની યાદી.
+3. મહારાજ રાંધતા નથી. તે ચિઠ્ઠી લખે છે: **"ખાસ દાળની રેસીપી-ચોપડી લાવો."**
+4. રમેશભાઈ કોઠારમાં જાય છે, ચોપડી લાવે છે, ચોપડામાં લખે છે: "આ માંગ્યું, આ મળ્યું."
+5. **ફરી** મહારાજ પાસે જાય છે — આ વખતે રેસીપી સાથે.
+6. મહારાજ હવે રાંધે છે. કોઈ નવી ચિઠ્ઠી નથી.
+7. રમેશભાઈ લખે છે: "ઓર્ડર નં. 1 પૂર્ણ," અને થાળી પીરસે છે.
+
+મીરાદીદી નોટબુક જોઈને કહે છે: "તેં હમણાં એક **turn** અને બે **steps** લખ્યા. હવે આ જ મુસાફરી harness માં જોઈએ. ઓર્ડર હશે — 'આ repository નું README વાંચીને ગુજરાતી સાર આપો.' અને આપણે દરેક પગલાનો **માલિક** શોધીશું: કઈ file, કયું function."
+
+## 🎯 આ પ્રકરણ પછી તમે શું કરી શકશો
 
 - `pnpm dsh --profile headless "…"` થી final answer સુધીના દરેક પગલાનો **માલિક file અને symbol** બતાવી શકશો.
 - **Turn** અને **step** વચ્ચેનો તફાવત સમજાવી, બતાવી શકશો કે README ઉદાહરણમાં એક turn અને બે steps કેમ છે.
 - કઈ માહિતી **session log માં stored** થાય છે અને કઈ ફક્ત **live streamed** થાય છે તે અલગ કરી શકશો.
 - API key વગર, scripted mock provider સામે આખી મુસાફરી ચલાવી, દરેક event ને timestamp સાથે જોઈ શકશો.
 
-## 1.1 સરળ સમજ: turn, step, અને બે calls
+## 🗺️ આ પ્રકરણનો નકશો: એક request ના દસ સ્ટેશન
 
-**Turn** એટલે user ના એક સંદેશથી શરૂ થઈ "હવે કંઈ બાકી નથી" ત્યાં સુધીનું આખું કામ. ઉદાહરણ: README વાળું આખું કામ એક turn છે.
+આ table આ પ્રકરણની કરોડરજ્જુ છે. દરેક વિભાગના શીર્ષકમાં સ્ટેશન નંબર લખેલો છે, જેથી તમને હંમેશા ખબર રહે કે મુસાફરીમાં ક્યાં છો.
 
-**Step** એટલે **એક model request + તે request એ માંગેલા tools**. Architecture doc ની વ્યાખ્યા: "A step is one model request plus the tools it calls. A turn is zero or more steps" ([docs/architecture.md — Turn flow][arch-turnflow]). ✅
+| # | સ્ટેશન | શું થાય | 🍽️ ભોજનાલયમાં | વિભાગ |
+|---|---|---|---|---|
+| 1 | `pnpm dsh` | `apps/cli/src/bin.ts` ચાલે | ગ્રાહક દરવાજે આવ્યો | 1.3 |
+| 2 | Profile boot | ~100 plugins mount થાય | ભોજનાલય ખૂલ્યું, સ્ટાફ હાજર | 1.3 (વિગત પ્રકરણ 2) |
+| 3 | Headless runner | Agent બને, task inbox માં જાય | ઓર્ડર લખાયો | 1.4 |
+| 4 | `turn/start` | Turn ચોપડામાં શરૂ | ઓર્ડર નંબર પડ્યો | 1.5 |
+| 5 | Step 1: model call #1 | system + 4 user messages + 25 tools મોકલાય | રમેશભાઈ મહારાજને પૂછે | 1.6, 1.7 |
+| 6 | Tool call `read` | model કહે: "README.md ખોલો" | મહારાજની ચિઠ્ઠી: "રેસીપી-ચોપડી લાવો" | 1.7 (f) |
+| 7 | Tool pipeline | policy → tool body → `tool/result` | રમેશભાઈ કોઠારમાંથી લાવે | 1.8 (વિગત પ્રકરણ 3) |
+| 8 | Step 2: model call #2 | tool result સાથે ફરી પૂછાય | મહારાજ રેસીપી વાંચીને રાંધે | 1.7 |
+| 9 | `turn/end completed` | ચોપડામાં turn બંધ | થાળી પીરસાઈ | 1.5 |
+| 10 | stdout + exit 0 | જવાબ છપાય | ગ્રાહકને બિલ | 1.4 |
+
+**યાદ-ચાવી "2-1-25-4":** **2** model calls, **1** tool call, **25** tools model ને દેખાય, **4** user messages. (Title row ચાલુ હોય તો calls **3** થાય — એ આ પ્રકરણની આગાહી કસોટી છે.)
+
+## 1.1 🟢 Turn, step, અને બે calls
+
+> 📦 **Turn** — user ના એક સંદેશથી શરૂ થઈ "હવે કંઈ બાકી નથી" ત્યાં સુધીનું આખું કામ. ઉદાહરણ: README વાળું આખું કામ એક turn છે. 🍽️ એક ઓર્ડર, થાળી પીરસાય ત્યાં સુધી.
+>
+> 📦 **Step** — **એક model request + તે request એ માંગેલા tools**. 🍽️ મહારાજ સાથેની એક વાતચીત + તેમણે માંગેલો સામાન.
+
+Architecture doc ની વ્યાખ્યા: "A step is one model request plus the tools it calls. A turn is zero or more steps" ([docs/architecture.md — Turn flow][arch-turnflow]). ✅
 
 README ઉદાહરણમાં:
 
@@ -25,7 +62,11 @@ README ઉદાહરણમાં:
 
 તેથી **બે model calls**. (એક અપવાદ છે — base bundle ત્રીજો call પણ કરી શકે છે. તે આ પ્રકરણની આગાહી કસોટી છે.)
 
-## 1.2 Sequence diagram: બંને model calls
+> 💡 **મીરાદીદીની ટીપ:** રમકડા-agent માં પણ બરાબર આ જ થયું હતું — `modelCalls: 2`. ફરક એટલો કે ત્યાં છેલ્લા call માં 3 messages ગયા, અહીં 7 જશે. કેમ? વિભાગ 1.7 અને Lab 1 માં જવાબ.
+
+## 1.2 🟡 Sequence diagram: બંને model calls
+
+> 📦 **Sequence diagram** — કોણ કોને ક્યારે સંદેશો મોકલે તેનું ચિત્ર. ઉપરથી નીચે સમય વહે છે; દરેક ઊભી લીટી એક પાત્ર. Solid arrow = call; dashed arrow = પાછો આવતો જવાબ.
 
 ```mermaid
 sequenceDiagram
@@ -64,23 +105,33 @@ sequenceDiagram
   CLI-->>CLI: print final text, exit 0
 ```
 
-| Diagram node | Owner file | Symbol |
-|---|---|---|
-| headless runner | `packages/bundle/headless/src/index.ts` | [`run`][headless-run], [`agents.create`][headless-create], [`agent.followup`][headless-followup] |
-| ReactLoopAgent | `packages/core/agent-loop/src/agent.ts` | [`turn`][loop-turn], [`preStep`][loop-preStep], [`step`][loop-step] |
-| Session log | `packages/core/session/src/index.ts` | [`Session.append`][session-append], [`deriveMessages`][session-derive] |
-| ctx.systemPrompt | `packages/core/system-prompt/src/index.ts` | `assemble` (called from [`preStep`][loop-preStep]) |
-| ctx.llm → DeepSeekAdapter | `packages/llm/llm/src/index.ts`, `packages/llm/llm-deepseek/src/adapter.ts` | [`prepareCall`][llm-prepareCall], [`stream`][llm-stream], [`fetch /messages`][deepseek-fetch] |
-| ctx.tools → executor → pipeline | `packages/core/tools/src/{index,batch,pipeline}.ts`, `packages/core/tool-executor-native/src/index.ts` | [`execute`][tools-execute], [`executeToolBatch`][batch-execute], [`prepare`][pipeline-prepare] / [`dispatch`][pipeline-dispatch] |
-| read tool | `packages/fs/tool-fs/src/read.ts` | [`applyReadTool`][read-tool] |
+| Diagram node | 🍽️ | Owner file | Symbol |
+|---|---|---|---|
+| headless runner | ઓર્ડર લેનાર કાઉન્ટર | `packages/bundle/headless/src/index.ts` | [`run`][headless-run], [`agents.create`][headless-create], [`agent.followup`][headless-followup] |
+| ReactLoopAgent | રમેશભાઈ | `packages/core/agent-loop/src/agent.ts` | [`turn`][loop-turn], [`preStep`][loop-preStep], [`step`][loop-step] |
+| Session log | ઓર્ડર-ચોપડો | `packages/core/session/src/index.ts` | [`Session.append`][session-append], [`deriveMessages`][session-derive] |
+| ctx.systemPrompt | ભોજનાલયના નિયમોની પોથી | `packages/core/system-prompt/src/index.ts` | `assemble` (called from [`preStep`][loop-preStep]) |
+| ctx.llm → DeepSeekAdapter | ફોન + દુભાષિયો | `packages/llm/llm/src/index.ts`, `packages/llm/llm-deepseek/src/adapter.ts` | [`prepareCall`][llm-prepareCall], [`stream`][llm-stream], [`fetch /messages`][deepseek-fetch] |
+| ctx.tools → executor → pipeline | કોઠારી ભીખાભાઈ | `packages/core/tools/src/{index,batch,pipeline}.ts`, `packages/core/tool-executor-native/src/index.ts` | [`execute`][tools-execute], [`executeToolBatch`][batch-execute], [`prepare`][pipeline-prepare] / [`dispatch`][pipeline-dispatch] |
+| read tool | કોઠારનું એક ખાનું | `packages/fs/tool-fs/src/read.ts` | [`applyReadTool`][read-tool] |
 
-Solid arrow = call direction; dashed arrow = returned data. `alt` box બંને tool branch બતાવે છે: નિષ્ફળતા પણ **tool/result** બને છે અને step 2 ચાલે જ છે (પ્રકરણ 5 માં ચારેય નિષ્ફળતા ખરેખર ચલાવીશું). 🧪
+`alt` box બંને tool branch બતાવે છે: **નિષ્ફળતા પણ `tool/result` બને છે** અને step 2 ચાલે જ છે (પ્રકરણ 5 માં ચારેય નિષ્ફળતા ખરેખર ચલાવીશું). 🧪 🍽️ કોઠારમાં સામાન ન મળે તો ભીખાભાઈ "નથી" ની ચિઠ્ઠી પાછી મોકલે — ઝઘડો નહીં, ભોજનાલય બંધ નહીં.
 
-## 1.3 Entry point: `dsh` નો દરવાજો
+## 1.3 🟢 સ્ટેશન 1–2 — Entry point: `dsh` નો દરવાજો
 
 `pnpm dsh …` એ root `package.json` નો script છે: `"dsh": "node --import tsx/esm apps/cli/src/bin.ts"`. ✅
 
-[`runCli`][cli-runCli] arguments parse કરે છે અને `invocation.mode` પર `switch` કરે છે. `'profile'` mode માં તે `runProfile(...)` બોલાવે છે. Input: argv; output: કંઈ નહીં (side effect: આખી app boot થાય). પ્રકરણ 2 આ boot ને line-by-line ખોલશે. અહીં એટલું જાણો કે **headless profile** ના અંતે `headless-runner` નામની config row mount થાય છે ([headless patch][bundle-headless]):
+> 📦 **CLI** (Command-Line Interface) — terminal માંથી ચાલતો program. `dsh` એ DeepSeek Harness નો CLI.
+>
+> 📦 **argv** — command સાથે લખેલા શબ્દો (arguments) ની યાદી, જે program ને મળે. `dsh --profile headless "…"` માં `--profile`, `headless`, અને task.
+
+[`runCli`][cli-runCli] arguments parse કરે છે અને `invocation.mode` પર `switch` કરે છે. `'profile'` mode માં તે `runProfile(...)` બોલાવે છે. Input: argv; output: કંઈ નહીં (side effect: આખી app boot થાય). પ્રકરણ 2 આ boot ને line-by-line ખોલશે.
+
+> 📦 **Side effect** — function ના return value સિવાયની અસર: file લખવી, screen પર છાપવું, plugin mount કરવો. 🍽️ "ઓર્ડર લેવો" નો return એક ટોકન, પણ side effect: રસોડું ચાલુ.
+>
+> 📦 **Profile** — કયા plugins સાથે harness ચલાવવું તેનું નામવાળું સંયોજન. `headless` = screen/UI વગર, એક task ચલાવી પૂરું. 🍽️ "આજે ફક્ત parcel કાઉન્ટર — હૉલ બંધ."
+
+અહીં એટલું જાણો કે **headless profile** ના અંતે `headless-runner` નામની config row mount થાય છે ([headless patch][bundle-headless]):
 
 ```yaml
     - id: headless-runner
@@ -90,11 +141,15 @@ Solid arrow = call direction; dashed arrow = returned data. `alt` box બંન�
         task: !!js ctx.headlessStartup.task
 ```
 
-(repository code; `!!js` એટલે YAML માં JavaScript expression, જે plugin context સામે evaluate થાય છે.)
+(repository code; `!!js` એટલે YAML માં JavaScript expression, જે plugin context સામે evaluate થાય છે.) 🍽️ મેનુની એક લીટી: "parcel કાઉન્ટર ખોલો, અને આજનો ઓર્ડર (`task`) ગ્રાહકે જે લખ્યો તે."
 
-## 1.4 Turn શરૂ થાય તે પહેલાં: Agent બનાવવો
+## 1.4 🟢 સ્ટેશન 3 અને 10 — Turn શરૂ થાય તે પહેલાં: Agent બનાવવો
 
-Headless plugin `inject = ['agentDefaultModel', 'agents', 'sessions']` જાહેર કરે છે ([source][headless-inject]) — એટલે આ ત્રણ services ન હોય ત્યાં સુધી તે ચાલતો જ નથી. પછી [`run`][headless-run]:
+Headless plugin `inject = ['agentDefaultModel', 'agents', 'sessions']` જાહેર કરે છે ([source][headless-inject]) — એટલે આ ત્રણ services ન હોય ત્યાં સુધી તે ચાલતો જ નથી.
+
+> 📦 **`inject`** — plugin ની શરત: "આ services હાજર થાય પછી જ મને ચાલુ કરો." 🍽️ "કોઠારની ચાવી અને ચોપડો મળે તો જ હું કામ શરૂ કરીશ." વિગત પ્રકરણ 2 માં.
+
+પછી [`run`][headless-run]:
 
 1. task વાંચે છે (ખાલી હોય તો error: `a task is required, for example: dsh --profile headless "run the tests"`).
 2. default model selection લે છે (base bundle: provider `deepseek-official`, model `deepseek-flash`). ✅
@@ -108,11 +163,17 @@ Headless plugin `inject = ['agentDefaultModel', 'agents', 'sessions']` જાહ
       }))
 ```
 
-5. `agent.whenIdle()` ની રાહ જુએ છે, `sessions.flush(...)` કરે છે, final text છાપે છે, અને `io.exit(0 અથવા 1)` માંગે છે.
+5. `agent.whenIdle()` ની રાહ જુએ છે, `sessions.flush(...)` કરે છે, final text છાપે છે, અને `io.exit(0 અથવા 1)` માંગે છે. **(સ્ટેશન 10.)**
 
-`followup` input ને **inbox** માં મૂકે છે અને driver ને જગાડે છે. Driver એટલે [`kick`][loop-kick]: `while (await this.turn()) {}`.
+> 📦 **UUID** — લગભગ ક્યારેય પુનરાવર્તિત ન થાય તેવો લાંબો random id. ઉદાહરણ: `session-88908480-9ef3-…`.
+>
+> 📦 **Inbox** — agent ને મળેલા, હજી ન લીધેલા સંદેશા. 🍽️ ઓર્ડર-પેટી.
+>
+> 📦 **Flush** — memory માં રાહ જોતું બધું disk પર લખી દેવું. 🍽️ દિવસના અંતે કાચી નોંધો પાકા ચોપડામાં ઉતારવી.
 
-## 1.5 `turn()`: turn ક્યાં શરૂ થાય અને ક્યાં પૂરો થાય
+`followup` input ને **inbox** માં મૂકે છે અને driver ને જગાડે છે. Driver એટલે [`kick`][loop-kick]: `while (await this.turn()) {}` — "જ્યાં સુધી નવો turn બને ત્યાં સુધી ચલાવો."
+
+## 1.5 🟡 સ્ટેશન 4 અને 9 — `turn()`: turn ક્યાં શરૂ થાય અને ક્યાં પૂરો થાય
 
 [`ReactLoopAgent.turn`][loop-turn] (lines 327–433) નું હાડપિંજર, **સરળ teaching pseudocode** તરીકે:
 
@@ -131,15 +192,21 @@ while (true) {
 session.append('turn/end', { turn, reason })            // turn અહીં પૂરો — error હોય તો પણ
 ```
 
+રમકડા-agent ના `turn()` સાથે સરખાવો — એ જ આકાર: start → steps નો loop → end.
+
 ત્રણ વાત ધ્યાનમાં રાખો:
 
 - **`turn/start`** એ [line 336][loop-turn-start] પર, પહેલો step શરૂ થાય **તે પહેલાં** લખાય છે.
 - **`turn/end`** એ `finally` block માં ([line 422][loop-turn-end]) લખાય છે, તેથી error, abort કે success — દરેક રસ્તે turn બંધ થાય છે. Reason `completed`, `error`, `aborted`, `blocked`, કે `max-tokens` હોય છે.
 - Step નિષ્ફળ જાય અને કોઈ tool call નું પરિણામ બાકી હોય, તો loop [`toolRecovery.results()`][loop-recovery] વડે ખૂટતા `tool/result` લખે છે, જેથી log માં દરેક call ને જવાબ મળે.
 
-## 1.6 `preStep()`: prompt અને tools ભેગા કરવા
+> 🍽️ **ભોજનાલયમાં:** પપ્પાનો નિયમ છે — "ચોપડામાં જે ઓર્ડર શરૂ થયો, તેનો અંત પણ લખાવો જોઈએ: પીરસાયો, ગ્રાહક ચાલ્યો ગયો, કે લાઈટ ગઈ." `finally` એ જ નિયમ છે.
 
-[`preStep`][loop-preStep] દરેક proposed step માટે:
+**Turn ના પાંચ અંત — યાદ-ચાવી "પૂ-ભૂ-ર-રો-મ":** **પૂ**ર્ણ (completed), **ભૂ**લ (error), **ર**દ (aborted), **રો**ક (blocked), **મ**ર્યાદા (max-tokens).
+
+## 1.6 🟡 સ્ટેશન 5 (તૈયારી) — `preStep()`: prompt અને tools ભેગા કરવા
+
+[`preStep`][loop-preStep] દરેક proposed step માટે પાંચ કામ કરે છે:
 
 1. `this.inbox.claim(target, turn)` — inbox માંથી user message લે છે.
 2. `this.model.current()` — model selection; ન હોય તો સ્પષ્ટ error.
@@ -147,13 +214,26 @@ session.append('turn/end', { turn, reason })            // turn અહીં પ
 4. `this.loopCtx.systemPrompt.assemble(...)` — system prompt sections + tool schemas.
 5. `this.dispatch.waterfall('agent/pre-step', …)` — plugins ને message બદલવાની કે step નકારવાની તક. Default (છેલ્લું) વર્તન: claimed messages + runtime context સાથે `{ kind: 'enter' }`.
 
-**Waterfall** એટલે middleware ની જેમ listener ની સાંકળ; દરેક listener એ `next()` બોલાવવું પડે, નહીં તો સાંકળ ત્યાં જ અટકે ([Cordis primer — dispatch modes][primer-dispatch]). ✅
+> 📦 **System prompt** — model માટેના સ્થાયી નિયમો, દરેક call ની શરૂઆતમાં. ઉદાહરણ: "You are an AI agent powered by DeepSeek Harness…" 🍽️ ભોજનાલયના નિયમોની પોથી.
+>
+> 📦 **Tool schema** — tool નું નામ, વર્ણન અને arguments નું વર્ણન (JSON Schema માં), જેથી model ને ખબર પડે કે શું માંગી શકાય. ઉદાહરણ: `read(file_path, offset, limit)`. 🍽️ કોઠારના દરેક ખાના પરનું લેબલ.
 
-## 1.7 `step()`: model request બનાવવો, મોકલવો, પરિણામ સાચવવું
+**Waterfall** એટલે middleware ની જેમ listener ની સાંકળ; દરેક listener એ `next()` બોલાવવું પડે, નહીં તો સાંકળ ત્યાં જ અટકે ([Cordis primer — dispatch modes][primer-dispatch]). ✅ — પ્રવેશ પ્રકરણના `waterfall.mjs` માં તમે ચોકીદાર અને મેનેજરને આ જ કરતા જોયા હતા. `{ kind: 'enter' }` અને `{ kind: 'reject' }` એ discriminated union છે.
 
-[`step`][loop-step] (lines 435–610) એક `while (true)` છે, કારણ કે retry એ જ step ની અંદર થાય છે. એક attempt માં:
+## 1.7 🟡 સ્ટેશન 5, 6, 8 — `step()`: model request બનાવવો, મોકલવો, પરિણામ સાચવવું
 
-**(a) Adapter બાંધવો.** [`prepareRequest`][loop-prepareRequest] પહેલાં `agent/request` waterfall ચલાવે છે, પછી `this.loopCtx.llm.prepareCall(...)`. આ step નો provider/model અહીં બદલી શકાતો નથી — બદલે તો loop error ફેંકે છે.
+[`step`][loop-step] (lines 435–610) એક `while (true)` છે, કારણ કે retry એ જ step ની અંદર થાય છે (પ્રકરણ 5). એક attempt માં છ ભાગ છે — **(a)–(f)**:
+
+```mermaid
+flowchart LR
+  a["(a) adapter બાંધો"] --> b["(b) model-visible input<br/>ચોપડામાં લખો"]
+  b --> c["(c) ચોપડામાંથી request<br/>બનાવો અને freeze"]
+  c --> d["(d) stream: જવાબ<br/>ટીપે ટીપે"]
+  d --> e["(e) settle: assistant/message<br/>અથવા attempt + retry"]
+  e --> f["(f) tool calls?<br/>હા → tools, null<br/>ના → completed"]
+```
+
+**(a) 🔴 Adapter બાંધવો.** [`prepareRequest`][loop-prepareRequest] પહેલાં `agent/request` waterfall ચલાવે છે, પછી `this.loopCtx.llm.prepareCall(...)`. આ step નો provider/model અહીં બદલી શકાતો નથી — બદલે તો loop error ફેંકે છે.
 
 **(b) Model-visible input log કરવો.** System prompt `system/message` તરીકે, અને પહેલા attempt માં દરેક entered message `user/message` તરીકે append થાય છે ([source][loop-admit]):
 
@@ -167,7 +247,13 @@ session.append('turn/end', { turn, reason })            // turn અહીં પ
 
 Repository નો નિયમ છે: "**Model-visible ⟺ logged**" — model સુધી પહોંચતું બધું session log માંથી ફરી બનાવી શકાય તેવું હોવું જોઈએ ([AGENTS.md][agents-conventions]). ✅
 
+> 🍽️ **"જે મહારાજને કહ્યું, તે ચોપડામાં લખ્યું."** પછીથી કોઈ પૂછે "મહારાજને ખરેખર શું કહેવાયું હતું?" તો ચોપડો જવાબ આપે. Resume, fork, debugging — બધું આ નિયમ પર ટકે છે. `⟺` એટલે "બંને દિશામાં સાચું".
+
 **(c) Request derive અને freeze.** [`buildRequest`][loop-buildRequest] `request/header` (provider, model, tools) અને `request/context` (context window) log કરે છે, પછી `session.deriveMessages()` થી model history બનાવી તેને `deepFreeze` કરે છે ([source][loop-derive]). એટલે model ને મોકલાતી history **log માંથી** આવે છે, memory ના કોઈ અલગ array માંથી નહીં.
+
+> 📦 **Derive** — બીજી માહિતી પરથી ગણીને બનાવવું. અહીં: ચોપડામાંથી model history.
+>
+> 📦 **Freeze / deepFreeze** — object ને "લૉક" કરવું, જેથી કોઈ બદલી ન શકે (`Object.freeze` — રમકડા-agent માં પણ હતું). Deep = અંદરનાં બધાં objects પણ.
 
 **(d) Stream.** [Source][loop-stream]:
 
@@ -182,7 +268,11 @@ Repository નો નિયમ છે: "**Model-visible ⟺ logged**" — model 
         }
 ```
 
-દરેક chunk `agent/assistant-stream` નામના **live** event તરીકે publish થાય છે, durable log માં નહીં.
+દરેક chunk `agent/assistant-stream` નામના **live** event તરીકે publish થાય છે, durable log માં નહીં. દરેક `await` પછી `signal.throwIfAborted()` — "રદ દબાયું છે? તો અહીં જ અટકો" (પ્રકરણ 5).
+
+> 📦 **`for await`** — ટીપે ટીપે આવતા ટુકડા (stream) એક પછી એક, આવે તેમ લેવાનો loop.
+>
+> 📦 **Chunk** — streamed જવાબનો એક ટુકડો. 🍽️ ફોન પર મહારાજનું એક વાક્ય.
 
 **(e) Settle.** Stream સફળ પૂરો થાય તો આખો compact stream એક `assistant/message` event માં embed થાય છે ([source][loop-assistant-message]). નિષ્ફળ થાય તો `assistant/attempt` લખાય અને `agent/request-error` waterfall retry નક્કી કરે ([source][loop-request-error]).
 
@@ -200,15 +290,19 @@ Repository નો નિયમ છે: "**Model-visible ⟺ logged**" — model 
           return result.concluded ? { kind: 'completed' } : null
 ```
 
-Tool calls હોય તો step `null` પાછું આપે છે — "turn પૂરો નથી". તેથી `turn()` નો loop step 2 શરૂ કરે છે. Step 2 માં model text આપે અને tool call નહીં, એટલે `{ kind: 'completed' }` → turn બંધ.
+Tool calls હોય તો step `null` પાછું આપે છે — "turn પૂરો નથી". તેથી `turn()` નો loop step 2 શરૂ કરે છે. Step 2 માં model text આપે અને tool call નહીં, એટલે `{ kind: 'completed' }` → turn બંધ. — રમકડા-agent નું `continue` અને `return reply.text` બરાબર આ જ હતાં.
 
-## 1.8 Tool call ની અંદર (ટૂંકમાં; વિગત પ્રકરણ 3)
+## 1.8 🟢 સ્ટેશન 7 — Tool call ની અંદર (ટૂંકમાં; વિગત પ્રકરણ 3)
 
 `ctx.tools.execute` પસંદ કરેલા **executor** ને કામ સોંપે છે ([`selectExecutor`][tools-selectExecutor]). Base bundle `tool-executor-native` mount કરે છે ([rows][bundle-base-tools]), જે [`executeToolBatch`][batch-execute] ચલાવે છે: arguments JSON parse, `tool/call` log, pipeline (`tools/pre-execute` → guards → `tools/execute` → tool body → `tools/post-execute`), અને છેલ્લે `tool/result` log.
 
+> 📦 **Executor** — tool calls નો જથ્થો (batch) ખરેખર ચલાવનાર. 🍽️ કોઠારી ભીખાભાઈ.
+>
+> 📦 **Pipeline** — એક પછી એક તપાસ/પગલાંની હાર. 🍽️ ચિઠ્ઠી → તપાસ → નિયમ → સામાન → લેબલ → ચોપડો.
+
 `read` tool ([`applyReadTool`][read-tool]) `ctx.fs` પાસે path resolve કરાવે છે, file વાંચે છે, અને line-numbered text પાછું આપે છે.
 
-## 1.9 શું stored થાય છે અને શું ફક્ત streamed?
+## 1.9 🟡 શું stored થાય છે અને શું ફક્ત streamed?
 
 | માહિતી | ક્યાં | ટકાઉ? |
 |---|---|---|
@@ -219,24 +313,34 @@ Tool calls હોય તો step `null` પાછું આપે છે — "tu
 
 સ્રોત: architecture doc નું turn flow ✅ અને અમારો ચલાવેલો trace 🧪. Durable/live નો નિયમ: "Session events are durable facts appended to the log … Agent events (`agent/*`) carry a live `Agent`" ([architecture.md][arch-turnflow]).
 
+> 📦 **Durable / persisted** — disk પર સચવાયેલું; process બંધ થાય તો પણ રહે. 📦 **Transient / live** — ફક્ત ચાલતા process માં; બંધ થતાં ગયું.
+>
+> 🍽️ **યાદ-ચાવી: "વાત હવામાં, હિસાબ ચોપડામાં."** મહારાજ ફોન પર જે વાક્યો બોલે (chunks) તે હવામાં; અંતે નક્કી થયેલો ઓર્ડર (`assistant/message`) ચોપડામાં.
+
 ## Source map: આ ક્રમમાં ખોલો
 
-| ક્રમ | File | Symbol | Input → Output (side effect) |
-|---|---|---|---|
-| 1 | `apps/cli/src/bin.ts` | [`runCli`][cli-runCli] | argv → (profile boot) |
-| 2 | `packages/bundle/headless/src/index.ts` | [`run`][headless-run] | task → stdout text, exit code |
-| 3 | `packages/core/agent-loop/src/agent.ts` | [`kick`][loop-kick] → [`turn`][loop-turn] | inbox → `turn/*` events |
-| 4 | same | [`preStep`][loop-preStep] | claimed messages → enter/reject decision |
-| 5 | same | [`step`][loop-step] | decision → `assistant/*`, `tool/*` events |
-| 6 | same | [`buildRequest`][loop-buildRequest] | log → frozen `GenerateOptions` |
-| 7 | `packages/llm/llm/src/index.ts` | [`stream`][llm-stream] | request → `llm/stream` waterfall → adapter |
-| 8 | `packages/llm/llm-deepseek/src/adapter.ts` | [`fetch /messages`][deepseek-fetch] | body → HTTP SSE |
-| 9 | `packages/core/tools/src/batch.ts` | [`executeToolBatch`][batch-execute] | tool calls → results |
-| 10 | `packages/fs/tool-fs/src/read.ts` | [`applyReadTool`][read-tool] | `file_path` → numbered lines |
+| ક્રમ | સ્ટેશન | File | Symbol | Input → Output (side effect) |
+|---|---|---|---|---|
+| 1 | 1 | `apps/cli/src/bin.ts` | [`runCli`][cli-runCli] | argv → (profile boot) |
+| 2 | 3, 10 | `packages/bundle/headless/src/index.ts` | [`run`][headless-run] | task → stdout text, exit code |
+| 3 | 4, 9 | `packages/core/agent-loop/src/agent.ts` | [`kick`][loop-kick] → [`turn`][loop-turn] | inbox → `turn/*` events |
+| 4 | 5 | same | [`preStep`][loop-preStep] | claimed messages → enter/reject decision |
+| 5 | 5, 6, 8 | same | [`step`][loop-step] | decision → `assistant/*`, `tool/*` events |
+| 6 | 5 | same | [`buildRequest`][loop-buildRequest] | log → frozen `GenerateOptions` |
+| 7 | 5 | `packages/llm/llm/src/index.ts` | [`stream`][llm-stream] | request → `llm/stream` waterfall → adapter |
+| 8 | 5 | `packages/llm/llm-deepseek/src/adapter.ts` | [`fetch /messages`][deepseek-fetch] | body → HTTP SSE |
+| 9 | 7 | `packages/core/tools/src/batch.ts` | [`executeToolBatch`][batch-execute] | tool calls → results |
+| 10 | 7 | `packages/fs/tool-fs/src/read.ts` | [`applyReadTool`][read-tool] | `file_path` → numbered lines |
 
-## Lab 1 — key વગર આખી મુસાફરી જુઓ
+## 🧪 Lab 1 — key વગર આખી મુસાફરી જુઓ
 
 **વિચાર.** Repository માં `@deepseek-ai/dsh-llm-mock-server` છે: Messages-compatible HTTP/SSE server, જે દરેક request માટે scripted વર્તન આપે છે ([`tool_call_success`][mock-tool-call]). DeepSeek adapter ને `DEEPSEEK_BASE_URL` થી તેની તરફ વાળી શકાય છે ([`BASE_URL_ENV`][deepseek-baseurl]). Script: પહેલો request → `read` tool call; બીજો → ગુજરાતી text.
+
+> 📦 **Mock server** — ખરા server જેવો દેખાતો, પણ script મુજબ જવાબ આપતો નકલી server. 🍽️ **"રિહર્સલ મહારાજ"** — પહેલી વાર "રેસીપી-ચોપડી લાવો" કહે, બીજી વાર "સાર તૈયાર". Agency ને ફોન નથી, બિલ નથી, key નથી.
+>
+> 📦 **Observer plugin** — ફક્ત જોતો અને નોંધતો plugin; વર્તન બદલતો નથી. 🍽️ ખૂણામાં બેઠેલો નિરીક્ષક, જે દરેક ઘટના ઘડિયાળ જોઈને લખે.
+>
+> 📦 **Overlay / `--patch`** — ચાલુ configuration માં ઉમેરો/બદલાવ કરતી YAML file. 🍽️ મેનુ પર ચોંટાડેલી ચિઠ્ઠી.
 
 **તૈયારી** (harness checkout ના root માં, `pnpm install && pnpm run build` પછી):
 
@@ -250,7 +354,11 @@ cp -r <book>/labs tmp/book-labs
 bash tmp/book-labs/request-trace/run-mock.sh
 ```
 
-આ script ([labs/request-trace/run-mock.sh](../labs/request-trace/run-mock.sh)) ત્રણ કામ કરે છે: mock server ને port 8000 પર `--sequence tool_call_success,success` સાથે શરૂ કરે છે; એક overlay લખે છે જે observer plugin [`trace-events.ts`](../labs/request-trace/trace-events.ts) ને **absolute path** થી insert કરે છે અને `session-title-llm` row ને disable કરે છે; અને પછી `pnpm dsh --profile headless --patch <overlay> "આ repositoryનું README વાંચીને ગુજરાતી સાર આપો."` ચલાવે છે.
+આ script ([labs/request-trace/run-mock.sh](../labs/request-trace/run-mock.sh)) ત્રણ કામ કરે છે:
+
+1. mock server ને port 8000 પર `--sequence tool_call_success,success` સાથે શરૂ કરે છે;
+2. એક overlay લખે છે જે observer plugin [`trace-events.ts`](../labs/request-trace/trace-events.ts) ને **absolute path** થી insert કરે છે અને `session-title-llm` row ને disable કરે છે;
+3. પછી `pnpm dsh --profile headless --patch <overlay> "આ repositoryનું README વાંચીને ગુજરાતી સાર આપો."` ચલાવે છે.
 
 **અપેક્ષિત stdout** (🧪 exit 0):
 
@@ -258,9 +366,9 @@ bash tmp/book-labs/request-trace/run-mock.sh
 README નો સાર: DeepSeek Harness એ plugin આધારિત agent harness છે.
 ```
 
-ધ્યાન: આ text mock server એ `--success-text` થી આપ્યો છે. Lab **plumbing** ચકાસે છે, model ની ગુણવત્તા નહીં.
+ધ્યાન: આ text mock server એ `--success-text` થી આપ્યો છે. Lab **plumbing** (પાઇપ-લાઇન) ચકાસે છે, model ની ગુણવત્તા નહીં.
 
-**અપેક્ષિત stderr** (અમારો run, [evidence/two-calls.err](../evidence/two-calls.err) માંથી ટૂંકાવીને):
+**અપેક્ષિત stderr** (અમારો run, [evidence/two-calls.err](../evidence/two-calls.err) માંથી ટૂંકાવીને) — દરેક line ની ડાબી બાજુ સ્ટેશન નંબર ઉમેરીને વાંચો:
 
 ```text
 [trace +  132ms] session/event #4 turn/start {"turn":1}
@@ -289,6 +397,18 @@ README નો સાર: DeepSeek Harness એ plugin આધારિત agent ha
 [trace +  402ms] dispose: total llm/stream calls = 2
 ```
 
+| Trace lines | સ્ટેશન |
+|---|---|
+| `#4 turn/start` | 4 |
+| `#6`–`#13`, `llm/stream call #1` | 5 |
+| `#16 assistant/message`, `#17 tool/call` | 6 |
+| `tools/result`, `#18 tool/result` | 7 |
+| `#20`, `llm/stream call #2`, `#22` | 8 |
+| `#24 turn/end` | 9 |
+| stdout line, exit 0 | 10 |
+
+આખી મુસાફરી 0.4 સેકન્ડથી ઓછી — કારણ કે રિહર્સલ મહારાજ તરત જવાબ આપે છે.
+
 **અવલોકનો જે તમારે જાતે ચકાસવાના છે:**
 
 1. `llm/stream call` બરાબર **2** વાર. Call #1 માં `messages=5` (1 system + 4 user), call #2 માં `messages=7` (+ assistant tool-call + tool result).
@@ -299,12 +419,17 @@ node tmp/book-labs/request-trace/print-session.mjs "$(find tmp/book-home/session
 ```
 
 અમને મળ્યું ([evidence/two-calls.session.txt](../evidence/two-calls.session.txt)): `source={"kind":"user"}` (તમારું task), `agent-instructions` (checkout ના `AGENTS.md` માંથી workspace instructions), `runtime-context` (current working directory વગેરે), અને `skill-catalog`. 🧪
-3. Session file નું નામ `session.v4.jsonl.zstd` — format version 4, zstd-compressed JSONL. Folder નામ cwd પરથી બને છે.
+
+**યાદ-ચાવી "કા-નિ-સ્થ-કૌ":** **કા**મ (task), ઘરના **નિ**યમ (agent-instructions), **સ્થ**ળ-સમય (runtime-context), **કૌ**શલ્ય-યાદી (skill-catalog).
+
+3. Session file નું નામ `session.v4.jsonl.zstd` — format version 4, zstd-compressed JSONL (એક line = એક event, દબાવેલી પોટલીમાં). Folder નામ cwd પરથી બને છે.
 4. `chunks=7` અને `chunks=13` એ live frames છે; file માં ફક્ત committed `assistant/message` છે, જેમાં compact stream embedded છે.
 
 **Wire પર ખરેખર શું ગયું?** [`capture-wire.ts`](../labs/request-trace/capture-wire.ts) એ mock server ને in-process ચલાવી દરેક request body નો સાર લખે છે. અમારું પરિણામ ([evidence/wire.json](../evidence/wire.json)): call #1 માં `messageRoles: ["user"]` — ચારેય logged user messages **એક** wire `user` message ના ચાર text blocks બન્યા; call #2 માં `["user","assistant","user"]`, અને છેલ્લા user message માં `tool_result` block. બંને request માં 25 tools અને `dsh_session_log` field હતાં. 🧪 (પ્રકરણ 3 અને 5 માં આ field પર પાછા આવીશું.)
 
-## આગાહી કસોટી
+> 📦 **Wire** — network પર ખરેખર જતો data, byte-byte. 🍽️ ફોન પર ખરેખર બોલાયેલા શબ્દો — ચોપડાની નોંધ નહીં.
+
+## 🔮 આગાહી કસોટી
 
 `TITLE=on` (base bundle નો LLM title generator ચાલુ) અને default script `tool_call_success,success` સાથે ચલાવો:
 
@@ -312,91 +437,41 @@ node tmp/book-labs/request-trace/print-session.mjs "$(find tmp/book-home/session
 TITLE=on bash tmp/book-labs/request-trace/run-mock.sh
 ```
 
-**ચલાવતા પહેલાં લખો:** (1) કુલ કેટલા `llm/stream` calls થશે? (2) stdout માં શું આવશે? (3) exit code? (4) run કેટલો સમય લેશે — 1 સેકન્ડથી ઓછો કે વધુ?
+> 📦 **Title generator** — નવા session ને ટૂંકું નામ આપવા model ને એક વધારાનો નાનો call કરતો plugin. 🍽️ ઓર્ડરને "ટેબલ 4 — ખાસ દાળ" જેવું નામ આપવા મહારાજને અલગથી પૂછવું.
+
+**ચલાવતા પહેલાં લખો:** (1) કુલ કેટલા `llm/stream` calls થશે? (2) stdout માં શું આવશે? (3) exit code? (4) run કેટલો સમય લેશે — 1 સેકન્ડથી ઓછો કે વધુ? (સંકેત: રિહર્સલ મહારાજ પાસે ફક્ત **બે** જવાબ લખેલા છે.)
 
 જવાબ અને અમારો trace: [પરિશિષ્ટ D — Lab 1](../appendix/D-lab-solutions.md#lab-1).
 
-## નિષ્ફળતા: stdout ખાલી, `dsh: TRANSPORT: DeepSeek Messages transport failed`
+## 🩺 નિષ્ફળતા: stdout ખાલી, `dsh: TRANSPORT: DeepSeek Messages transport failed`
+
+**વાર્તામાં.** આરવ lab script વગર સીધું `pnpm dsh` ચલાવે છે. થોડી વાર કંઈ થતું નથી, પછી લાલ અક્ષર. "દીદી, મહારાજ ગુસ્સે થયા?" — "ના, ફોન જ નથી લાગ્યો."
 
 **લક્ષણ.** Lab script વગર સીધું `pnpm dsh --profile headless "…"` ચલાવ્યું, `DEEPSEEK_BASE_URL` set કર્યું નથી, અને network public API સુધી પહોંચતું નથી.
 
 **ટૂંકો નિદાન માર્ગ.**
 
 1. Stderr ની પહેલી lines જુઓ. અમારા sandbox માં: `model listing from https://api.deepseek.com/models failed … using the bundled catalog` અને પછી `dsh: TRANSPORT: DeepSeek Messages transport failed`. 🧪 ([evidence/nofs.err](../evidence/nofs.err) ના અંતે)
-2. `TRANSPORT` code adapter ના [`generate`][deepseek-generate] માંથી આવે છે: `fetch` પોતે નિષ્ફળ ગયું, provider એ HTTP error આપી નથી.
-3. Base URL ક્યાંથી આવે છે? [`DEEPSEEK_BASE_URL`][deepseek-baseurl] env, નહીં તો public API. Lab માટે તેને mock તરફ વાળો.
+2. `TRANSPORT` code adapter ના [`generate`][deepseek-generate] માંથી આવે છે: `fetch` પોતે નિષ્ફળ ગયું, provider એ HTTP error આપી નથી. (HTTP error હોત તો `AUTH`, `SERVER` જેવો code — પ્રકરણ 5.)
+3. Base URL ક્યાંથી આવે છે? [`DEEPSEEK_BASE_URL`][deepseek-baseurl] env, નહીં તો public API. Lab માટે તેને mock તરફ વાળો — `run-mock.sh` આ જ કરે છે.
 
-## Mastery check
-
-1. Turn અને step ની વ્યાખ્યા લખો, અને README ઉદાહરણમાં બંનેની સંખ્યા કહો.
-2. `turn/end` `finally` block માં કેમ છે? તેનાથી કઈ ખાતરી મળે છે?
-3. Call #2 માં `messages=7` ના સાત messages કયા?
-4. `agent/assistant-stream` chunk frames અને `assistant/message` વચ્ચે replay ની દૃષ્ટિએ શું ફરક છે?
-5. Step 1 tool call પછી `step()` શું return કરે છે, અને `turn()` તેનો અર્થ શું કરે છે?
-6. Model history કઈ function થી બને છે, અને તે memory ના કોઈ અલગ array ને બદલે log માંથી કેમ બને છે?
-
-જવાબો: [પરિશિષ્ટ D — પ્રકરણ 1](../appendix/D-lab-solutions.md#ch1).
+> 📦 **Transport error** — network સ્તરે જ નિષ્ફળતા (connection ન થયું), જવાબ આવ્યો જ નહીં. 🍽️ ફોનનો તાર જ કપાયેલો — agency એ "ના" નથી કહ્યું, કંઈ સાંભળ્યું જ નથી.
 
 <a id="saral-samaj"></a>
 
-## સરળ સમજ — પ્રકરણ 1 સાદી ગુજરાતીમાં
+## ✅ સાર — પ્રકરણ 1 એક પાનામાં
 
-> આ વિભાગ નવો ઉમેરેલો છે; ઉપરનું પ્રકરણ જેમ હતું તેમ જ છે. આખો નકશો: [સમગ્ર નકશો](overview-samagra-naksho.md).
+**એક વાક્યમાં:** એક ઓર્ડર દરવાજાથી થાળી સુધી — ઓર્ડર લખાય (`turn/start`), મહારાજને બે વાર પૂછાય (2 model calls = 2 steps), વચ્ચે એક વાર કોઠારમાંથી રેસીપી-ચોપડી લવાય (`read` tool), અને દરેક પગલું ચોપડામાં નોંધાય — `finally` ને કારણે અંત પણ.
 
-### એક વાક્યમાં
+> ⚠️ **ઉપમા અહીં તૂટે છે:** સાચો વેઈટર મહારાજને દરેક વખતે આખી કહાની નથી કહેતો. અહીં **દરેક model call માં આખો ઇતિહાસ** (ચોપડામાંથી ફરી બનાવેલો) જાય છે — call #1 માં 5 messages, call #2 માં 7. Model ને "યાદ" નથી રહેતું; યાદ ચોપડો રાખે છે.
 
-**પ્રકરણ 1 = એક ઓર્ડર દરવાજાથી થાળી સુધી અનુસરવો: ઓર્ડર લખાય, રસોઇયાને બે વાર પૂછાય, વચ્ચે એક વાર કોઠારમાંથી રેસીપી-ચોપડી લવાય, અને દરેક પગલું ચોપડામાં નોંધાય.**
+### Turn અને step — ઘડિયાળ અને મિનિટ-કાંટો
 
-### ભોજનાલયની ઉપમામાં
+- **Turn** = એક ઓર્ડરનું આખું કામ. શરૂ: `turn/start`. અંત: `turn/end`, કારણ સાથે.
+- **Step** = મહારાજ સાથેની એક વાતચીત + તેમણે માંગેલા સાધનો. એક turn માં શૂન્ય, એક, કે ઘણા steps હોઈ શકે. README ઉદાહરણમાં **1 turn = 2 steps**.
+- **કેમ બે steps?** Step 1 ના અંતે model એ text ને બદલે tool call આપ્યો; `step()` એ `null` ("હજી પૂરું નથી") આપ્યું; `turn()` એ બીજો step શરૂ કર્યો. Step 2 માં tool call નથી → `{ kind: 'completed' }`.
 
-ગ્રાહક (તમે) કહે છે: "README વાંચીને ગુજરાતી સાર આપો."
-
-1. **વેઈટર** (agent loop) ઓર્ડર-ચોપડામાં લખે છે: "ઓર્ડર નં. 1 શરૂ" (`turn/start`).
-2. વેઈટર **રસોઇયા** (model) પાસે જાય છે અને સાથે લઈ જાય છે: ભોજનાલયના નિયમો (system prompt), ગ્રાહકનો ઓર્ડર, ઘરના ખાસ નિયમો (`AGENTS.md`), આજની તારીખ-સ્થળ (runtime context), અને "આપણી પાસે કયા 25 સાધનો છે" તેની યાદી (tools). આ **પહેલી વાતચીત** છે (step 1, model call #1).
-3. રસોઇયો કહે છે: "મારે રેસીપી-ચોપડી જોઈએ — `read README.md`" (tool call).
-4. વેઈટર કોઠારમાં જાય, ચોપડી લાવે (tool execution), અને ચોપડામાં લખે: "આ માંગ્યું, આ મળ્યું" (`tool/call`, `tool/result`).
-5. વેઈટર **ફરી** રસોઇયા પાસે જાય, આ વખતે ચોપડીનું પાનું સાથે (step 2, model call #2).
-6. રસોઇયો હવે વાનગી બનાવે: ગુજરાતી સાર (text). કોઈ નવું સાધન નથી માંગતો.
-7. વેઈટર લખે: "ઓર્ડર નં. 1 પૂર્ણ" (`turn/end completed`) અને થાળી પીરસે (stdout).
-
-**ઉપમા ક્યાં તૂટે છે:** સાચો વેઈટર રસોઇયાને દરેક વખતે આખી કહાની નથી કહેતો. અહીં **દરેક model call માં આખો ઇતિહાસ** (ચોપડામાંથી ફરી બનાવેલો) જાય છે — call #1 માં 5 messages, call #2 માં 7. Model ને "યાદ" નથી રહેતું; યાદ ચોપડો રાખે છે.
-
-### વિષય-વાર ઊંડી સમજ
-
-#### (1) Turn અને step — ઘડિયાળ અને મિનિટ-કાંટો
-
-- **Turn** = એક ઓર્ડરનું આખું કામ. શરૂ: `turn/start`. અંત: `turn/end`, કારણ સાથે (`completed`, `error`, `aborted`, `blocked`, `max-tokens`).
-- **Step** = રસોઇયા સાથેની એક વાતચીત + તેણે માંગેલા સાધનો.
-- એક turn માં શૂન્ય, એક, કે ઘણા steps હોઈ શકે. README ઉદાહરણમાં **1 turn = 2 steps**.
-
-**કેમ બે steps?** Step 1 ના અંતે model એ text ને બદલે tool call આપ્યો. Code (`step()`) ત્યારે `null` પાછું આપે છે — એનો અર્થ "હજી પૂરું નથી". `turn()` એ જોઈને બીજો step શરૂ કરે છે. Step 2 માં tool call નથી, એટલે `{ kind: 'completed' }` — turn બંધ.
-
-#### (2) `turn/end` હંમેશા કેમ લખાય છે
-
-`turn/end` `finally` block માં છે. **`finally`** એટલે "ગમે તે થાય — સફળતા, ભૂલ, કે રદ — આ code ચાલશે જ". તેથી ચોપડામાં દરેક શરૂ થયેલા ઓર્ડરનો અંત હોય છે. પ્રકરણ 3 અને 5 માં Ctrl+C પછી પણ `turn/end {"kind":"aborted"}` દેખાય છે, અને resume આ જ જોડ પર આધાર રાખે છે.
-
-#### (3) `preStep` — વાતચીત પહેલાંની તૈયારી
-
-દરેક step પહેલાં પાંચ કામ: (1) inbox માંથી ઓર્ડર લેવો, (2) કયું model વાપરવું તે જોવું, (3) આ step માં કયા tools દેખાશે, (4) system prompt + tool schemas ભેગા કરવા, (5) `agent/pre-step` **waterfall** ચલાવવું — બીજા plugins ને ઓર્ડર બદલવાની કે નકારવાની તક.
-
-**Waterfall** = ધોધની જેમ એક પછી એક listener; દરેકે `next()` બોલાવી પાણી આગળ વહેવા દેવું પડે. `next()` ભૂલો તો ધોધ ત્યાં જ અટકે (પ્રકરણ 6 ની નિષ્ફળતા).
-
-#### (4) "જે model ને દેખાય, તે ચોપડામાં લખાય"
-
-Repository નો નિયમ: **Model-visible ⟺ logged.** Model ને જતું દરેક message પહેલાં session log માં `system/message` કે `user/message` તરીકે લખાય છે, અને પછી `session.deriveMessages()` ચોપડામાંથી history બનાવે છે. ફાયદો: કોઈ પણ request પછીથી ચોપડામાંથી **ફરી બનાવી** શકાય — resume, fork, debugging બધું આના પર ટકે છે.
-
-#### (5) Stored vs streamed — ચોપડો vs વાતો
-
-- **Stored (ચોપડો):** `turn/*`, `step/*`, `*/message`, `tool/*`, `request/*` — file માં સચવાય, reload પછી પણ રહે.
-- **Streamed (વાતો):** `agent/assistant-stream` chunk frames — model લખતું જાય તેમ UI ને ટુકડા. Process બંધ થાય તો ગયા. ફક્ત અંતનો committed `assistant/message` ચોપડામાં જાય.
-
-**યાદ-ચાવી:** "**વાત હવામાં, હિસાબ ચોપડામાં.**"
-
-#### (6) Lab કેવી રીતે key વગર ચાલે છે
-
-`dsh-llm-mock-server` એ નકલી રસોઇયો છે જે script મુજબ જવાબ આપે: પહેલી વાર "`read README.md`", બીજી વાર "ગુજરાતી સાર". `DEEPSEEK_BASE_URL` થી DeepSeek adapter ને આ નકલી રસોઇયા તરફ વાળીએ છીએ. **ધ્યાન:** સાર mock નો લખેલો છે; lab plumbing (પાઇપ-લાઇન) ચકાસે છે, model ની બુદ્ધિ નહીં.
-
-### નવા ટેકનિકલ શબ્દો — સરળ ગુજરાતીમાં
+### નવા ટેકનિકલ શબ્દો — એક નજરે
 
 | શબ્દ | સરળ અર્થ | ઉદાહરણ | યાદ-ચાવી |
 |---|---|---|---|
@@ -404,22 +479,24 @@ Repository નો નિયમ: **Model-visible ⟺ logged.** Model ને જ�
 | Step | એક model call + તેના tools | step 1 = `read` માંગ્યું | "એક વાતચીત" |
 | Inbox | agent ને મળેલા, હજી ન લીધેલા સંદેશા | `agent.followup(...)` | "ઓર્ડર-પેટી" |
 | System prompt | model માટેના સ્થાયી નિયમો | "You are an AI agent…" | "ભોજનાલયના નિયમો" |
-| Tool schema | tool નું નામ, વર્ણન, arguments નું વર્ણન | `read(file_path, offset, limit)` | "સાધનનું લેબલ" |
+| Tool schema | tool નું નામ, વર્ણન, arguments નું વર્ણન | `read(file_path, offset, limit)` | "ખાનાનું લેબલ" |
 | Tool call | model ની "આ tool ચલાવો" માંગ | `read {"file_path":"README.md"}` | "કોઠારની ચિઠ્ઠી" |
 | Session event | ચોપડાની એક entry | `#17 tool/call` | "ચોપડાની લીટી" |
 | `seq` | event નો ક્રમાંક, 0 થી | `#24 turn/end` | "પાના નંબર" |
 | Waterfall event | `next()` વાળી listener સાંકળ | `agent/pre-step`, `llm/stream` | "ધોધ" |
 | Stream / chunk | જવાબ ટુકડે-ટુકડે આવવો | `chunks=13` | "ટીપે ટીપે" |
-| Mock server | scripted નકલી provider | `tool_call_success,success` | "નકલી રસોઇયો" |
+| Mock server | scripted નકલી provider | `tool_call_success,success` | "રિહર્સલ મહારાજ" |
 | Overlay / `--patch` | config માં ઉમેરો/બદલાવ કરતી YAML | trace plugin insert | "મેનુ પર ચિઠ્ઠી" |
 | stdout / stderr | સામાન્ય output / ભૂલ-અને-માહિતી output | જવાબ stdout માં, trace stderr માં | "થાળી / રસોડાની બૂમો" |
 
 ### યાદ રાખવાની રીતો
 
 - **"2-1-25-4":** 2 model calls, 1 tool call, 25 tools, 4 user messages. Title row ચાલુ → 3 calls.
-- **ચાર user messages "કા-નિ-સ્થ-કૌ":** **કા**મ (task), ઘરના **નિ**યમ (agent-instructions), **સ્થ**ળ-સમય (runtime-context), **કૌ**શલ્ય-યાદી (skill-catalog).
-- **Turn ના પાંચ અંત "પૂ-ભૂ-ર-રો-મ":** **પૂ**ર્ણ (completed), **ભૂ**લ (error), **ર**દ (aborted), **રો**ક (blocked), **મ**ર્યાદા (max-tokens).
-- **દસ સ્ટેશનની વાર્તા:** [સમગ્ર નકશો — વિભાગ 5](overview-samagra-naksho.md) માંની table મોઢે બોલો.
+- **"કા-નિ-સ્થ-કૌ":** ચાર user messages — કામ, નિયમ, સ્થળ-સમય, કૌશલ્ય-યાદી.
+- **"પૂ-ભૂ-ર-રો-મ":** turn ના પાંચ અંત — completed, error, aborted, blocked, max-tokens.
+- **"વાત હવામાં, હિસાબ ચોપડામાં":** live chunks vs durable `assistant/message`.
+- **"જે મહારાજને કહ્યું, તે ચોપડામાં લખ્યું":** Model-visible ⟺ logged.
+- **દસ સ્ટેશનની વાર્તા:** ઉપરનું table મોઢે બોલો — દરવાજો, ભોજનાલય ખૂલે, ઓર્ડર લખાય, નંબર પડે, પહેલી વાતચીત, ચિઠ્ઠી, કોઠાર, બીજી વાતચીત, પીરસાય, બિલ.
 
 ### સામાન્ય ગેરસમજો
 
@@ -459,11 +536,24 @@ System, 4 user messages, assistant નો tool-call, અને tool result.
 
 ### મિત્રને સમજાવો (3 મિનિટ)
 
-ભોજનાલયની ઉપમા વાપરીને મિત્રને સમજાવો કે README ઉદાહરણમાં રસોઇયાને **બે વાર** કેમ પૂછવું પડ્યું. પછી એ જ વાત ઉપમા વગર, ફક્ત `turn`, `step`, `tool call` શબ્દોથી કહો.
+ભોજનાલયની ઉપમા વાપરીને મિત્રને સમજાવો કે README ઉદાહરણમાં મહારાજને **બે વાર** કેમ પૂછવું પડ્યું. પછી એ જ વાત ઉપમા વગર, ફક્ત `turn`, `step`, `tool call` શબ્દોથી કહો.
 
-### આગલા પ્રકરણ સાથે જોડાણ
+## 🧠 Mastery check
 
-તમે ઓર્ડરની મુસાફરી જોઈ, પણ એક પ્રશ્ન બાકી છે: **આ વેઈટર, રસોઇયો, કોઠાર — બધા ભોજનાલયમાં આવ્યા કેવી રીતે?** પ્રકરણ 2 એ startup ની વાર્તા છે: profile, patches, Cordis, `inject`. પ્રકરણ 1 નો `trace-events.ts` અને `run-mock.sh` ત્યાં અને પછીનાં બધાં પ્રકરણોમાં ફરી વપરાશે.
+1. Turn અને step ની વ્યાખ્યા લખો, અને README ઉદાહરણમાં બંનેની સંખ્યા કહો.
+2. `turn/end` `finally` block માં કેમ છે? તેનાથી કઈ ખાતરી મળે છે?
+3. Call #2 માં `messages=7` ના સાત messages કયા?
+4. `agent/assistant-stream` chunk frames અને `assistant/message` વચ્ચે replay ની દૃષ્ટિએ શું ફરક છે?
+5. Step 1 tool call પછી `step()` શું return કરે છે, અને `turn()` તેનો અર્થ શું કરે છે?
+6. Model history કઈ function થી બને છે, અને તે memory ના કોઈ અલગ array ને બદલે log માંથી કેમ બને છે?
+
+જવાબો: [પરિશિષ્ટ D — પ્રકરણ 1](../appendix/D-lab-solutions.md#ch1).
+
+## 🎬 આગળ શું
+
+રાત્રે આરવ નોટબુકમાં દસ સ્ટેશન ફરી લખે છે, અને એક પ્રશ્ન પર અટકે છે: "સ્ટેશન 2 — 'ભોજનાલય ખૂલ્યું, સ્ટાફ હાજર.' પણ આ ~100 કર્મચારી **આવ્યા કેવી રીતે**? કોણે નક્કી કર્યું કે રમેશભાઈ પહેલાં કોઠારી હાજર હોવા જોઈએ?"
+
+મીરાદીદી: "કાલે સવારે છ વાગ્યે આવજે. ભોજનાલય **ખૂલતું** જોઈશું — કાંતિકાકા (Cordis) કોને ક્યારે કામ પર લે છે, આજનું મેનુ (profile + patches) કેવી રીતે બને છે, અને એક કર્મચારી રજા પર હોય તો શું થાય." આજનો `trace-events.ts` અને `run-mock.sh` ત્યાં અને પછીનાં બધાં પ્રકરણોમાં ફરી વપરાશે.
 
 ---
 
