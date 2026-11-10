@@ -7,6 +7,9 @@
 - **વાચક:** 12મું ધોરણ પાસ કરેલો કોઈ પણ વિદ્યાર્થી — programming ન આવડતું હોય તો પણ. [પ્રવેશ પ્રકરણ](book/pravesh-shunya-thi-shuruaat.md) terminal, JSON, HTTP, JavaScript અને AI model નો પાયો શૂન્યથી શીખવે છે; પ્રકરણ 7 ના અંતે તમે maintainer સ્તરનું કામ કરો છો.
 - **API key જરૂરી નથી.** બધી labs repository ના keyless mock provider સાથે ચાલે છે.
 
+> 📖 **રંગીન web આવૃત્તિ — online વાંચો:** <https://claude.ai/artifact/53w4tkgs3LB5a3KYDwsUNT>
+> આખું પુસ્તક એક સુંદર પાનામાં: થાળીનું ચિત્ર, રંગીન વાર્તા-ખાનાં, chapter cards, diagrams, light/dark mode, અક્ષરનું કદ નાનું-મોટું, અને phone પર પણ સરસ દેખાય. આ પાનું [`tools/build-artifact.mjs`](tools/build-artifact.mjs) આ repository ની files પરથી બનાવે છે.
+
 > **Verification marks:** ✅ pinned source વાંચીને ચકાસ્યું · 🧪 આ પુસ્તક લખતી વખતે ચલાવીને ચકાસ્યું · ⚠️ ચકાસ્યું નથી.
 > Repository ની [SAFETY.md](https://github.com/deepseek-ai/deepseek-harness/blob/fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159/SAFETY.md) પહેલાં વાંચો: આ developer-preview software model-generated commands ચલાવી શકે છે.
 
@@ -111,6 +114,12 @@ node tools/verify-mermaid.mjs <directory with mermaid and jsdom in node_modules>
 ```
 
 પહેલો command citations, reference-links, relative links/anchors અને દરેક permalink ની line range ચકાસે છે; બીજો દરેક mermaid diagram parse કરે છે.
+
+રંગીન web આવૃત્તિ ફરી બનાવવા ([marked](https://www.npmjs.com/package/marked) નું `marked.esm.js` જોઈએ):
+
+```bash
+node tools/build-artifact.mjs <path to marked.esm.js> book.html
+```
 
 ## License
 
