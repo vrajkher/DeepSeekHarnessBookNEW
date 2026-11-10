@@ -8,6 +8,8 @@
 //   - blockquotes that open with 📦 / 🍽️ / ⚠️ / 💡 become coloured callouts;
 //   - "##" headings that open with a chapter-structure emoji (🎬 🎯 🗺️ 🧪 🔮 🩺 ✅ 🧠) get an icon chip,
 //     and the 🎬 story and ✅ recap sections are wrapped in tinted panels;
+//   - paragraphs that open with a scene-step emoji (🎬 event, ❓ question, 💻 in code, 🔬 expert view)
+//     get a coloured edge; the 🔬 paragraph becomes a tinted panel;
 //   - a cover with the thali diagram and chapter cards is generated from META below.
 import { readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, normalize, relative, resolve } from 'node:path'
@@ -70,6 +72,7 @@ const KATORIS = [
 ]
 
 const SECTION_ICONS = { '🎬': 'haldi', '🎯': 'ink', '🗺️': 'sky', '🧪': 'leaf', '🔮': 'kesar', '🩺': 'chili', '✅': 'ink', '🧠': 'kesar' }
+const STEPS = [['🎬', 'story'], ['❓', 'ask'], ['💻', 'code'], ['🔬', 'expert']]
 const CALLOUTS = [['📦', 'term'], ['🍽️', 'dish'], ['⚠️', 'warn'], ['💡', 'tip'], ['🧭', 'tip']]
 
 const meta = new Map(VIEWS.map(([file, view, title, eyebrow, chip, tone]) => [view, { file, view, title, eyebrow, chip, tone }]))
@@ -105,6 +108,10 @@ function styleBlockquotes(html) {
     })
     return first ? `<blockquote class="co co-${first}">${body}</blockquote>` : `<blockquote>${body}</blockquote>`
   })
+}
+
+function styleSteps(html) {
+  return html.replace(/<p>(🎬|❓|💻|🔬)/g, (_m, mark) => `<p class="step step-${STEPS.find(([k]) => k === mark)[1]}">${mark}`)
 }
 
 function wrapSegments(html) {
@@ -165,6 +172,7 @@ for (const [file, view] of VIEWS) {
   html = html.replace(/<table>/g, '<div class="table-wrap"><table>').replace(/<\/table>/g, '</table></div>')
   html = html.replace(/<a id="([^"]+)"><\/a>/g, (_m, a) => `<span class="anchor" id="${anchorId(view, a)}"></span>`)
   html = styleBlockquotes(html)
+  html = styleSteps(html)
   html = wrapSegments(html)
   sections.push(`<section class="part t-${v.tone}" id="${view}" aria-labelledby="${view}-h1">\n${html}</section>`)
   toc.push({ ...v, heads })
