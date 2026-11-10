@@ -1,20 +1,14 @@
 # પ્રકરણ 3 — Tools, sessions અને model adapters
 
-> **Level 3 · 🟡 મોટા ભાગે, 🔴 wire/SSE ની વિગતો બીજી વાંચનમાં.** વાર્તાનો દિવસ 7.
-> ત્રણ seam ને અંદરથી ખોલીએ: built-in `read` tool, DeepSeek model adapter, અને session log.
-> દરેક માટે: input schema/format, registration, execution, error handling, અને output conversion. આખો નકશો: [સમગ્ર નકશો](overview-samagra-naksho.md).
+> **Level 3 · વાર્તાનો દિવસ 7.**
+> પ્રકરણ 1 માં જે ત્રણ જગ્યાએ "વિગત પછી" લખ્યું હતું, તે ત્રણ ઓરડા આજે અંદરથી ખૂલે છે: **કોઠાર** (`read` tool અને tool pipeline), **ફોન-રૂમ** (DeepSeek adapter), અને **ચોપડા-ઘર** (session log, persistence, resume).
+> દરેક દૃશ્ય: 🎬 ઘટના → ❓ પ્રશ્ન → 💻 code માં → 🔬 expert નજર. આખો નકશો: [સમગ્ર નકશો](overview-samagra-naksho.md).
 
-## 🎬 વાર્તા: ત્રણ ચાવી, ત્રણ ઓરડા
+## 🎬 સવાર: અધૂરો ઓર્ડર અને ત્રણ ચાવી
 
-ગઈ રાત્રે નવ વાગ્યે અચાનક લાઈટ ગઈ. ટેબલ 2 નો ઓર્ડર અધૂરો રહ્યો. આજે સવારે આરવે જોયું કે રમેશભાઈ ચોપડો ખોલીને ગઈકાલની છેલ્લી લીટીઓ વાંચે છે — "ઓર્ડર શરૂ… મહારાજને પૂછ્યું… **ઓર્ડર રદ (લાઈટ ગઈ)**" — અને ગ્રાહક ફરી આવે ત્યારે ત્યાંથી જ વાત આગળ ચલાવે છે.
+ગઈ રાત્રે નવ વાગ્યે અચાનક લાઈટ ગઈ. ટેબલ 2 નો ઓર્ડર અધૂરો રહ્યો. આજે સવારે આરવ જુએ છે કે રમેશભાઈ ચોપડો ખોલીને ગઈકાલની છેલ્લી લીટીઓ વાંચે છે — "ઓર્ડર શરૂ… મહારાજને પૂછ્યું… **ઓર્ડર રદ (લાઈટ ગઈ)**" — અને ગ્રાહક ફરી આવે ત્યારે ત્યાંથી જ વાત આગળ ચલાવે છે.
 
-મીરાદીદી ત્રણ ચાવી ટેબલ પર મૂકે છે:
-
-1. **કોઠારની ચાવી** — ભીખાભાઈ મહારાજની ચિઠ્ઠી કેવી રીતે તપાસે, સામાન કેવી રીતે શોધે, અને "નથી" ત્યારે શું કરે. (`read` tool અને tool pipeline)
-2. **ફોન-રૂમની ચાવી** — મહારાજ દૂર agency ના રસોડામાં બેસે છે અને બીજી ભાષા બોલે છે. **દુભાષિયો** બંને ભાષા જાણે. (DeepSeek adapter)
-3. **ચોપડા-ઘરની ચાવી** — ચોપડો કેવી રીતે લખાય, સચવાય, અને લાઈટ ગયા પછી ઓર્ડર કેવી રીતે આગળ ચાલે. (session log, persistence, resume)
-
-"ત્રણેય ઓરડાની એક ખાસિયત છે," દીદી કહે છે, "દરેક ઓરડાનો **દરવાજો** બદલ્યા વગર અંદરનો માણસ બદલી શકાય. એને **seam** કહે છે."
+"આ કેવી રીતે શક્ય બન્યું, એ સાંજ સુધીમાં તું જાતે કરી બતાવીશ," મીરાદીદી કહે છે, અને ત્રણ ચાવી ટેબલ પર મૂકે છે.
 
 ## 🎯 આ પ્રકરણ પછી તમે શું કરી શકશો
 
@@ -23,52 +17,65 @@
 - એક provider request ને `GenerateOptions` થી HTTP body સુધી અને SSE response ને `StreamChunk` સુધી અનુસરી શકશો.
 - Session log કેવી રીતે model context બને છે, file માં કેવી રીતે persist થાય છે, અને interrupted session કેવી રીતે resume થાય છે તે ચલાવીને બતાવી શકશો.
 
-## 🗺️ આ પ્રકરણનો નકશો
+## 🗺️ આજના દિવસનો નકશો
 
 ```mermaid
 flowchart LR
-  S["3.1 Seam<br/>ત્રણ ભૂમિકા"] --> R1["ઓરડો 1: કોઠાર"]
-  R1 --> A["3.2 read tool<br/>પાંચ ભાગ"]
-  A --> B["3.3 Tool pipeline<br/>ચિઠ્ઠીથી ચોપડા સુધી"]
+  S["દૃશ્ય 1 નોકરીનું વર્ણન<br/>seam: ત્રણ ભૂમિકા"] --> R1["ઓરડો 1: કોઠાર"]
+  R1 --> A["દૃશ્ય 2–6 read tool<br/>ફોર્મ, નોંધણી, લેબલ, ના, રૂપાંતર"]
+  A --> B["દૃશ્ય 7 ચિઠ્ઠીનો રસ્તો<br/>tool pipeline"]
   B --> R2["ઓરડો 2: ફોન-રૂમ"]
-  R2 --> C["3.4 Adapter boundary<br/>request અને SSE"]
+  R2 --> C["દૃશ્ય 8–10 દુભાષિયો<br/>request, SSE, boundary"]
   C --> R3["ઓરડો 3: ચોપડા-ઘર"]
-  R3 --> D["3.5 Session log<br/>persistence, resume"]
+  R3 --> D["દૃશ્ય 11–14 ચોપડો<br/>append, surface, તિજોરી, resume"]
   D --> L["Lab 3<br/>લાઈટ ગયા પછી resume"]
 ```
 
-## 3.1 🟢 Seam એટલે બદલી શકાય તેવો સાંધો
+---
 
-> 📦 **Capability seam** — ત્રણ ભૂમિકાવાળી બદલી શકાય તેવી capability:
-> **Service Definition** (interface — "આ કામ આવી રીતે માંગવું"), **Service Provider** (implementation — ખરું કામ કરનાર), **Consumer** (તેને વાપરનાર, ઘણી વાર model-facing tool).
+## દૃશ્ય 1 — નોકરીનું વર્ણન: seam
+
+🎬 કોઠારના દરવાજા પર એક પાટિયું છે: **"કોઠારી: ચિઠ્ઠી લો, સામાન આપો."** ગયા અઠવાડિયે ભીખાભાઈ બીમાર હતા; તેમની જગ્યાએ બીજા ભાઈ આવ્યા હતા. મહારાજને ખબર પણ ન પડી: તેમની ચિઠ્ઠી એ જ રહી, જવાબ એ જ રીતે આવ્યો.
+
+❓ "મહારાજને ખબર કેમ ન પડી?"
+
+"કારણ કે મહારાજ **ભીખાભાઈ** ને ઓળખતા જ નથી. તે પાટિયાને ઓળખે છે."
+
+💻 **Capability seam** = ત્રણ ભૂમિકાવાળી, બદલી શકાય તેવી capability — એક "સાંધો":
+
+| ભૂમિકા | અર્થ | કોઠારમાં |
+|---|---|---|
+| **Service Definition** | interface — "આ કામ આવી રીતે માંગવું" | દરવાજા પરનું પાટિયું |
+| **Service Provider** | implementation — ખરું કામ કરનાર | ભીખાભાઈ (કે બીજું કોઈ) |
+| **Consumer** | તેને વાપરનાર, ઘણી વાર model-facing tool | ચિઠ્ઠી મોકલનાર |
+
+**Abstract class / interface** = "શું કરવું" નું વચન, "કેવી રીતે" નહીં — નોકરીનું વર્ણન.
 
 ઉદાહરણ: `@deepseek-ai/dsh-fs` નો abstract [`FileSystem`][fs-abstract] definition છે, `dsh-fs-sandbox` provider છે, અને `read` tool consumer છે ([architecture.md — Capability seams](https://github.com/deepseek-ai/deepseek-harness/blob/fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159/docs/architecture.md#capability-seams)). ✅
 
-> 🍽️ **ભોજનાલયમાં:** "કોઠારી" ની નોકરીનું વર્ણન (definition) દીવાલ પર લખેલું છે: "ચિઠ્ઠી લો, સામાન આપો." આજે ભીખાભાઈ (provider) છે; કાલે બીજું કોઈ આવે તો પણ મહારાજ (consumer) ની ચિઠ્ઠી બદલાતી નથી.
->
-> **યાદ-ચાવી "નિ-ક-વા":** **નિ**યમ (definition), **ક**ારીગર (provider), **વા**પરનાર (consumer).
->
-> 📦 **Abstract class / interface** — "શું કરવું" નું વચન, "કેવી રીતે" નહીં. 🍽️ નોકરીનું વર્ણન.
+આજના ત્રણ ઓરડા = ત્રણ seam:
 
-આ પ્રકરણના ત્રણ seam:
-
-| Seam | 🍽️ ઓરડો | Definition | Provider (base bundle) | Consumer |
+| Seam | ઓરડો | Definition | Provider (base bundle) | Consumer |
 |---|---|---|---|---|
 | Tools | કોઠાર | `ctx.tools` ([`dsh-tools`][tools-execute]) | `tool-executor-native` ([`NativeToolExecutor`][native-executor]) | agent loop |
 | Filesystem | કોઠારનાં ખાનાં | `ctx.fs` ([`FileSystem`][fs-abstract]) | `dsh-fs-sandbox` ([policy][fs-sandbox-doc]) | `read`, `write`, `edit` tools |
 | LLM | ફોન-રૂમ | `ctx.llm` ([`LlmRuntime`][llm-runtime]) | `dsh-llm-deepseek-api-key` → [`DeepSeekAdapter`][deepseek-adapter] | agent loop |
 
-**ફાયદો:** provider બદલો (દા.ત. remote sandbox, બીજો model provider), consumer જરા પણ બદલવો પડતો નથી.
+**યાદ-ચાવી "નિ-ક-વા":** **નિ**યમ (definition), **ક**ારીગર (provider), **વા**પરનાર (consumer).
 
-## ઓરડો 1: કોઠાર
+🔬 **Expert નજર.** Seam એ પ્રકરણ 2 ની "તકતીવાળી ખુરશી" નું પૂરું રૂપ છે. તેની કિંમત ત્યારે દેખાય જ્યારે તમે provider બદલો: remote sandbox, બીજો model provider — અને consumer ની **એક line** બદલવી ન પડે. નવો code વાંચતી વખતે expert પહેલાં seam શોધે છે, કારણ કે harness ને બદલવાની સલામત જગ્યાઓ એ જ છે.
 
-## 3.2 🟡 `read` tool: પાંચ ભાગ — "ઇ-ન-ચ-ભ-રૂ"
+# ઓરડો 1: કોઠાર
 
-**યાદ-ચાવી "ઇનામ ચલાવ્યું, ભૂલ રૂપે":** **ઇ**નપુટ schema, **ન**ોંધણી, **ચ**લાવવું, **ભ**ૂલ, **રૂ**પાંતર.
+## દૃશ્ય 2 — ચિઠ્ઠીનું ફોર્મ: input schema
 
-### (a) ઇનપુટ schema — "ચિઠ્ઠીનું ફોર્મ"
+🎬 કોઠારની બારી પર છાપેલાં ફોર્મની થોકડી છે. દરેક ખાના માટે અલગ ફોર્મ; "રેસીપી-ચોપડી" ના ફોર્મમાં ત્રણ ખાનાં: *કઈ ચોપડી* (ફરજિયાત), *કયા પાનાથી*, *કેટલાં પાનાં*. મહારાજ કોરા કાગળ પર મનફાવે તેમ નથી લખતા; આ ફોર્મ ભરે છે.
 
-[`applyReadTool`][read-tool] માંથી (repository code):
+❓ "મહારાજને કેવી રીતે ખબર કે ફોર્મમાં કયાં ખાનાં છે? તે તો કોઠાર જોઈ શકતા નથી."
+
+"ફોર્મની નકલ **દરેક વાતચીતમાં** તેમને અપાય છે. પ્રકરણ 1 ના 25 લેબલ યાદ છે? એ આ ફોર્મ છે."
+
+💻 [`applyReadTool`][read-tool] માંથી (repository code):
 
 ```ts
   ctx.tools.register(defineTool({
@@ -81,21 +88,36 @@ flowchart LR
     },
 ```
 
+- **DSL** (Domain-Specific Language) = એક ખાસ કામ માટેની નાની "ભાષા". અહીં `{ type: 'string', required: true }` જેવું ટૂંકું લખાણ.
+- **JSON Schema** = JSON નો આકાર વર્ણવવાનું ધોરણ: કયાં fields, કયા type, કયાં ફરજિયાત — છાપેલું ફોર્મ.
+- **UTF-8** = ગુજરાતી સહિત દુનિયાના બધા અક્ષરો bytes માં લખવાની રીત.
+
 `defineTool` આ નાના DSL ને JSON Schema માં ફેરવે છે; model ને એ જ schema મળે છે (પ્રકરણ 1 ની wire capture માં 25 tools માંનું એક). `limit` નો default `READ_LIMIT = 2000` છે, અને તે `tool-fs` plugin config (`readLimit`) થી બદલી શકાય છે. ✅
 
-> 📦 **DSL** (Domain-Specific Language) — એક ખાસ કામ માટેની નાની "ભાષા". અહીં `{ type: 'string', required: true }` જેવું ટૂંકું લખાણ.
->
-> 📦 **JSON Schema** — JSON નો આકાર વર્ણવવાનું ધોરણ: કયાં fields, કયા type, કયાં ફરજિયાત. 🍽️ છાપેલું ચિઠ્ઠી-ફોર્મ: "file_path (ફરજિયાત), offset, limit".
->
-> 📦 **UTF-8** — ગુજરાતી સહિત દુનિયાના બધા અક્ષરો bytes માં લખવાની રીત.
+🔬 **Expert નજર.** `description` ની દરેક line model વાંચે છે — તે માણસ માટેનું comment નથી, **model માટેની સૂચના** છે. "1-based" જેવો એક શબ્દ નક્કી કરે છે કે model `offset: 0` મોકલશે કે `1`. Tool ની ગુણવત્તાનો અડધો ભાગ તેના ફોર્મના શબ્દોમાં છે. અને `limit` નો default જુઓ: tool **પોતે** નક્કી કરે છે કે એક વારમાં કેટલું આપવું, જેથી મોટી file મહારાજ સામેનો આખો કાગળ (context window) ન ભરી દે.
 
-### (b) નોંધણી — બે effects
+## દૃશ્ય 3 — નવો કોઠારી બે નોંધ કરાવે: registration
 
-બે નોંધણી, બંને effects (પ્રકરણ 2): `ctx.systemPrompt.section({ name: 'tool:read', … })` — model ને "cat/sed નહીં, read વાપરો" એવી સૂચના, પણ ફક્ત ત્યારે જ જ્યારે આ scope માં `read` દેખાતું હોય — અને `ctx.tools.register(defineTool({...}))`. `tool-fs` plugin `inject = ['tools', 'fs', 'systemPrompt', 'workingDirectory']` જાહેર કરે છે ([source][toolfs-inject]); પ્રકરણ 2 ના lab માં જોયું કે `workingDirectory` ખૂટે તો આખો `tool-fs` pending રહે છે. 🧪
+🎬 નવું ખાનું ખૂલે ત્યારે કોઠારી બે જગ્યાએ નોંધ કરાવે છે. એક, **કોઠાર-યાદીમાં** પોતાનું ખાનું. બે, **નિયમોની પોથીમાં** એક લીટી: "રેસીપી જોઈતી હોય તો મને ચિઠ્ઠી આપો; જાતે કબાટ ફંફોસવાનું ન કહેશો."
 
-🍽️ નવો કોઠારી આવે ત્યારે બે કામ: નિયમ-પોથીમાં લખાવે "રેસીપી માટે મને ચિઠ્ઠી આપો, જાતે કબાટ ન ખોલો", અને કોઠાર-યાદીમાં પોતાનું ખાનું નોંધાવે. નોકરી છોડે તો બંને નોંધ આપોઆપ ભૂંસાય.
+❓ "યાદીમાં નોંધ પૂરતી નથી? પોથીમાં પણ કેમ?"
 
-### (c) ચલાવવું
+"યાદી કહે છે કે ખાનું **છે**. પોથી કહે છે કે તેને **ક્યારે વાપરવું**. મહારાજ પાસે બીજા રસ્તા પણ છે; કયો સારો, એ તેમને કહેવું પડે."
+
+💻 બે નોંધણી, બંને effects (પ્રકરણ 2, દૃશ્ય 6):
+
+1. `ctx.tools.register(defineTool({...}))` — કોઠાર-યાદી.
+2. `ctx.systemPrompt.section({ name: 'tool:read', … })` — model ને "cat/sed નહીં, read વાપરો" એવી સૂચના, પણ ફક્ત ત્યારે જ જ્યારે આ scope માં `read` દેખાતું હોય.
+
+`tool-fs` plugin ની શરત: `inject = ['tools', 'fs', 'systemPrompt', 'workingDirectory']` ([source][toolfs-inject]). પ્રકરણ 2 ના Lab 2b માં જોયું કે `workingDirectory` ખૂટે તો આખો `tool-fs` બાંકડે બેસે છે. 🧪
+
+🔬 **Expert નજર.** બંને નોંધ effects છે, એટલે plugin unload થાય ત્યારે **બંને સાથે** જાય. વિચારો કે ફક્ત tool જાય અને પોથીની લીટી રહી જાય: મહારાજ એવા ખાના માટે ચિઠ્ઠી લખે જે છે જ નહીં. અને શરત "ફક્ત ત્યારે જ જ્યારે `read` દેખાતું હોય" એ જ ભૂલને scope ના સ્તરે રોકે છે. System prompt અને tool યાદી **સુસંગત** રહેવાં જોઈએ; બંને અલગ પડે તે model ને ગૂંચવવાની સૌથી સહેલી રીત છે.
+
+## દૃશ્ય 4 — ડબ્બો ખોલ્યા વગર લેબલ: execution
+
+🎬 ચિઠ્ઠી આવે ત્યારે ભીખાભાઈ સીધો ડબ્બો નથી ખોલતા. પહેલાં નક્કી કરે છે કે "કઈ ચોપડી" એટલે **કયા કબાટની** (ફરી બિલ-બુક!). પછી ડબ્બો ખોલ્યા વગર **લેબલ** જુએ છે: ચીજ છે? ચોપડી છે કે આખું ખાનું? કેટલી મોટી? અને બહુ મોટી હોય તો એક ખેપમાં નથી લાવતા; **થોડી થોડી** લાવે છે.
+
+💻
 
 ```ts
     async execute(args, exec) {
@@ -106,19 +128,36 @@ flowchart LR
         : [await ctx.fs.readText(target, exec.signal)]
 ```
 
-(ટૂંકાવેલું; [source][read-tool].) [`resolveRegularReadTarget`][read-target] session ની current directory માં path resolve કરે છે, એક જ `stat` કરે છે, file ન હોય તો `fs/observed` (absent) emit કરી `FsError(..., 'FS_NOT_FOUND')` ફેંકે છે, અને directory હોય તો `FS_NOT_REGULAR_FILE`. 10 MB (`STREAM_MIN_SIZE`) થી મોટી કે size-unknown file stream થાય છે, જેથી backend આખી file memory માં ન ભરે.
+(ટૂંકાવેલું; [source][read-tool].)
 
-> 📦 **`stat`** — file વિશે માહિતી (છે કે નહીં, file છે કે folder, કદ) — file ખોલ્યા વગર. 🍽️ ખાના પરનું લેબલ જોવું, ડબ્બો ખોલ્યા વગર.
->
-> 📦 **Resolve (path)** — relative path ને ચોક્કસ સરનામામાં ફેરવવો — "કોની સામે?" એ પ્રશ્ન અહીં પણ: session ની current directory સામે.
+- **Resolve (path)** = relative path ને ચોક્કસ સરનામામાં ફેરવવો. "કોની સામે?" અહીં: session ની current directory સામે.
+- **`stat`** = file વિશે માહિતી (છે કે નહીં, file છે કે folder, કદ) — file ખોલ્યા વગર. લેબલ જોવું.
 
-### (d) ભૂલ — ત્રણ સ્તર
+[`resolveRegularReadTarget`][read-target] session ની current directory માં path resolve કરે છે, એક જ `stat` કરે છે, file ન હોય તો `fs/observed` (absent) emit કરી `FsError(..., 'FS_NOT_FOUND')` ફેંકે છે, અને directory હોય તો `FS_NOT_REGULAR_FILE`. 10 MB (`STREAM_MIN_SIZE`) થી મોટી કે size-unknown file stream થાય છે, જેથી backend આખી file memory માં ન ભરે.
 
-| સ્તર | ક્યાં | ઉદાહરણ | Model ને શું મળે | 🍽️ |
-|---|---|---|---|---|
-| Schema | `defineTool` નું `execute` wrapper ([source][schema-defineTool-validate]) | `{"path":"README.md"}` | `Error: invalid arguments: missing required property "file_path"` (`INVALID_ARGS`) 🧪 | ફોર્મમાં ફરજિયાત ખાનું ખાલી |
-| Value | [`parseReadArgs`][read-parse] | `offset: 0` | `Error: offset must be a positive integer` ✅ | ખાનું ભર્યું, પણ ખોટી value |
-| Filesystem | [`resolveRegularReadTarget`][read-target] | `NOPE.md` | `Error: cannot read "…/NOPE.md": not found` (`FS_NOT_FOUND`) 🧪 | ફોર્મ બરાબર, પણ કોઠારમાં સામાન નથી |
+🔬 **Expert નજર.** ધ્યાનથી જુઓ કે `read` tool ક્યાંય સીધી disk ને અડતું નથી: `ctx.fs.readText`, `ctx.fs.streamText`. તે seam (દૃશ્ય 1) માંથી જાય છે. એટલે પ્રકરણ 5 ની sandbox સીમા **આપોઆપ** લાગુ પડે છે — tool લખનારે સલામતી યાદ રાખવાની નથી. અને `exec.signal` દરેક call માં આગળ અપાય છે: લાલ દીવો (પ્રવેશ, દૃશ્ય 5) કોઠારની અંદર સુધી પહોંચે છે.
+
+## દૃશ્ય 5 — ત્રણ જાતની "ના", અને લાલ ચિઠ્ઠી: errors
+
+🎬 આજે ભીખાભાઈએ ત્રણ ચિઠ્ઠી પાછી મોકલી, અને ત્રણેયનું કારણ જુદું:
+
+1. ફોર્મમાં **ફરજિયાત ખાનું ખાલી** — "કઈ ચોપડી" લખ્યું જ નથી.
+2. ખાનું ભર્યું છે, પણ **value ખોટી** — "શૂન્યમા પાનાથી".
+3. ફોર્મ બરાબર છે, પણ **કોઠારમાં એ ચોપડી નથી**.
+
+ત્રણેય વખત ભીખાભાઈ રસોડામાં ઝઘડવા નથી જતા, અને કોઠારને તાળું નથી મારતા. તે **લાલ ચિઠ્ઠી** પર કારણ લખીને પાછી મોકલે છે. મહારાજ વાંચે, અને બીજી ચિઠ્ઠી લખે.
+
+❓ "ભૂલ થઈ અને કોઈ અટક્યું નહીં?"
+
+"મહારાજ **ધારે છે**, જાણતા નથી. તે ખોટું ધારે એ રોજની વાત છે. દર ખોટી ચિઠ્ઠીએ ભોજનાલય અટકે તો કદી થાળી ન પીરસાય. ભૂલને જવાબ બનાવો, અને તેમને ફરી પ્રયત્ન કરવા દો."
+
+💻
+
+| સ્તર | ક્યાં | ઉદાહરણ | Model ને શું મળે |
+|---|---|---|---|
+| Schema — ખાનું ખાલી | `defineTool` નું `execute` wrapper ([source][schema-defineTool-validate]) | `{"path":"README.md"}` | `Error: invalid arguments: missing required property "file_path"` (`INVALID_ARGS`) 🧪 |
+| Value — value ખોટી | [`parseReadArgs`][read-parse] | `offset: 0` | `Error: offset must be a positive integer` ✅ |
+| Filesystem — સામાન નથી | [`resolveRegularReadTarget`][read-target] | `NOPE.md` | `Error: cannot read "…/NOPE.md": not found` (`FS_NOT_FOUND`) 🧪 |
 
 દરેક throw ને pipeline [`toolErrorResult`][pipeline-errorResult] માં ફેરવે છે:
 
@@ -134,17 +173,20 @@ function toolErrorResult(error: unknown): ToolExecutionResult {
 }
 ```
 
-એટલે tool ની નિષ્ફળતા **crash નથી**, model માટે એક સામાન્ય `tool/result` છે, અને `info` (`name`, `code`) log માં રહે છે પણ model text નો ભાગ નથી.
+એટલે tool ની નિષ્ફળતા **crash નથી**; model માટે તે એક સામાન્ય `tool/result` છે. **યાદ-ચાવી: "લાલ ચિઠ્ઠી, ઝઘડો નહીં."**
 
-> 🍽️ **"લાલ ચિઠ્ઠી, ઝઘડો નહીં":** ભીખાભાઈ સામાન ન મળે તો મહારાજને લાલ ચિઠ્ઠી મોકલે — "નથી". મહારાજ બીજી રીતે વિચારી શકે. કોઠારનો અંદરનો કોડ-નંબર (`FS_NOT_FOUND`) ચોપડામાં નોંધાય, મહારાજની ચિઠ્ઠીમાં નહીં.
+🔬 **Expert નજર.** Return value માં **બે વાચક** માટે બે વસ્તુ છે. `content` model માટે છે: માણસ વાંચે તેવું `Error: …` text, જેમાંથી model શીખીને સુધારે. `error.info` (`name`, `code`) ચોપડા માટે છે: `FS_NOT_FOUND` જેવો કોડ-નંબર, જે model text નો ભાગ **નથી**. Debugging વખતે તમે code શોધો; model ને code ની જરૂર નથી, તેને કારણ જોઈએ. Error message લખતી વખતે expert પૂછે છે: "આ વાંચીને model ને ખબર પડશે કે **આગળ શું કરવું**?" પહેલી લીટીનો message જુઓ: તે કહે છે કે કયું ખાનું ખૂટે છે.
 
-### (e) રૂપાંતર — canonical value અને render
+## દૃશ્ય 6 — સામાન અને લેબલ: canonical value અને render
 
-> 📦 **Canonical value** — tool નું સાચું, structured પરિણામ, જે log અને UI માટે રહે. 🍽️ સામાન પોતે.
->
-> 📦 **Render** — value ને model માટે text બનાવવું. 🍽️ સામાન પર ચોંટાડેલું સાફ લેબલ.
+🎬 ભીખાભાઈ રેસીપી-ચોપડી આપતી વખતે બે વસ્તુ આપે છે: **ચોપડી પોતે** (ગલ્લા પર પપ્પા પણ જોઈ શકે), અને તેના પર ચોંટાડેલું **સાફ લેબલ** — કઈ ચોપડી, અને દરેક લીટી આગળ નંબર — જે મહારાજ વાંચે.
 
-`execute` એક **canonical value** આપે છે: `{ path, offset, lines: [{number, text}], totalLines }`. Pipeline તેને `output.schema` સામે validate કરે છે ([source][pipeline-materialize]), પછી `output.render` તેને model-facing text બનાવે છે ([source][read-output]), અને `presentationMeta` UI card માટે `meta` આપે છે (replay પર card ફરી બની શકે). અમારી wire capture માં model ને આવું text ગયું 🧪:
+💻
+
+- **Canonical value** = tool નું સાચું, structured પરિણામ, જે log અને UI માટે રહે — સામાન પોતે.
+- **Render** = value ને model માટે text બનાવવું — લેબલ.
+
+`execute` એક canonical value આપે છે: `{ path, offset, lines: [{number, text}], totalLines }`. Pipeline તેને `output.schema` સામે validate કરે છે ([source][pipeline-materialize]), પછી `output.render` તેને model-facing text બનાવે છે ([source][read-output]), અને `presentationMeta` UI card માટે `meta` આપે છે (replay પર card ફરી બની શકે). અમારી wire capture માં model ને આવું text ગયું 🧪:
 
 ```text
 <path><harness>/README.md</path>
@@ -155,7 +197,30 @@ function toolErrorResult(error: unknown): ToolExecutionResult {
 3: English | [中文](README.zh.md)
 ```
 
-## 3.3 🟡 Tool pipeline: raw JSON થી `tool/result` — "ચિઠ્ઠીનો રસ્તો"
+**`read` tool ના પાંચ ભાગ — યાદ-ચાવી "ઇ-ન-ચ-ભ-રૂ" ("ઇનામ ચલાવ્યું, ભૂલ રૂપે"):** **ઇ**નપુટ schema (દૃશ્ય 2), **ન**ોંધણી (3), **ચ**લાવવું (4), **ભ**ૂલ (5), **રૂ**પાંતર (6).
+
+🔬 **Expert નજર.** Output પણ schema સામે **validate** થાય છે — ફક્ત input નહીં. Tool નું પોતાનું પરિણામ ખોટા આકારનું હોય, તો તે model સુધી પહોંચતાં પહેલાં પકડાય. અને value/render અલગ રાખવાનો ફાયદો: model માટેનું લખાણ કાલે બદલો (દા.ત. line numbers નો format), તો ચોપડામાં સચવાયેલી જૂની values અને UI cards તૂટતાં નથી.
+
+## દૃશ્ય 7 — ચિઠ્ઠીનો આખો રસ્તો: tool pipeline
+
+🎬 આરવ એક ચિઠ્ઠીની પાછળ પાછળ ચાલે છે, રસોડાથી કોઠાર અને પાછી. તે સાત પડાવ ગણે છે:
+
+```text
+મહારાજની ચિઠ્ઠી (raw JSON)
+  →  parseArguments: ચિઠ્ઠી વાંચો (અક્ષર ગરબડ હોય તો પણ ફેંકો નહીં)
+  →  tool/call: ચોપડામાં "આ માંગ્યું"
+  →  tools/pre-execute: શેઠની નીતિ, મંજૂરી (પ્રકરણ 5); guards
+  →  tools/execute: ખરું કામ (around-wrapper)  →  tool.execute()
+  →  validate + render (અથવા throw → "Error: …" લાલ ચિઠ્ઠી)
+  →  post-execute, finalize, tools/result
+  →  tool/result: ચોપડામાં "આ મળ્યું"
+```
+
+❓ "ચિઠ્ઠીના અક્ષર જ ન ઉકલે, તો ફેંકી કેમ નથી દેતા?"
+
+"ફેંકી દઉં તો મહારાજને શું કહું — 'કંઈક ખોટું હતું'? ના. હું ચિઠ્ઠી **જેમ છે તેમ** ખાનાવાળાને આપું છું. તે જ સારી રીતે કહી શકે કે તેમાં શું ખોટું છે."
+
+💻
 
 ```mermaid
 flowchart LR
@@ -173,19 +238,6 @@ flowchart LR
   J --> K["tool/result logged"]
 ```
 
-ભોજનાલયની ભાષામાં એ જ રસ્તો:
-
-```text
-મહારાજની ચિઠ્ઠી (raw JSON)
-  →  parseArguments: ચિઠ્ઠી વાંચો (ગરબડ અક્ષરો હોય તો પણ ફેંકો નહીં)
-  →  tool/call: ચોપડામાં "આ માંગ્યું"
-  →  tools/pre-execute: શેઠની નીતિ, મંજૂરી (પ્રકરણ 5); guards
-  →  tools/execute: ખરું કામ (around-wrapper)  →  tool.execute()
-  →  validate + render (અથવા throw → "Error: …" લાલ ચિઠ્ઠી)
-  →  post-execute, finalize, tools/result
-  →  tool/result: ચોપડામાં "આ મળ્યું"
-```
-
 | Node | Owner | Symbol |
 |---|---|---|
 | executeToolBatch / parseArguments | `packages/core/tools/src/batch.ts` | [`executeToolBatch`][batch-execute], [`parseArguments`][batch-parse] |
@@ -198,26 +250,30 @@ flowchart LR
 બે નાની પણ મહત્વની વિગતો:
 
 - [`parseArguments`][batch-parse]: invalid JSON હોય તો crash નહીં — raw string જ રાખે છે, જેથી tool પોતાનું argument diagnostic આપી શકે; ખાલી string → `{}`.
-- [`dispatchToolBody`][pipeline-body]: tool registry માં ન મળે તો `ToolNotFoundError` ([source][contracts-notfound]); અમારા run માં model ને `Error: unknown tool "read_everything"` મળ્યું, code `UNKNOWN_TOOL`. 🧪 🍽️ "એવું કોઈ ખાનું જ નથી."
+- [`dispatchToolBody`][pipeline-body]: tool registry માં ન મળે તો `ToolNotFoundError` ([source][contracts-notfound]); અમારા run માં model ને `Error: unknown tool "read_everything"` મળ્યું, code `UNKNOWN_TOOL`. 🧪 "એવું કોઈ ખાનું જ નથી."
 
-> 📦 **Around-wrapper** — ખરા કામની **આગળ અને પાછળ** બંને બાજુ ચાલતો listener (દા.ત. સમય માપવા — પ્રકરણ 6). 🍽️ ઘડિયાળ લઈ ઊભો નિરીક્ષક: "શરૂ… પૂરું, 9 ms."
+**Around-wrapper** = ખરા કામની **આગળ અને પાછળ** બંને બાજુ ચાલતો listener — ઘડિયાળ લઈ ઊભો નિરીક્ષક: "શરૂ… પૂરું, 9 ms." `tools/execute` waterfall હોવાથી plugin `next()` ની આગળ-પાછળ code મૂકી શકે (પ્રકરણ 6 નો metrics plugin).
 
-## ઓરડો 2: ફોન-રૂમ
+🔬 **Expert નજર.** Diagram માં જુઓ કે **ત્રણેય રસ્તા** — deny, throw, value — એક જ node `complete` પર ભેગા થાય છે, અને ત્યાંથી એક જ `tool/result` લખાય છે. પરિણામ ગમે તે હોય, અંત એક જ આકારનો. આ પ્રકરણ 1 ના invariant ("દરેક `tool/call` નું એક `tool/result`") નું mechanism છે. અને ક્રમ જુઓ: `tool/call` log થાય છે નીતિ-તપાસ **પહેલાં**. એટલે જે ચિઠ્ઠીને મંજૂરી ન મળી, તેની પણ ચોપડામાં નોંધ છે: model એ શું માંગ્યું હતું, એ કદી ખોવાતું નથી.
 
-## 3.4 🟡 Adapter boundary: એક request અને એક streamed response
+# ઓરડો 2: ફોન-રૂમ
 
-> 📦 **Adapter** — harness ની ભાષા ↔ provider ની wire ભાષાનો દુભાષિયો. 🍽️ રમેશભાઈ ગુજરાતીમાં બોલે (`GenerateOptions`), agency બીજી ભાષા સમજે (DeepSeek Messages format); દુભાષિયો બંને બાજુ ફેરવે.
+## દૃશ્ય 8 — દુભાષિયો: request
 
-### Request: `GenerateOptions` → HTTP
+🎬 ફોન-રૂમમાં એક જણ બેઠો છે જે બે ભાષા જાણે છે. રમેશભાઈ ભોજનાલયની બોલીમાં કાગળ આપે; દુભાષિયો તેને agency ની ભાષામાં ફેરવી ફોન પર બોલે. આરવ નોંધે છે: રમેશભાઈ કદી ફોન ઉપાડતા નથી, અને દુભાષિયાએ કદી ચોપડો જોયો નથી.
 
-1. Loop [`buildRequest`][loop-buildRequest] માં frozen `GenerateOptions` બનાવે છે: `provider`, `model`, `messages` (log માંથી), `tools`, `toolHistory`, `sessionId`, `signal`.
+અને દુભાષિયો એક ઘડિયાળ સામે રાખે છે: સામે છેડેથી બહુ વાર કંઈ ન સંભળાય, તો "લાઈન મરી ગઈ" ગણીને ફોન મૂકી દે.
+
+❓ "દુભાષિયો ચોપડો ન જુએ, તો મહારાજને આખી વાત કેવી રીતે કહે?"
+
+"તેને ચોપડાની જરૂર નથી. રમેશભાઈ ચોપડામાંથી જે **નકલ** ઉતારે છે — સિક્કાવાળી — તે જ તેના હાથમાં આવે છે."
+
+💻 **Adapter** = harness ની ભાષા ↔ provider ની wire ભાષાનો દુભાષિયો.
+
+1. Loop [`buildRequest`][loop-buildRequest] માં frozen `GenerateOptions` બનાવે છે (સિક્કાવાળી નકલ — પ્રકરણ 1, દૃશ્ય 7): `provider`, `model`, `messages` (log માંથી), `tools`, `toolHistory`, `sessionId`, `signal`.
 2. [`LlmRuntime.stream`][llm-stream] તેને `llm/stream` **waterfall** માંથી પસાર કરે છે; છેલ્લો handler adapter stream છે. એટલે કોઈ પણ plugin દરેક model request જોઈ/લપેટી શકે — પ્રકરણ 1 નો trace plugin અને પ્રકરણ 6 નો metrics plugin આ જ hook વાપરે છે.
-3. [`DeepSeekAdapter.generate`][deepseek-generate] idle watchdog લગાવે છે (stream શાંત રહે તો `TIMEOUT`), અને errors ને `LlmError` codes માં ફેરવે છે: `TIMEOUT`, `ABORTED`, `TRANSPORT`.
-4. `request()` images/files તૈયાર કરે છે, auth headers લાવે છે, [`serialize`][deepseek-serialize] થી Messages-format body બનાવે છે, request extensions ઉમેરે છે, અને [`fetch(…/messages)`][deepseek-fetch] કરે છે:
-
-> 📦 **Watchdog** — "આટલા સમયમાં કંઈ ન આવ્યું તો ભૂલ ગણો" એવી ચોકી. 🍽️ ફોન પર સામે છેડેથી બહુ વાર કંઈ ન સંભળાય તો "લાઇન મરી ગઈ" ગણવું.
->
-> 📦 **Serialize** — object ને મોકલી શકાય તેવા text (JSON) માં ફેરવવું.
+3. [`DeepSeekAdapter.generate`][deepseek-generate] idle **watchdog** લગાવે છે ("આટલા સમયમાં કંઈ ન આવ્યું તો ભૂલ ગણો" — દુભાષિયાની ઘડિયાળ; stream શાંત રહે તો `TIMEOUT`), અને errors ને `LlmError` codes માં ફેરવે છે: `TIMEOUT`, `ABORTED`, `TRANSPORT`.
+4. `request()` images/files તૈયાર કરે છે, auth headers લાવે છે, [`serialize`][deepseek-serialize] થી Messages-format body બનાવે છે (**serialize** = object ને મોકલી શકાય તેવા text માં ફેરવવું), request extensions ઉમેરે છે, અને [`fetch(…/messages)`][deepseek-fetch] કરે છે:
 
 ```ts
         const response = await fetch(`${messagesApiRoot(connection.baseURL)}/messages`, {
@@ -229,9 +285,9 @@ flowchart LR
             'anthropic-version': '2023-06-01',
 ```
 
-(પ્રવેશ પ્ર.4 ની ટપાલ: `POST` method, URL, headers — અને `accept: text/event-stream` એટલે "જવાબ ટીપે ટીપે મોકલજો".)
+(પ્રવેશ દૃશ્ય 4 નો ફોન: `POST` method, URL, headers — અને `accept: text/event-stream` એટલે "જવાબ ટુકડે ટુકડે મોકલજો".)
 
-Wire પર ખરેખર શું ગયું (🧪 [evidence/wire.json](../evidence/wire.json), user id redacted):
+ફોન પર ખરેખર શું બોલાયું (🧪 [evidence/wire.json](../evidence/wire.json), user id redacted):
 
 ```json
     "bodyKeys": ["dsh_plugin_packages", "dsh_session_log", "max_tokens", "messages",
@@ -245,13 +301,19 @@ Wire પર ખરેખર શું ગયું (🧪 [evidence/wire.json](..
     }
 ```
 
-> 📦 **Request extension** — provider-specific વધારાનો body field, જે plugins ઉમેરે. 🍽️ ઓર્ડર-ચિઠ્ઠી સાથે ટાંકેલું વધારાનું પાનું.
+આરવ `bodyKeys` માં એક નામ પર અટકે છે: "`dsh_session_log`? Agency ને આપણા **ચોપડાનાં પાનાં** પણ જાય છે?"
 
-`dsh_session_log` અને `dsh_plugin_packages` એ **request extensions** છે — DeepSeek-specific fields જે plugins ઉમેરે છે. `dsh_session_log` field `session-log-deepseek` plugin register કરે છે ([source][sessionlog-register]); તેનું README કહે છે: "Incremental canonical session-log upload for official DeepSeek LLM API requests … Disable it only when the official API must not receive a Session-log suffix." પ્રકરણ 5 માં આને **data boundary** તરીકે તપાસીશું — "agency ને આપણા ચોપડાનાં પાનાં પણ જાય છે?" ✅🧪
+"સારી આંખ. હા."
 
-### 🔴 Response: SSE → `StreamChunk`
+**Request extension** = provider-specific વધારાનો body field, જે plugins ઉમેરે — ઓર્ડર સાથે ટાંકેલું વધારાનું પાનું. `dsh_session_log` અને `dsh_plugin_packages` એવા બે fields છે. `dsh_session_log` field `session-log-deepseek` plugin register કરે છે ([source][sessionlog-register]); તેનું README કહે છે: "Incremental canonical session-log upload for official DeepSeek LLM API requests … Disable it only when the official API must not receive a Session-log suffix." ✅🧪
 
-Provider HTTP 200 સાથે Server-Sent Events મોકલે છે. [`parseSse`][deepseek-sse] દરેક `data:` line ને JSON બનાવે છે, અને [`translate`][deepseek-translate] તેને harness ના provider-neutral [`StreamChunk`][llm-streamchunk] માં ફેરવે છે:
+🔬 **Expert નજર.** આરવનો પ્રશ્ન **data boundary** નો છે: "મારા machine ની બહાર બરાબર શું જાય છે?" તેનો જવાબ docs માં શોધવાનો નથી; **wire capture** માં જોવાનો છે, કારણ કે body માં fields plugins ઉમેરે છે અને plugins બદલાય છે. પ્રકરણ 5 માં આ જ સવાલ ફરી પૂછીશું અને તે row બંધ કરીને ફરક માપીશું. Expert કોઈ પણ agent system અપનાવતાં પહેલાં એક વાર wire જુએ છે.
+
+## દૃશ્ય 9 — મહારાજ ટુકડે ટુકડે બોલે: SSE → `StreamChunk`
+
+🎬 ફોન પર મહારાજ એક શ્વાસે નથી બોલતા: "હવે એક વાત શરૂ કરું છું… આ તેનો ટુકડો… બીજો ટુકડો… એ વાત પૂરી… હવે એક ચિઠ્ઠી લખાવું છું… પૂરી… કુલ આટલા શબ્દ બોલ્યો… બસ." દુભાષિયો દરેક ટુકડાને ભોજનાલયની બોલીના **સાતમાંથી એક** છાપેલા કાર્ડમાં ફેરવીને રમેશભાઈને આપતો જાય છે.
+
+💻 Provider HTTP 200 સાથે Server-Sent Events મોકલે છે. [`parseSse`][deepseek-sse] દરેક `data:` line ને JSON બનાવે છે, અને [`translate`][deepseek-translate] તેને harness ના provider-neutral [`StreamChunk`][llm-streamchunk] માં ફેરવે છે:
 
 ```ts
 export type StreamChunk =
@@ -264,17 +326,24 @@ export type StreamChunk =
   | { type: 'finish'; reason: FinishReason; replayState?: ReplayEnvelope }
 ```
 
-(repository code; છેલ્લો `finish` variant source માં ઘણી lines માં છે, અહીં એક line માં સંક્ષિપ્ત કર્યો છે.) — ઓળખ્યું? આ discriminated union છે (પ્રવેશ પ્ર.6): `type` field જોઈને આકાર નક્કી.
+(repository code; છેલ્લો `finish` variant source માં ઘણી lines માં છે, અહીં એક line માં સંક્ષિપ્ત કર્યો છે.) ઓળખ્યું? Discriminated union (પ્રવેશ, દૃશ્ય 6): `type` જોઈને આકાર નક્કી.
 
-> 📦 **Provider-neutral** — કોઈ એક provider ની ભાષા પર આધાર નહીં. 🍽️ ભોજનાલયની પોતાની ભાષા — agency બદલાય તો પણ એ જ.
->
-> 📦 **Delta** — "આગળના ટુકડામાં ઉમેરો" — આખું નહીં, ફક્ત નવો ભાગ. 🍽️ મહારાજનું નવું વાક્ય.
+- **Provider-neutral** = કોઈ એક provider ની ભાષા પર આધાર નહીં — ભોજનાલયની પોતાની બોલી.
+- **Delta** = "અત્યાર સુધીનામાં આ ઉમેરો" — આખું નહીં, ફક્ત નવો ભાગ.
 
-**યાદ-ચાવી — સાત પ્રકાર "બ્લો-ટે-રી-ટૂ-એન્ડ-યુ-ફિ":** `block-start`, `text-delta`, `reasoning-delta`, `tool-call-delta`, `block-end`, `usage`, `finish`.
+**યાદ-ચાવી — સાત કાર્ડ "બ્લો-ટે-રી-ટૂ-એન્ડ-યુ-ફિ":** `block-start`, `text-delta`, `reasoning-delta`, `tool-call-delta`, `block-end`, `usage`, `finish`.
 
 Provider ના `stop_reason` નું mapping ([source][deepseek-finish]): `end_turn`/`stop_sequence` → `stop`, `tool_use` → `tool-calls`, `max_tokens` → `max-tokens`. HTTP error હોય તો adapter body વાંચી `providerError(raw, status, headers)` થી code (દા.ત. `AUTH`, `SERVER`, rate limit) બનાવે છે અને `LlmError` ફેંકે છે; `LlmRuntime` તેને `finish` chunk (`kind: 'error'`) માં ફેરવે છે, અને loop `agent/request-error` ચલાવે છે (પ્રકરણ 5).
 
-### Adapter boundary નો નિયમ — ઉપર શું, નીચે શું
+🔬 **Expert નજર.** `tool-call-delta` માં `argumentsDelta: string` જુઓ: tool call ના arguments પણ **ટુકડે ટુકડે, text તરીકે** આવે છે. JSON અધવચ્ચે કપાઈ શકે, અથવા model ખોટું JSON લખી શકે. એટલે જ દૃશ્ય 7 નું `parseArguments` "અક્ષર ગરબડ હોય તો પણ ફેંકો નહીં" નિયમ પાળે છે. બે ઓરડાના નિયમ એકબીજા પર ટકેલા છે.
+
+## દૃશ્ય 10 — agency બદલાય તો? adapter boundary
+
+🎬 પપ્પા વિચારે છે: "આવતા વર્ષે બીજી agency સસ્તી પડે તો?" આરવ ગભરાય છે: આખું ભોજનાલય ફરી ગોઠવવું પડશે? દીદી ફોન-રૂમના ઉંબરા પર ચોકથી લીટી દોરે છે.
+
+"લીટીની આ બાજુ કોઈને agency ની ભાષા નથી આવડતી. પેલી બાજુ કોઈએ ચોપડો નથી જોયો. Agency બદલાય, તો ફક્ત **દુભાષિયો** બદલાય."
+
+💻
 
 | Boundary ની ઉપર (loop, tools, session) | Boundary ની નીચે (DeepSeekAdapter) |
 |---|---|
@@ -283,17 +352,32 @@ Provider ના `stop_reason` નું mapping ([source][deepseek-finish]): `en
 | retry નિર્ણય (`agent/request-error`) | HTTP error → `LlmError` code (`AUTH`, `SERVER`, …) |
 | wire format જાણતું નથી | session log જાણતું નથી |
 
-Boundary ની ઉપર (loop, tools, session) કોઈ code DeepSeek wire format જાણતું નથી; boundary ની નીચે adapter harness ના session log ને જાણતું નથી — તે ફક્ત `GenerateOptions` લે છે અને `StreamChunk` આપે છે. નવો provider ઉમેરવો એટલે `ctx.llm.registerAdapter(...)` ([source][llm-registerAdapter]).
+નવો provider ઉમેરવો એટલે `ctx.llm.registerAdapter(...)` ([source][llm-registerAdapter]).
 
-**યાદ-ચાવી: "દુભાષિયો ફક્ત ભાષા બદલે, અર્થ નહીં."**
+⚠️ **વાર્તા અને technical વચ્ચે ફરક:** માણસ દુભાષિયો અર્થ પણ બદલી શકે, ટૂંકાવી શકે. Adapter **ફક્ત format** બદલે છે. **યાદ-ચાવી: "દુભાષિયો ફક્ત ભાષા બદલે, અર્થ નહીં."**
 
-## ઓરડો 3: ચોપડા-ઘર
+🔬 **Expert નજર.** Table ની ત્રીજી લીટી સૌથી સૂક્ષ્મ છે: adapter error ને **ઓળખે** છે (HTTP 401 → `AUTH`), પણ "ફરી પ્રયત્ન કરવો કે નહીં" તે **નક્કી નથી કરતો**. નિર્ણય ઉપર છે, `agent/request-error` waterfall માં, જ્યાં plugins ભાગ લઈ શકે. ઓળખવું અને નક્કી કરવું બે અલગ જવાબદારી છે. Boundary ની ખરી કસોટી આ પ્રશ્ન છે: "આ file વાંચવા મારે provider ના docs ખોલવા પડે?" જવાબ "હા" ફક્ત adapter ની અંદર હોવો જોઈએ.
 
-## 3.5 🟡 Session state → model context
+# ઓરડો 3: ચોપડા-ઘર
 
-> 📦 **Session log** — append-only events ની યાદી; દરેક event ને `seq` (0,1,2…) અને `time` મળે છે. ઉદાહરણ: પ્રકરણ 1 માં `#17 tool/call`. 🍽️ ઓર્ડર-ચોપડો: દરેક લીટી પર પાના-નંબર અને સમય.
->
-> 📦 **Append-only** — ફક્ત અંતે ઉમેરાય; જૂનું કદી બદલાય કે ભૂંસાય નહીં.
+## દૃશ્ય 11 — શાહીથી, નંબર સાથે, તાળાબંધ: `Session.append`
+
+🎬 ચોપડા-ઘરમાં પપ્પાના ત્રણ નિયમ દીવાલ પર લખેલા છે:
+
+1. **"શાહીથી લખાય તેવું જ."** એક વાર કોઈએ લીટીમાં લખ્યું "વિગત માટે રમેશભાઈને પૂછો". એક મહિના પછી રમેશભાઈને યાદ નહોતું. લીટી પોતે પૂરી હોવી જોઈએ.
+2. **"લખ્યું તે લખ્યું."** છેકછાક નહીં. ભૂલ હોય તો નવી લીટીમાં સુધારો.
+3. **"પાના-નંબર ક્રમમાં, કૂદકો નહીં."**
+
+અને ખાસ: નિયમ 1 તોડતી લીટી રમેશભાઈ **લખવા જ નથી દેતા** — સાંજે તિજોરીમાં મૂકતી વખતે નહીં, લખતી ક્ષણે જ ના પાડે.
+
+❓ "સાંજે તપાસે તોય ચાલે ને?"
+
+"સાંજે પકડાય ત્યારે કોને ખબર કે એ લીટી **કોણે, ક્યારે, કેમ** લખી? ભૂલ જ્યાં થાય ત્યાં જ પકડો; ત્યારે ગુનેગાર સામે ઊભો હોય."
+
+💻
+
+- **Session log** = append-only events ની યાદી; દરેક event ને `seq` (0,1,2…) અને `time` મળે છે.
+- **Append-only** = ફક્ત અંતે ઉમેરાય; જૂનું કદી બદલાય કે ભૂંસાય નહીં.
 
 [`Session.append`][session-append]:
 
@@ -309,25 +393,37 @@ Boundary ની ઉપર (loop, tools, session) કોઈ code DeepSeek wire fo
       time: Date.now(),
 ```
 
-ત્રણ ખાતરીઓ:
+ત્રણ નિયમ, ત્રણ lines:
 
-1. data JSON-serializable હોવો જ જોઈએ (નહીં તો append જ નિષ્ફળ — ખરાબ event પછીથી flush વખતે નહીં, **અહીં જ** પકડાય). 🍽️ "ચોપડામાં ફક્ત શાહીથી લખાય તેવું જ" — પેન્સિલ નહીં.
-2. event deep-frozen છે — કોઈ બદલી ન શકે.
-3. `seq` = log ની લંબાઈ — પાના નંબર ક્રમમાં, કદી કૂદકો નહીં.
+1. Data JSON-serializable હોવો જ જોઈએ; નહીં તો append જ નિષ્ફળ — ખરાબ event પછીથી flush વખતે નહીં, **અહીં જ** પકડાય.
+2. Event deep-frozen છે — કોઈ બદલી ન શકે.
+3. `seq` = log ની લંબાઈ — ક્રમમાં, કદી કૂદકો નહીં.
 
-રમકડા-agent નું `append` યાદ છે? `Object.freeze({ seq: log.length, … })` — એ જ ત્રણ વિચાર, ઘણા નાના રૂપમાં.
+રમકડા-agent નું `append` યાદ છે? `Object.freeze({ seq: log.length, … })` — એ જ વિચાર, નાના રૂપમાં.
 
-> 📦 **Surface** — log ના એવા nodes જે model history બનાવે છે.
+🔬 **Expert નજર.** નિયમ 1 ને **fail fast** કહેવાય. ખરાબ event ને memory માં સ્વીકારી લો અને disk પર લખતી વખતે નિષ્ફળ જાઓ, તો error નો stack trace `flush` બતાવે — ગુનેગાર plugin નહીં. `append` માં throw કરો, તો stack trace સીધો એ line બતાવે જેણે ખરાબ data આપ્યો. ક્યાં નિષ્ફળ જવું એ પસંદગી debugging ના કલાકો બચાવે છે.
 
-**Surface** માં પાંચ message-producing types છે: `system/message`, `developer/message`, `user/message`, `assistant/message`, `tool/result` ([`SurfaceEventType`][session-surface-types]). [`deriveMessages`][session-derive] surface nodes પરથી `Message[]` બનાવે છે અને cache કરે છે; compaction જેવી replacement થાય તો `contentGeneration` બદલાય અને cache ફરી બને. ખાલી content વાળો `assistant/message` (દા.ત. ફક્ત usage) history માં આવતો નથી.
+## દૃશ્ય 12 — મહારાજ માટે કઈ લીટીઓ? surface અને `deriveMessages`
+
+🎬 રમેશભાઈ મહારાજ માટે નકલ ઉતારે છે. આરવ જુએ છે કે તે ચોપડાની **દરેક** લીટી નથી ઉતારતા. "ઓર્ડર શરૂ", "કોઠારમાં ચિઠ્ઠી ગઈ", "ઓર્ડર બંધ" — આ છોડી દે છે. ફક્ત **વાતચીતની** લીટીઓ લે છે.
+
+❓ "તો 'જે મહારાજને કહ્યું તે ચોપડામાં' — ઊલટું સાચું નથી? ચોપડાનું બધું મહારાજને નથી જતું?"
+
+"બરાબર. ચોપડામાં બે જાતની લીટી છે: **વાતચીત**, અને **વહીવટ**. મહારાજને વાતચીત જાય. વહીવટ આપણા માટે છે."
+
+💻 **Surface** = log ના એવા nodes જે model history બનાવે છે. તેમાં પાંચ message-producing types છે: `system/message`, `developer/message`, `user/message`, `assistant/message`, `tool/result` ([`SurfaceEventType`][session-surface-types]).
 
 **યાદ-ચાવી "સિ-ડે-યુ-આ-ટૂ" — "સીડી યુવાન આગળ ટૂંકી":** **સિ**સ્ટમ, **ડે**વલપર, **યુ**ઝર, **આ**સિસ્ટન્ટ, **ટૂ**લ result.
 
-> 📦 **Cache** — એક વાર ગણેલું પરિણામ સાચવી રાખવું, જેથી ફરી ગણવું ન પડે. 📦 **Compaction** — લાંબો ઇતિહાસ ટૂંકો (સાર) કરવો — આ પુસ્તકમાં વિગતે નથી (પરિશિષ્ટ F).
+[`deriveMessages`][session-derive] surface nodes પરથી `Message[]` બનાવે છે અને **cache** કરે છે (એક વાર ગણેલું સાચવી રાખવું, જેથી ફરી ગણવું ન પડે). **Compaction** (લાંબો ઇતિહાસ ટૂંકો કરવો — આ પુસ્તકમાં વિગતે નથી; પરિશિષ્ટ F) જેવી replacement થાય તો `contentGeneration` બદલાય અને cache ફરી બને. ખાલી content વાળો `assistant/message` (દા.ત. ફક્ત usage) history માં આવતો નથી.
 
-### Persistence — તિજોરીમાં ચોપડો
+🔬 **Expert નજર.** પ્રકરણ 1 ના Lab ના આંકડા હવે સમજાય છે: 24 થી વધુ events ચોપડામાં હતા, પણ call #2 માં ફક્ત 7 messages ગયા. `turn/start`, `tool/call`, `request/header` surface નથી. (હા, `tool/call` surface નથી: model ની માંગ `assistant/message` ની અંદર tool-call block તરીકે જ history માં છે.) "Model ને શું દેખાશે?" નો જવાબ: પાંચ surface types, બીજું કશું નહીં. તમારો plugin model ને કંઈક બતાવવા માગે, તો તેણે આ પાંચમાંથી એક event append કરવી પડે.
 
-> 📦 **Persistence** — data ને disk પર ટકાવવું, process બંધ થાય તો પણ. 🍽️ દિવસના અંતે ચોપડો તિજોરીમાં.
+## દૃશ્ય 13 — તિજોરી: persistence
+
+🎬 રાત્રે રમેશભાઈ કાચી નોંધો પાકા ચોપડામાં ઉતારે છે (flush — પ્રકરણ 1), ચોપડો તિજોરીમાં મૂકે છે, અને તિજોરી પર એક ટૅગ લટકાવે છે: "લખાણ ચાલુ છે" — જેથી બે જણ એકસાથે એ જ ચોપડામાં ન લખે. અને પપ્પાનો બીજો નિયમ: ભરાઈ ગયેલો જૂનો ચોપડો **કદી ફેંકાતો કે ફરી લખાતો નથી**. નવું ફોર્મ આવે તો જૂના ચોપડાની નકલ નવા ફોર્મમાં થાય; મૂળ અકબંધ.
+
+💻 **Persistence** = data ને disk પર ટકાવવું, process બંધ થાય તો પણ.
 
 Base bundle `session-persistence-jsonl` ને `root: dshHomePath('sessions')` સાથે mount કરે છે. ✅ અમારા runs માં file layout 🧪:
 
@@ -336,20 +432,24 @@ $DSH_HOME/sessions/<cwd-key>/session-<uuid>/session.v4.jsonl.zstd
 $DSH_HOME/sessions/<cwd-key>/session-<uuid>/session.lock
 ```
 
-પહેલી line header છે (`{"type":"session","version":4,"id":…,"cwd":…}`), પછી એક event પ્રતિ line (JSONL — પ્રવેશ પ્ર.3). `.zstd` = દબાવેલી પોટલી (compression); `session.lock` = "આ ચોપડો અત્યારે કોઈ લખે છે" નું તાળું. Architecture doc મુજબ v1 અને પછીના format `session.vN.jsonl[.zstd]` નામ વાપરે છે, અને committed generation files ક્યારેય rename/replace/delete થતી નથી; જૂના version ની session ખોલતાં adjacent migrations ચાલે છે. ✅ Headless runner અંતે [`sessions.flush`][session-flush] બોલાવે છે, જે દરેક `session/flush` listener ની રાહ જુએ છે.
+પહેલી line header છે (`{"type":"session","version":4,"id":…,"cwd":…}`), પછી એક event પ્રતિ line (JSONL — પ્રવેશ, દૃશ્ય 3). `.zstd` = દબાવેલી પોટલી (compression); `session.lock` = "આ ચોપડો અત્યારે કોઈ લખે છે" નો ટૅગ.
 
-> 📦 **Migration** — જૂના format ના data ને નવા format માં ફેરવવું. 🍽️ જૂના ચોપડાની નકલ નવા ફોર્મમાં — મૂળ ચોપડો અકબંધ.
+Architecture doc મુજબ v1 અને પછીના format `session.vN.jsonl[.zstd]` નામ વાપરે છે, અને committed generation files ક્યારેય rename/replace/delete થતી નથી; જૂના version ની session ખોલતાં adjacent migrations ચાલે છે. ✅ (**Migration** = જૂના format ના data ને નવા format માં ફેરવવું.) Headless runner અંતે [`sessions.flush`][session-flush] બોલાવે છે, જે દરેક `session/flush` listener ની રાહ જુએ છે.
 
-### Recovery અને resume — લાઈટ ગયા પછી
+🔬 **Expert નજર.** File ના નામમાં `v4` છે. Format નો version **data ની સાથે** રહે છે, code માં નહીં. બે વર્ષ પછી કોઈ આ file ખોલે, તો તેને ખબર હોય કે કયા નિયમથી વાંચવી. અને "committed files કદી rename/replace/delete નહીં" એ append-only નો વિચાર (દૃશ્ય 11) file ના સ્તરે છે: migration નિષ્ફળ જાય તો પણ મૂળ ચોપડો સલામત. જે data ગુમાવવો પોસાય નહીં, તેના માટે expert હંમેશા આ બે વાત જુએ છે: versioned format, અને "મૂળને અડ્યા વગર" migration.
 
-બે પ્રકારની recovery source માં છે:
+## દૃશ્ય 14 — લાઈટ ગયા પછી: recovery અને resume
 
-- **Step ની અંદર:** step નિષ્ફળ જાય અને tool calls નાં પરિણામ ખૂટે, તો loop [`toolRecovery.results()`][loop-recovery] વડે ખૂટતા `tool/result` લખે છે — દરેક `tool/call` ને જવાબ મળે એ invariant જળવાય.
+🎬 સવારનું દૃશ્ય, હવે આખું. ગઈ રાત્રે લાઈટ ગઈ ત્યારે બે વસ્તુ અધૂરી હોઈ શકતી હતી: એક **ચિઠ્ઠી** કોઠારમાં ગયેલી અને જવાબ વગરની, અને આખો **ઓર્ડર**. રમેશભાઈએ જતાં પહેલાં બંને ચોપડામાં બંધ કર્યાં. આજે ગ્રાહક પાછો આવ્યો; રમેશભાઈએ **એ જ ચોપડો** ખોલ્યો, નવો ઓર્ડર-નંબર પાડ્યો, અને મહારાજને ગઈકાલની આખી વાત સાથે નવી માંગ કહી.
+
+💻 બે પ્રકારની recovery source માં છે:
+
+- **Step ની અંદર:** step નિષ્ફળ જાય અને tool calls નાં પરિણામ ખૂટે, તો loop [`toolRecovery.results()`][loop-recovery] વડે ખૂટતા `tool/result` લખે છે — invariant "દરેક `tool/call` ને એક `tool/result`" જળવાય.
 - **Process ની બહાર:** headless `--session-id <id>` થી persisted Session ફરી અપનાવી શકાય ([headless flags][headless-flags]).
 
-> 📦 **Invariant** — હંમેશા સાચી રહેવી જોઈએ તેવી શરત. અહીં: "દરેક `tool/call` ને એક `tool/result`." 🍽️ દરેક ચિઠ્ઠીનો જવાબ ચોપડામાં હોય જ.
->
-> 📦 **Resume** — જૂના session માં નવો turn ચલાવવો. 🍽️ ગઈકાલનો ચોપડો ખોલી વાત આગળ ચલાવવી.
+**Resume** = જૂના session માં નવો turn ચલાવવો — ગઈકાલનો ચોપડો ખોલી વાત આગળ ચલાવવી.
+
+🔬 **Expert નજર.** Resume માટે harness માં કોઈ "ખાસ mode" નથી. તે આપોઆપ મળે છે, કારણ કે ત્રણ નિયમ પહેલેથી પળાય છે: history ચોપડામાંથી derive થાય (પ્રકરણ 1), ચોપડો disk પર છે (દૃશ્ય 13), અને ચોપડામાં કશું અધૂરું નથી (invariants). સારા design ની નિશાની: નવી ક્ષમતા નવા code થી નહીં, **જૂના નિયમોના પરિણામ** તરીકે આવે. Lab માં તમે જોશો કે resumed turn માં model ને બરાબર પહેલાંની history + નવો સંદેશ જાય છે, અને એ માટે loop માં એક પણ ખાસ line નથી.
 
 ## Source map: આ ક્રમમાં ખોલો
 
@@ -365,9 +465,13 @@ $DSH_HOME/sessions/<cwd-key>/session-<uuid>/session.lock
 | 8 | ફોન | `packages/llm/llm-deepseek/src/translate.ts` | [`translate`][deepseek-translate] | SSE JSON → `StreamChunk` |
 | 9 | ચોપડો | `packages/core/session/src/index.ts` | [`append`][session-append], [`deriveMessages`][session-derive] | event → log; log → `Message[]` |
 
-## 🧪 Lab 3 — completed અને interrupted session ને resume કરો
+---
 
-**ભાગ A: સામાન્ય resume — "ગ્રાહક પાછો આવ્યો."**
+## 🧪 Lab 3 — સવારનું દૃશ્ય, તમારા હાથે
+
+🎬 "હવે," દીદી કહે છે, "સવારે રમેશભાઈએ જે કર્યું તે તું કર. પહેલાં સહેલું: ગ્રાહક પાછો આવે. પછી અઘરું: લાઈટ જાય."
+
+### ભાગ A: ગ્રાહક પાછો આવ્યો — સામાન્ય resume
 
 ```bash
 rm -rf tmp/book-home && bash tmp/book-labs/request-trace/run-mock.sh
@@ -377,7 +481,9 @@ rm -rf tmp/book-home && bash tmp/book-labs/request-trace/run-mock.sh
 SID=$(basename "$(find tmp/book-home/sessions -maxdepth 2 -name 'session-*' -type d | head -1)")
 ```
 
-(પહેલો command નવા ઘરમાં પ્રકરણ 1 નો run કરે છે; બીજો એ session નું folder નામ — એટલે session id — `SID` variable માં મૂકે છે. `$(…)` અને `basename` = "આખા path માંથી ફક્ત છેલ્લું નામ".)
+(પહેલો command નવા ઘરમાં પ્રકરણ 1 નો run કરે છે; બીજો એ session નું folder નામ — એટલે session id — `SID` variable માં મૂકે છે. `basename` = "આખા path માંથી ફક્ત છેલ્લું નામ".)
+
+**પહેલાં ધારો:** બીજો ઓર્ડર આપશો ત્યારે (1) `turn` નંબર શું હશે? (2) `seq` 0 થી ફરી શરૂ થશે કે આગળ વધશે? (3) Model ને કેટલા messages જશે? (પહેલા turn ના અંતે 7 હતા.)
 
 ```bash
 SEQUENCE=success SUCCESS_TEXT='ત્રણ મુદ્દા: 1) plugin 2) Cordis 3) session log.' TASK='હવે એ સાર ત્રણ મુદ્દામાં લખો.' DSH_ARGS="--session-id $SID" bash tmp/book-labs/request-trace/run-mock.sh
@@ -385,11 +491,14 @@ SEQUENCE=success SUCCESS_TEXT='ત્રણ મુદ્દા: 1) plugin 2) Cor
 
 🧪 અવલોકનો ([evidence/resume-a2.err](../evidence/resume-a2.err)): exit 0; નવો event `#27 turn/start {"turn":2}` — એ જ log, આગલો seq; `request/header` reason **`resume`**; ફક્ત **એક** model call, જેમાં `messages=9` — પહેલા turn ની આખી history + નવો સંદેશ.
 
-🍽️ ગ્રાહક બીજા દિવસે આવીને કહે "ગઈકાલની વાનગી, હવે ઓછી તીખી." રમેશભાઈ ચોપડો ખોલે (એ જ session), નવો ઓર્ડર નંબર લખે (turn 2), અને મહારાજને ગઈકાલની **આખી** વાત + નવી માંગ કહે (9 messages).
+ગ્રાહક બીજા દિવસે આવીને કહે "ગઈકાલની વાનગી, હવે ઓછી તીખી." રમેશભાઈ એ જ ચોપડો ખોલે (એ જ session), નવો ઓર્ડર નંબર લખે (turn 2), અને મહારાજને ગઈકાલની **આખી** વાત + નવી માંગ કહે (9 messages) — કારણ કે મહારાજ તો ભૂલી ગયા છે.
 
-**ભાગ B: interrupted session ને resume — "લાઈટ ગઈ હતી."** Mock ને `--sequence stall` સાથે ચલાવી headless run ને 4 સેકન્ડે `SIGINT` મોકલ્યો, પછી `--session-id` થી resume કર્યું (પૂરા commands: [પરિશિષ્ટ B](../appendix/B-command-reference.md#interrupt-and-resume)). 🧪 Stored log ([evidence/int2.err](../evidence/int2.err)):
+### ભાગ B: લાઈટ ગઈ — interrupted session ને resume
 
-> 📦 **`SIGINT`** — "અટકો" નો signal; Ctrl+C દબાવો ત્યારે process ને મળે. 📦 **Stall** — mock નું એક વર્તન: headers મોકલી પછી ચૂપ — "ફોન ઉપાડ્યો પણ કંઈ બોલ્યા નહીં."
+- **`SIGINT`** = "અટકો" નો signal; Ctrl+C દબાવો ત્યારે process ને મળે.
+- **Stall** = mock નું એક વર્તન: headers મોકલી પછી ચૂપ — "ફોન ઉપાડ્યો, પણ કંઈ બોલ્યા નહીં."
+
+Mock ને `--sequence stall` સાથે ચલાવી headless run ને 4 સેકન્ડે `SIGINT` મોકલ્યો, પછી `--session-id` થી resume કર્યું (પૂરા commands: [પરિશિષ્ટ B](../appendix/B-command-reference.md#interrupt-and-resume)). 🧪 Stored log ([evidence/int2.err](../evidence/int2.err)):
 
 ```text
 #4 turn/start {"turn":1}
@@ -402,8 +511,6 @@ SEQUENCE=success SUCCESS_TEXT='ત્રણ મુદ્દા: 1) plugin 2) Cor
 #35 turn/end {"turn":2,"reason":{"kind":"completed"}}
 ```
 
-Interrupted turn 1 ગુમ થયો નથી: તેનો user message, ખાલી `assistant/attempt`, અને `aborted` reason સાથે `turn/end` durable છે. Turn 2 એ history સાથે ફરી `read` ચલાવ્યું અને પૂરો થયો. — વાર્તાની શરૂઆતમાં રમેશભાઈએ સવારે ચોપડામાં બરાબર આ જ વાંચ્યું હતું.
-
 ```mermaid
 flowchart LR
   T1["turn 1<br/>user message"] --> X["assistant/attempt<br/>stream: [] (ખાલી)"]
@@ -412,59 +519,95 @@ flowchart LR
   T2 --> E2["turn/end<br/>completed"]
 ```
 
-## 🔮 આગાહી કસોટી
+આરવ લીટી-લીટી વાંચે છે, સવારે રમેશભાઈએ વાંચ્યું હતું તેમ:
 
-`read` tool ને `{"file_path":"packages"}` (directory) argument સાથે call કરાવો:
+- `#8`: ગ્રાહકનો ઓર્ડર **સચવાયો** છે.
+- `#16 assistant/attempt … "stream":[]`: મહારાજને પૂછ્યું હતું, પણ તે એક શબ્દ બોલ્યા નહોતા. એ **attempt** છે, `assistant/message` નહીં — એટલે દૃશ્ય 12 મુજબ history માં નથી જતું.
+- `#18 turn/end … aborted`: પ્રકરણ 1 નો `finally`. લાઈટ ગઈ, તો પણ ઓર્ડરનો અંત લખાયો.
+- `#21` પછી: turn 2 એ history સાથે ફરી `read` ચલાવ્યું અને પૂરો થયો.
+
+Interrupted turn 1 ગુમ થયો નથી.
+
+🔬 **Expert નજર.** આ આઠ લીટીમાં ત્રણ પ્રકરણના નિયમ એકસાથે કામ કરતા દેખાય છે: `finally` (પ્ર.1), attempt ≠ message (પ્ર.1 અને દૃશ્ય 12), persistence (દૃશ્ય 13). અને એક વસ્તુ જે **નથી** તે નોંધો: turn 1 માં અધૂરો `assistant/message` નથી. અડધો જવાબ history માં ગયો હોત, તો turn 2 માં model તેના પર આગળ વધત. Interrupted કામને "અડધું સાચવવું" કરતાં "આખું attempt તરીકે અલગ રાખવું" સલામત છે.
+
+## 🔮 આગાહી કસોટી: ચોપડી માંગી, આખું ખાનું બતાવ્યું
+
+મહારાજ ભૂલથી ચોપડીને બદલે **આખા ખાનાનું નામ** લખે છે. `read` tool ને `{"file_path":"packages"}` (directory) argument સાથે call કરાવો:
 
 ```bash
 TOOL_ARGS='{"file_path":"packages"}' bash tmp/book-labs/request-trace/run-mock.sh
 ```
 
-**ચલાવતા પહેલાં લખો:** (1) model ને મળતું exact `Error:` text, (2) `tool/result` માં `error.info.code`, (3) turn નું reason. (સંકેત: 3.2 (d) ની table માં ત્રીજું સ્તર, અને 3.2 (c) નો છેલ્લો ફકરો.) જવાબ: [પરિશિષ્ટ D — Lab 3](../appendix/D-lab-solutions.md#lab-3).
+**ચલાવતા પહેલાં લખો:** (1) model ને મળતું exact `Error:` text, (2) `tool/result` માં `error.info.code`, (3) turn નું reason. (સંકેત: દૃશ્ય 5 ની table માં ત્રીજું સ્તર, અને દૃશ્ય 4 નો છેલ્લો ફકરો.)
 
-## 🩺 નિષ્ફળતા: નવો tool model ને દેખાતો નથી
+જવાબ: [પરિશિષ્ટ D — Lab 3](../appendix/D-lab-solutions.md#lab-3).
 
-**વાર્તામાં.** આરવે નવું કોઠાર-ખાનું બનાવ્યું, plugin load પણ થયો (startup warning નથી). પણ મહારાજ તે ખાના માટે કદી ચિઠ્ઠી લખતા નથી — જાણે ખાનું છે જ નહીં.
+## 🩺 નિષ્ફળતા: ખાનું છે, પણ મહારાજ કદી ચિઠ્ઠી લખતા નથી
 
-**લક્ષણ.** તમારો plugin load થયો છે (startup warning નથી), પણ `llm/stream` trace ની `tools=[…]` યાદીમાં તમારો tool નથી.
+🎬 આરવે નવું કોઠાર-ખાનું બનાવ્યું. Plugin load પણ થયો; startup warning નથી. પણ મહારાજ તે ખાના માટે કદી ચિઠ્ઠી લખતા નથી — જાણે ખાનું છે જ નહીં.
 
-**ટૂંકો નિદાન માર્ગ.**
+"મહારાજને ગમતું નથી?"
 
-1. Tool `ctx.tools.register` થી register થાય છે કે ફક્ત object બને છે? `defineTool` એકલું કંઈ register કરતું નથી. 🍽️ ખાનું બનાવ્યું, પણ કોઠાર-યાદીમાં નોંધાવ્યું નહીં.
-2. Preset કે agent scope માં ફક્ત અમુક tools દેખાય છે? Loop દરેક step માં `ctx.tools.resolve({ agent, … })` થી step-admitted tools લે છે ([`preStep`][loop-preStep]).
-3. Plugin કોઈ agent ના `agent.ctx` ને બદલે બીજા scope માં mount થયો છે? Scope chain [`scopeChainOf`][scope-chain] જુઓ. 🍽️ ખાનું બીજા ટેબલની યાદીમાં નોંધાયું.
-4. Trace plugin ની `tools=[…]` line એ wire પર ગયેલી યાદી છે; [`capture-wire.ts`](../labs/request-trace/capture-wire.ts) થી `toolNames` ચકાસો.
+"મહારાજ જે ફોર્મ **જોતા નથી**, તે ભરી ન શકે. પહેલાં જો કે ફોર્મ તેમના સુધી પહોંચે છે?"
+
+💻 **લક્ષણ.** Plugin load થયો છે, પણ `llm/stream` trace ની `tools=[…]` યાદીમાં તમારો tool નથી.
+
+**નિદાન:**
+
+1. **નોંધાવ્યું?** Tool `ctx.tools.register` થી register થાય છે કે ફક્ત object બને છે? `defineTool` એકલું કંઈ register કરતું નથી — ખાનું બનાવ્યું, પણ કોઠાર-યાદીમાં નોંધાવ્યું નહીં.
+2. **આ ઓર્ડર માટે માન્ય?** Preset કે agent scope માં ફક્ત અમુક tools દેખાય છે? Loop દરેક step માં `ctx.tools.resolve({ agent, … })` થી step-admitted tools લે છે ([`preStep`][loop-preStep]).
+3. **સાચા ટેબલની યાદીમાં?** Plugin કોઈ agent ના `agent.ctx` ને બદલે બીજા scope માં mount થયો છે? Scope chain [`scopeChainOf`][scope-chain] જુઓ.
+4. **ફોન પર ગયું?** Trace plugin ની `tools=[…]` line એ wire પર ગયેલી યાદી છે; [`capture-wire.ts`](../labs/request-trace/capture-wire.ts) થી `toolNames` ચકાસો.
+
+🔬 **Expert નજર.** "Model tool વાપરતું નથી" ના બે તદ્દન જુદા અર્થ છે: (a) model ને tool **દેખાતો નથી**, (b) દેખાય છે, પણ model **પસંદ નથી કરતું**. (a) plumbing નો પ્રશ્ન છે અને wire પર સાબિત થાય; (b) ફોર્મના શબ્દો (description, system prompt section — દૃશ્ય 2, 3) નો પ્રશ્ન છે. શિખાઉ સીધો (b) માં કૂદીને prompt બદલવા માંડે છે. Expert પહેલાં wire જોઈને (a) નકારે છે.
 
 <a id="saral-samaj"></a>
 
-## ✅ સાર — પ્રકરણ 3 એક પાનામાં
+## ✅ સાર — આરવની નોટબુક, દિવસ 7
 
-**એક વાક્યમાં:** ત્રણ ઓરડા અંદરથી — કોઠાર (`read` tool: schema → નોંધણી → `ctx.fs` → ભૂલ → render, અને "ભૂલ crash નથી" વાળો tool pipeline), ફોન-રૂમ (DeepSeek adapter: `GenerateOptions` → HTTP → SSE → `StreamChunk`, ફક્ત ભાષા બદલે), અને ચોપડા-ઘર (append-only session log → model history, JSONL file માં સચવાય, અને `--session-id` થી લાઈટ ગયા પછી પણ resume).
+**એક વાક્યમાં:** ત્રણ ઓરડા અંદરથી — કોઠાર (`read` tool: ફોર્મ → નોંધણી → `ctx.fs` → લાલ ચિઠ્ઠી → લેબલ, અને "ભૂલ crash નથી" વાળો pipeline), ફોન-રૂમ (DeepSeek adapter: `GenerateOptions` → HTTP → SSE → `StreamChunk`, ફક્ત ભાષા બદલે), અને ચોપડા-ઘર (append-only log → surface → model history, JSONL file માં, અને `--session-id` થી લાઈટ ગયા પછી પણ resume).
 
-> ⚠️ **ઉપમા અહીં તૂટે છે:** સાચો દુભાષિયો વાતચીતનો અર્થ પણ બદલી શકે. અહીં adapter **ફક્ત format** બદલે છે; loop, tools, session એ boundary ની ઉપર DeepSeek ની wire ભાષા ક્યારેય જાણતા નથી.
+### ચૌદ ઘટના, ચૌદ નિયમ
 
-### નવા ટેકનિકલ શબ્દો — એક નજરે
+| ઘટના | નિયમ | Code |
+|---|---|---|
+| દરવાજા પરનું પાટિયું | Seam: definition, provider, consumer | [`FileSystem`][fs-abstract] |
+| ચિઠ્ઠીનું ફોર્મ | Tool schema model ને જાય; description model માટેની સૂચના | [`applyReadTool`][read-tool] |
+| બે નોંધ | Tool + system prompt section, બંને effects | [`inject`][toolfs-inject] |
+| ડબ્બો ખોલ્યા વગર લેબલ | resolve → એક `stat` → નાની file `readText`, મોટી stream | [`resolveRegularReadTarget`][read-target] |
+| ત્રણ "ના", લાલ ચિઠ્ઠી | Tool error = `tool/result` (`isError`); code log માં, text model ને | [`toolErrorResult`][pipeline-errorResult] |
+| સામાન અને લેબલ | Canonical value (validated) ≠ render | [`output`][read-output] |
+| ચિઠ્ઠીનો રસ્તો | parse → `tool/call` → pre-execute → execute → `tool/result` | [`prepare`][pipeline-prepare], [`dispatch`][pipeline-dispatch] |
+| દુભાષિયો | `GenerateOptions` → `llm/stream` waterfall → HTTP POST | [`generate`][deepseek-generate] |
+| ટુકડે ટુકડે | SSE → સાત `StreamChunk` | [`translate`][deepseek-translate] |
+| ચોકની લીટી | ઉપર wire નથી જાણતા; નીચે log નથી જાણતા | [`registerAdapter`][llm-registerAdapter] |
+| શાહી, નંબર, તાળું | JSON-serializable (fail fast), frozen, `seq` ક્રમમાં | [`append`][session-append] |
+| વાતચીત vs વહીવટ | પાંચ surface types જ model history બને | [`deriveMessages`][session-derive] |
+| તિજોરી | `session.v4.jsonl.zstd`; committed files કદી બદલાય નહીં | [`flush`][session-flush] |
+| લાઈટ ગયા પછી | ખૂટતા `tool/result` ભરાય; `--session-id` થી resume | [`toolRecovery`][loop-recovery] |
 
-| શબ્દ | સરળ અર્થ | ઉદાહરણ | યાદ-ચાવી |
+### નવા ટેકનિકલ શબ્દો
+
+| શબ્દ | અર્થ | ઉદાહરણ | ભોજનાલયમાં |
 |---|---|---|---|
-| Capability seam | ત્રણ ભૂમિકાવાળો બદલી શકાય તેવો સાંધો | `ctx.fs` | "નિ-ક-વા" |
-| Interface / abstract class | "શું કરવું" નું વચન, "કેવી રીતે" નહીં | `FileSystem` | "નોકરીનું વર્ણન" |
-| Tool executor | tool batch ચલાવતો provider | `NativeToolExecutor` | "કોઠારનો મુખ્ય" |
-| Tool pipeline | policy → body → result નો ક્રમ | `ToolExecutionPipeline` | "ચિઠ્ઠીનો રસ્તો" |
-| Canonical value | tool નું સાચું structured પરિણામ | `{path, lines}` | "સામાન પોતે" |
-| Render | value ને model માટે text બનાવવું | `1: # DeepSeek…` | "લેબલ" |
-| `isError` | આ result નિષ્ફળતા છે | `true` | "લાલ ચિઠ્ઠી" |
-| Adapter | harness ↔ provider wire નો દુભાષિયો | `DeepSeekAdapter` | "દુભાષિયો" |
-| HTTP / POST | web પર માંગ મોકલવાની રીત | `POST /v1/messages` | "ટપાલ" |
-| SSE | server થી એક-દિશાના event ટુકડા | `data: {...}` | "ટીપે ટીપે" |
-| `StreamChunk` | provider-neutral ટુકડો | `text-delta` | "ભોજનાલયની ભાષાનું ટીપું" |
-| Request extension | provider-specific વધારાનો body field | `dsh_session_log` | "ચિઠ્ઠી સાથે ટાંકેલું પાનું" |
-| Surface | model history બનાવતી log લીટીઓ | 5 પ્રકાર | "સીડી યુવાન આગળ ટૂંકી" |
-| Persistence | data ને disk પર ટકાવવું | JSONL file | "તિજોરી" |
-| zstd | compression format | `.jsonl.zstd` | "દબાવેલી પોટલી" |
-| Resume | જૂના session માં નવો turn | `--session-id` | "ગઈકાલનો ચોપડો ખોલવો" |
+| Capability seam | ત્રણ ભૂમિકાવાળો બદલી શકાય તેવો સાંધો | `ctx.fs` | પાટિયું, કોઠારી, ચિઠ્ઠી મોકલનાર |
+| Interface / abstract class | "શું કરવું" નું વચન | `FileSystem` | નોકરીનું વર્ણન |
+| Tool executor | tool batch ચલાવતો provider | `NativeToolExecutor` | કોઠારી |
+| Tool pipeline | policy → body → result નો ક્રમ | `ToolExecutionPipeline` | ચિઠ્ઠીનો રસ્તો |
+| Canonical value | tool નું સાચું structured પરિણામ | `{path, lines}` | સામાન પોતે |
+| Render | value ને model માટે text બનાવવું | `1: # DeepSeek…` | લેબલ |
+| `isError` | આ result નિષ્ફળતા છે | `true` | લાલ ચિઠ્ઠી |
+| Adapter | harness ↔ provider wire નો દુભાષિયો | `DeepSeekAdapter` | દુભાષિયો |
+| Watchdog | "આટલા સમયમાં કંઈ નહીં તો ભૂલ" | `TIMEOUT` | દુભાષિયાની ઘડિયાળ |
+| SSE | server થી એક-દિશાના event ટુકડા | `data: {...}` | ટુકડે ટુકડે |
+| `StreamChunk` | provider-neutral ટુકડો | `text-delta` | સાત છાપેલાં કાર્ડ |
+| Request extension | provider-specific વધારાનો body field | `dsh_session_log` | ટાંકેલું પાનું |
+| Surface | model history બનાવતી log લીટીઓ | 5 પ્રકાર | વાતચીતની લીટીઓ |
+| Persistence | data ને disk પર ટકાવવું | JSONL file | તિજોરી |
+| zstd | compression format | `.jsonl.zstd` | દબાવેલી પોટલી |
+| Resume | જૂના session માં નવો turn | `--session-id` | ગઈકાલનો ચોપડો ખોલવો |
 
-### યાદ રાખવાની રીતો
+### યાદ-ચાવીઓ
 
 - **"નિ-ક-વા"** — seam ની ત્રણ ભૂમિકા.
 - **"ઇનામ ચલાવ્યું, ભૂલ રૂપે"** — `read` tool ના પાંચ ભાગ.
@@ -472,7 +615,7 @@ TOOL_ARGS='{"file_path":"packages"}' bash tmp/book-labs/request-trace/run-mock.s
 - **"દુભાષિયો ફક્ત ભાષા બદલે, અર્થ નહીં"** — adapter boundary.
 - **"બ્લો-ટે-રી-ટૂ-એન્ડ-યુ-ફિ"** — `StreamChunk` ના સાત પ્રકાર.
 - **"સીડી યુવાન આગળ ટૂંકી"** — પાંચ surface types.
-- **ચિત્ર:** ચોપડો, જેની દરેક લીટી પર નંબર (`seq`) અને તાળું (deep-freeze).
+- **"શાહી, નંબર, તાળું"** — `append` ની ત્રણ ખાતરી.
 
 ### સામાન્ય ગેરસમજો
 
@@ -483,6 +626,7 @@ TOOL_ARGS='{"file_path":"packages"}' bash tmp/book-labs/request-trace/run-mock.s
 | "Loop DeepSeek API નું format જાણે છે." | ફક્ત adapter જાણે; loop `StreamChunk` જ જુએ. |
 | "Resume એટલે ફરી શરૂઆતથી." | એ જ log, આગળનો `seq`, આખી history સાથે. |
 | "Ctrl+C થી અધૂરો turn ગાયબ થાય." | `turn/end aborted` સાથે durable રહે છે. |
+| "ચોપડાની દરેક લીટી model ને જાય." | ફક્ત પાંચ surface types. |
 
 ### પુનરાવર્તન કાર્ડ
 
@@ -508,7 +652,7 @@ Schema (`ToolArgsError`, `INVALID_ARGS`), value (`parseReadArgs` નો સા�
 
 ### મિત્રને સમજાવો (3 મિનિટ)
 
-"દુભાષિયો" ઉપમા વાપરીને સમજાવો કે નવો model provider ઉમેરવા માટે loop કેમ બદલવો પડતો નથી (`ctx.llm.registerAdapter`).
+ફોન-રૂમના ઉંબરાની ચોકની લીટીની વાર્તા કહો. પછી એ જ વાત વાર્તા વગર: નવો model provider ઉમેરવા loop કેમ બદલવો પડતો નથી (`GenerateOptions`, `StreamChunk`, `ctx.llm.registerAdapter`).
 
 ## 🧠 Mastery check
 
@@ -523,9 +667,9 @@ Schema (`ToolArgsError`, `INVALID_ARGS`), value (`parseReadArgs` નો સા�
 
 ## 🎬 આગળ શું
 
-સાંજે પપ્પા આરવને બે કાગળ આપે છે — બે supplier ના invoice ની યાદીઓ (CSV exports). "આ બેય મેળ ખાય છે કે નહીં, દર મહિને હાથે તપાસવું પડે છે. આમાં તારો agent કંઈ કરી શકે?"
+સાંજે પપ્પા આરવને બે કાગળ આપે છે — બે supplier ના invoice ની યાદીઓ (CSV exports). "આ બેય મેળ ખાય છે કે નહીં, દર મહિને હાથે તપાસવું પડે છે. તારો agent આમાં કંઈ કરી શકે?"
 
-આરવ મીરાદીદી સામે જુએ છે. દીદી હસે છે: "તેં આજે `read` tool અંદરથી જોયો: schema → `ctx.fs` → render → `tool/result`. કાલે **આ જ ઢાંચાથી** તું તારું પોતાનું કોઠાર-ખાનું બનાવીશ — `csv_compare`. અને 'ભૂલ crash નથી' નો નિયમ તારા પોતાના tests માં સાબિત કરીશ."
+આરવ મીરાદીદી સામે જુએ છે. દીદી: "તેં આજે એક ખાનું અંદરથી જોયું: ફોર્મ → નોંધણી → `ctx.fs` → લાલ ચિઠ્ઠી → લેબલ. કાલે **આ જ ઢાંચાથી** તું તારું પોતાનું કોઠાર-ખાનું બનાવીશ — `csv_compare`. અને 'ભૂલ crash નથી' નો નિયમ તારા પોતાના tests માં સાબિત કરીશ."
 
 ---
 
