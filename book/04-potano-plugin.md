@@ -357,7 +357,7 @@ book-csv-compare (file:///…/csv-inspect/src/plugin.ts): ValidationError: inval
 
 🧪 રસ્તો 2 ચકાસ્યો: model એ `csv_compare` call કર્યું ત્યારે result `Error: unknown tool "csv_compare"`, code `UNKNOWN_TOOL` ([evidence/csv-disabled.err](../evidence/csv-disabled.err)) — પ્રકરણ 3 ની "એવું કોઈ ખાનું જ નથી" લાલ ચિઠ્ઠી.
 
-🔬 **Expert નજર.** પાંચ પરીક્ષામાં ફક્ત એક (3) "ચાલે છે?" પૂછે છે. બે (4, 5) પૂછે છે "**ખરાબ રીતે** વાપરો તો શું થાય, અને **કાઢી** શકાય?" શિખાઉ feature ઉમેરીને અટકે છે. Expert જાણે છે કે production માં સૌથી વધુ વપરાતી ક્ષમતા ઘણી વાર "આને હમણાં બંધ કરો" હોય છે. અને (4) માં જુઓ કે ત્રણ પ્રકરણ એક line માં મળે છે: schema (આ પ્રકરણ) → fiber `FAILED` (પ્ર.2) → warning, exit નહીં, કારણ કે required નથી (પ્ર.2).
+🔬 **Expert નજર.** પાંચ પરીક્ષામાં ફક્ત એક (3) "ચાલે છે?" પૂછે છે. બે (4, 5) પૂછે છે "**ખરાબ રીતે** વાપરો તો શું થાય, અને **કાઢી** શકાય?" શિખાઉ feature ઉમેરીને અટકે છે. Expert જાણે છે કે production માં સૌથી વધુ વપરાતી ક્ષમતા ઘણી વાર "આને હમણાં બંધ કરો" હોય છે. અને (4) માં જુઓ કે ત્રણ પ્રકરણ એક line માં મળે છે: schema (આ પ્રકરણ) → fiber `FAILED` (પ્રકરણ 2) → warning, exit નહીં, કારણ કે required નથી (પ્રકરણ 2).
 
 ## 🔮 આગાહી કસોટી: બંને યાદીમાં બે વાર
 

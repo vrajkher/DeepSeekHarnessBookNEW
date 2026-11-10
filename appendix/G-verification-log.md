@@ -36,6 +36,17 @@
 
 આ પુનર્લેખનમાં harness labs (`run-mock.sh`, tests) **ફરી ચલાવ્યા નથી**; તેમનો code બદલાયો નથી, અને તેમના outputs મૂળ 2026-11-04 ના runs ([evidence/](../evidence/)) માંથી છે.
 
+## 2026-11-10 પુનર્લેખન (વાર્તા પોતે જ technical) — ફરી ચકાસણી
+
+| શું | પરિણામ |
+|---|---|
+| `tools/verify_book.py` (pinned commit `fcc0ad4` ના shallow checkout સામે) | 🧪 22 files, 218 relative links, 279 permalinks, 0 errors |
+| `tools/verify-mermaid.mjs` (mermaid 12.3.0, jsdom 31.0.0) | 🧪 26 blocks, 0 failures |
+| `tools/build-artifact.mjs` (marked 18.2.0) | 🧪 21 parts build થયા |
+| નવા 🔬 "Expert નજર" ભાગોમાં ઉમેરેલા source-level દાવા: `turn/end` reason `blocked` = `preStep` નો `reject` (`agent.ts` L348–L350); `tool/call` surface event નથી (`session/src/types.ts` L447–L452); `isConcurrencySafe` વગરનો tool `exclusive` (`pipeline.ts` L107) | ✅ pinned source વાંચીને |
+
+આ પુનર્લેખનમાં પણ harness labs (`run-mock.sh`, tests) **ફરી ચલાવ્યા નથી**; labs code, commands અને expected outputs બદલાયાં નથી, અને outputs મૂળ runs ([evidence/](../evidence/)) ના છે. 🔬 ભાગો design rationale છે: તેમાંનું "કેમ" એ pinned source અને docs પરથી કરેલું અર્થઘટન છે, upstream maintainers નું નિવેદન નહીં. ⚠️
+
 ## Runtime-verified (🧪)
 
 | દાવો | પુરાવો |
