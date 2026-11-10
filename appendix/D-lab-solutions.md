@@ -199,7 +199,7 @@
 
 ## પ્રકરણ 7 — walkthrough અને mastery check
 
-**Walkthrough (7.6):**
+**Walkthrough (પરીક્ષા, ભાગ 1):**
 
 1. Regex `^(\d+)(?:\.(\d{1,2}))?$` commas કાઢ્યા પછી; `Number(rupees) * 100 + Number(decimals.padEnd(2,'0'))` — integer arithmetic; `Number.isSafeInteger` check. ✅
 2. Uppercase: description case-insensitive duplicate શોધ. Balance બાકાત: duplicate rows નું running balance જુદું હોય (fixture L7/L8: 1,29,090.50 vs 1,35,190.50). ✅
