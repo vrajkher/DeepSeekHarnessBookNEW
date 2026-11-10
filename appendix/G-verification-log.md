@@ -40,7 +40,7 @@
 
 | શું | પરિણામ |
 |---|---|
-| `tools/verify_book.py` (pinned commit `fcc0ad4` ના shallow checkout સામે) | 🧪 22 files, 218 relative links, 279 permalinks, 0 errors |
+| `tools/verify_book.py` (pinned commit `fcc0ad4` ના shallow checkout સામે) | 🧪 22 files, 219 relative links, 279 permalinks, 0 errors |
 | `tools/verify-mermaid.mjs` (mermaid 12.3.0, jsdom 31.0.0) | 🧪 26 blocks, 0 failures |
 | `tools/build-artifact.mjs` (marked 18.2.0) | 🧪 21 parts build થયા |
 | નવા 🔬 "Expert નજર" ભાગોમાં ઉમેરેલા source-level દાવા: `turn/end` reason `blocked` = `preStep` નો `reject` (`agent.ts` L348–L350); `tool/call` surface event નથી (`session/src/types.ts` L447–L452); `isConcurrencySafe` વગરનો tool `exclusive` (`pipeline.ts` L107) | ✅ pinned source વાંચીને |
