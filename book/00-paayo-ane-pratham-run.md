@@ -5,6 +5,8 @@
 > દરેક દૃશ્ય: 🎬 ઘટના → ❓ આરવનો પ્રશ્ન → 💻 code માં → 🔬 expert નજર.
 > પહેલાં: [પ્રવેશ પ્રકરણ](pravesh-shunya-thi-shuruaat.md). આખો નકશો: [સમગ્ર નકશો](overview-samagra-naksho.md).
 
+![ભોજનાલય ખોલવાની તૈયારીથી pinned commit, setup, build, repository અને API key વગરનો પહેલો plugin સમજાય છે.](images/chapters/00-paayo-ane-pratham-run.webp)
+
 ## 🎬 સવારે સાત વાગ્યે: ચાવીનો ઝૂડો
 
 ભોજનાલય હજી બંધ છે. પપ્પા આરવના હાથમાં ચાવીનો ઝૂડો મૂકે છે: "આજથી સવારે તું ખોલીશ."

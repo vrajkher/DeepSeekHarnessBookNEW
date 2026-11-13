@@ -4,6 +4,8 @@
 > શનિવારે ભોજનાલયમાં જે ખોટું થઈ શકે તે બધું થયું. રવિવારે આરવ દરેક ભૂલ **જાણીજોઈને ફરી ઉત્પન્ન** કરે છે — unavailable tool, invalid input, provider error, interrupted execution — અને દરેકનો માલિક code શોધે છે. પછી રસોડાની ખરી સીમાઓ ચકાસે છે: ક્યાં વાડ છે, અને ક્યાં **નથી**.
 > દરેક દૃશ્ય: 🎬 ઘટના → ❓ પ્રશ્ન → 💻 code માં → 🔬 expert નજર. આખો નકશો: [સમગ્ર નકશો](overview-samagra-naksho.md).
 
+![ભૂલવાળી ચિઠ્ઠી, agencyનો ફોન અને વીજળી જવાનું દૃશ્ય error scope, cancellation, approval, sandbox અને concurrency સમજાવે છે.](images/chapters/05-debugging-permissions-reliability.webp)
+
 ## 🎬 શનિવાર: ખરાબ દિવસ
 
 ભીડ. અને:

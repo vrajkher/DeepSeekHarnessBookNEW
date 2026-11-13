@@ -5,6 +5,8 @@
 > કાંતિકાકા સવારે જે નિયમોથી સ્ટાફને કામ પર લે છે, તે જ નિયમોથી Cordis plugins ને ચાલુ કરે છે. દરેક દૃશ્ય: 🎬 ઘટના → ❓ પ્રશ્ન → 💻 code માં → 🔬 expert નજર.
 > આખો નકશો: [સમગ્ર નકશો](overview-samagra-naksho.md).
 
+![કાંતિકાકાની સવારની તૈયારીથી startup, services, profile patches, registration, fiber cleanup અને events સમજાય છે.](images/chapters/02-cordis-plugin-architecture.webp)
+
 ## 🎯 આ પ્રકરણ પછી તમે શું કરી શકશો
 
 - Startup (એક વાર, process શરૂ થતાં) અને request execution (દરેક turn) ને અલગ ઓળખી, બંનેના માલિક code બતાવી શકશો.

@@ -4,6 +4,8 @@
 > ભોજનાલયના એક દિવસમાં દસ નાની ઘટના બને છે. દરેક ઘટના computer નો એક પાયાનો નિયમ છે, અને દરેક પછી આરવ એ જ નિયમ પોતાના computer પર ચલાવી જુએ છે.
 > Terminal, JavaScript, JSON અને HTTP પહેલેથી આવડતાં હોય તો [સ્વ-કસોટી](#swa-kasoti) આપો અને સીધા [પ્રકરણ 0](00-paayo-ane-pratham-run.md) પર જાઓ.
 
+![અન્નપૂર્ણા થાળી ઘરના છ દૃશ્યોમાં File, Terminal, data formats, HTTP, JavaScript અને Toy Agentનો પરિચય.](images/chapters/pravesh-shunya-thi-shuruaat.webp)
+
 ## 🎬 પરિણામનો દિવસ
 
 અમદાવાદના મણિનગરમાં **"અન્નપૂર્ણા થાળી ઘર"** નામનું નાનું ભોજનાલય છે. તેના માલિક છે **આરવના પપ્પા**. આજે આરવનું 12મા ધોરણ (science) નું પરિણામ આવ્યું છે. સારા ગુણ આવ્યા છે; college બે મહિના પછી શરૂ થશે.
@@ -85,6 +87,8 @@ flowchart LR
 
 ❓ "'બીજું ખાનું' — પણ **કોના** બીજા ખાનામાંથી?"
 
+![આરવ રસોડાના બીજા ખાનામાં મસાલા જુએ છે અને ગલ્લાના બીજા ખાનામાં બિલ-બુક મળે છે. ચિત્ર relative અને absolute path, program અને process, stdout અને stderr સમજાવે છે.](images/pravesh/01-file-path-process.webp)
+
 💻 Computer માં આ જ પ્રશ્ન રોજ આવે છે.
 
 - **File** = નામવાળી માહિતી, disk પર સચવાયેલી. ઉદાહરણ: `menu.txt`, `README.md`.
@@ -116,6 +120,8 @@ flowchart LR
 🎬 રસોડા અને હૉલ વચ્ચે એક નાની બારી છે. રમેશભાઈ ત્યાં ચિઠ્ઠી મૂકે છે; રસોડું વાંચીને કામ કરે છે. બોલીને નહીં, **લખીને**. ચિઠ્ઠીમાં જોડણી ખોટી હોય તો રસોડું સમજતું નથી.
 
 ❓ "Computer ને પણ આમ લખીને કામ સોંપાય?"
+
+![રસોડાની બારીમાંથી સાચી અને ખોટી ચિઠ્ઠી જાય છે. બાજુમાં terminal, shell, commands, exit code, pipes અને redirectionનાં ઉદાહરણ છે.](images/pravesh/02-terminal.webp)
 
 💻 **Terminal (shell)** = text command લખીને computer ચલાવવાની બારી. Linux/macOS માં "Terminal" app; Windows માં WSL2 નું Ubuntu (પ્રકરણ 0 માં setup).
 
@@ -189,6 +195,8 @@ exit code = 2
 
 "કારણ કે વાંચનાર અલગ છે. આકાર વાંચનાર માટે હોય, લખનાર માટે નહીં."
 
+![ટેબલ 4નો એક ઓર્ડર JSON, YAML અને CSVમાં દેખાય છે. ચોપડાની બે JSONL પંક્તિમાં દરેક પંક્તિ એક event છે.](images/pravesh/03-json-yaml-csv.webp)
+
 💻 **JSON** (JavaScript Object Notation) — `{ }` માં નામ-value જોડી, `[ ]` માં યાદી. Program માટે: સ્પષ્ટ અને કડક.
 
 ```json
@@ -232,6 +240,8 @@ table,dish,qty,spicy
 
 ❓ "ચાર અલગ 'ના'. દરેક વખતે શું કરવું એ કેમ ખબર પડે?"
 
+![પપ્પા client તરીકે agencyને ફોન કરે છે. ચિત્ર request, response, API key, 200, 401, 429 અને 500 status અને ટુકડે મળતો SSE જવાબ બતાવે છે.](images/pravesh/04-http-api-streaming.webp)
+
 💻 Internet પર programs આ જ રીતે વાત કરે છે, અને દરેક જવાબ સાથે એક **આંકડો** આવે છે.
 
 - **Client / Server** = માંગનાર / આપનાર. ભોજનાલય client; agency server.
@@ -257,6 +267,8 @@ table,dish,qty,spicy
 🎬 મીરાદીદી laptop ખોલે છે: "હવે આ જ ભોજનાલય code માં લખીએ. ભાષા JavaScript; ચલાવનાર **Node.js**."
 
 **Node.js** = browser વગર JavaScript ચલાવતો program. `node file.mjs` લખો એટલે file ચાલે. Node ન હોય તો પ્રકરણ 0 નું setup (Node 24) પહેલાં કરી લો, પછી અહીં પાછા આવો. આ પ્રકરણનાં ઉદાહરણો કોઈ પણ નવા Node પર ચાલે છે; 🧪 અમે Node v22.23 પર ચલાવ્યાં છે.
+
+![થાળીનું બિલ, અલગ કાઉન્ટર અને રદ થયેલી ખીચડીથી JavaScriptના object, array, function, module, class, error handling અને AbortSignal સમજાય છે.](images/pravesh/05-javascript.webp)
 
 ### (a) થાળી code માં: variable, object, array, function
 
@@ -419,6 +431,8 @@ node labs/pravesh/rasoi-async.mjs
 
 ❓ "Code માં પણ ભૂલ 'ગ્રાહકના મોંમાં' પકડાય તેના કરતાં વહેલી પકડાય?"
 
+![ખારી ચાની ભૂલથી TypeScript type check સમજાય છે. Orderનું વૈકલ્પિક spicy field અને served કે rejected Result runtimeમાં quantityના નિયમથી જુદાં છે.](images/pravesh/06-typescript.webp)
+
 💻 **TypeScript** = JavaScript + **types**. Type એટલે value કેવા પ્રકારની છે તેની નોંધ: `number`, `string`, `boolean`, અથવા પોતે બનાવેલો આકાર — ડબ્બા પરનું લેબલ. તપાસનાર (**compiler**, `tsc`) program ચલાવતા **પહેલાં** જ ભૂલ પકડે:
 
 ```ts
@@ -489,6 +503,8 @@ node labs/pravesh/types.ts
 
 ❓ "એક જણ ભૂલે એમાં આખો ઓર્ડર ગાયબ?"
 
+![એક ચિઠ્ઠી next()થી મેનેજર અને રસોડા સુધી પહોંચે છે. બીજા ઉદાહરણમાં ચોકીદાર ચિઠ્ઠી ખિસ્સામાં મૂકે છે અને waterfall અટકી જાય છે.](images/pravesh/07-event-listener-waterfall.webp)
+
 💻
 
 - **Event** = કંઈક થયું તેની જાહેરાત. ઉદાહરણ: "નવો ઓર્ડર આવ્યો", "tool નું પરિણામ આવ્યું".
@@ -548,6 +564,8 @@ B: undefined
 
 "કારણ કે બાકીનું બધું તેમની **આસપાસ** ગોઠવ્યું છે. એ ગોઠવણનું નામ જ harness."
 
+![મહારાજ આગળનો token ધારે છે, ફરી મોકલેલી નોંધો context windowમાં જુએ છે અને કોઠાર માટે tool call લખે છે.](images/pravesh/08-ai-model.webp)
+
 💻 **(1) Model = આગળનો ટુકડો ધારનાર.**
 
 - **Token** = model text ને નાના ટુકડામાં તોડે છે; દરેક ટુકડો token. એક English શબ્દ આશરે 1–2 token; ગુજરાતી શબ્દ ઘણી વાર વધુ.
@@ -589,6 +607,8 @@ Harness આ ચિઠ્ઠી વાંચે, `read` tool ચલાવે, REA
 ## દૃશ્ય 9 — 40 lines નું ભોજનાલય: રમકડા-agent
 
 🎬 "હવે," દીદી કહે છે, "આજે જોયેલું બધું એક file માં: ગ્રાહક, રમેશભાઈ, મહારાજ, કોઠાર, ચોપડો."
+
+![પહેલા model call પછી રમેશભાઈ menu.txt વાંચે છે. બીજા callમાં મૂળ પ્રશ્ન, tool call અને છ વાનગીનો tool result મહારાજને આપે છે.](images/pravesh/09-toy-agent.webp)
 
 💻 નીચેનો program **DeepSeek Harness નથી** — રમકડું છે, જેમાં નકલી model છે. પણ તેનો આકાર ખરા harness જેવો જ છે, અને event નામો જાણીજોઈને ખરા harness જેવાં રાખ્યાં છે.
 
@@ -703,6 +723,8 @@ sequenceDiagram
 🎬 પપ્પા દર મહિને રસોડાનો ફોટો પાડીને આલ્બમમાં ચોંટાડે છે, પાછળ તારીખ અને નંબર લખે છે. કોઈ કહે "પહેલાં તંદૂર ક્યાં હતું?" તો આલ્બમ ખોલે. અને ભોજનાલય એક chain ની શાખા છે: નિયમો **મુખ્ય કચેરી** ઘડે છે, અને શાખા સુધારો સૂચવી શકે છે.
 
 ❓ "Software રોજ બદલાય છે. તો પુસ્તક કયા દિવસના software વિશે છે?"
+
+![રસોડાના ફોટો-આલ્બમથી repository, commit, SHA, clone, branch, upstream અને pull request સમજાય છે. પુસ્તક fcc0ad4 પર pinned છે.](images/pravesh/10-git.webp)
 
 💻
 

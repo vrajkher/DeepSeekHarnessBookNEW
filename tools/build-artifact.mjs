@@ -125,6 +125,8 @@ function wrapSegments(html) {
   }).join('')
 }
 
+// Keep the one-file web edition portable by embedding the book's illustrations.
+const illustrationRoot = join(ROOT, 'book', 'images')
 const sections = []
 const toc = []
 for (const [file, view] of VIEWS) {
@@ -158,6 +160,12 @@ for (const [file, view] of VIEWS) {
         const inner = this.parser.parseInline(tokens)
         return `<a href="${esc(r.href)}"${t ? ` title="${esc(t)}"` : ''}${r.external ? ' rel="noopener"' : ''}>${inner}</a>`
       },
+      image({ href, text: alt, title }) {
+        const path = resolve(ROOT, dirname(file), href)
+        if (!path.startsWith(illustrationRoot + '/') || !path.endsWith('.webp')) return false
+        const data = readFileSync(path).toString('base64')
+        return `<img class="book-illustration" src="data:image/webp;base64,${data}" alt="${esc(alt)}"${title ? ` title="${esc(title)}"` : ''} loading="lazy" decoding="async">`
+      },
       code({ text, lang }) {
         if (lang === 'mermaid') return `<pre class="mermaid">${esc(text)}</pre>\n`
         const label = lang || 'text'
@@ -177,6 +185,9 @@ for (const [file, view] of VIEWS) {
   sections.push(`<section class="part t-${v.tone}" id="${view}" aria-labelledby="${view}-h1">\n${html}</section>`)
   toc.push({ ...v, heads })
 }
+
+const illustrationCount = sections.reduce((count, section) => count + (section.match(/<img class="book-illustration"/g) ?? []).length, 0)
+const diagramCount = sections.reduce((count, section) => count + (section.match(/<pre class="mermaid">/g) ?? []).length, 0)
 
 const navItem = t => `<li><a href="#${t.view}" data-view="${t.view}" class="t-${t.tone}"><span class="num">${esc(t.chip)}</span><span class="nav-text"><span class="nav-eyebrow">${esc(t.eyebrow)}</span><span class="nav-title">${esc(t.title)}</span></span></a>${
   t.heads.length && (t.view.startsWith('ch') || t.view === 'overview' || t.view === 'pravesh') ? `<ol class="sub">${t.heads.map(x => `<li><a href="#${x.id}">${x.text}</a></li>`).join('')}</ol>` : ''}</li>`
@@ -198,7 +209,7 @@ const cover = `<header class="cover" aria-labelledby="cover-title">
     <h1 id="cover-title">12મા ધોરણથી <em>Expert Developer</em> સુધી</h1>
     <p class="cover-lede">એક ગુજરાતી થાળી ભોજનાલયની વાર્તામાં AI agent harness ને ચલાવો, અંદરથી સમજો, બદલો અને સાબિત કરો — programming ન આવડતું હોય તો પણ, અને API key વગર.</p>
     <ul class="chips">
-      <li class="t-leaf">15 દિવસ</li><li class="t-haldi">9 પ્રકરણ</li><li class="t-kesar">26 ચિત્રો</li><li class="t-sky">API key વગર</li>
+      <li class="t-leaf">15 દિવસ</li><li class="t-haldi">9 પ્રકરણ</li><li class="t-kesar">${illustrationCount} ચિત્રો · ${diagramCount} diagrams</li><li class="t-sky">API key વગર</li>
     </ul>
     <div class="cta">
       <a class="btn primary" href="#pravesh">પ્રવેશથી શરૂ કરો →</a>
