@@ -133,3 +133,11 @@ node tools/build-artifact.mjs <path to marked.esm.js> book.html
 ## License
 
 આ પુસ્તકનો text અને `labs/` નો code આ repository ના [LICENSE](LICENSE) હેઠળ છે. DeepSeek Harness ના quoted excerpts અને `labs/cordis-basics/tool-logger.ts` upstream MIT license હેઠળ છે.
+
+<!-- scene-image-index:begin -->
+## દૃશ્યવાર ચિત્રો — પ્રકરણ 0–7
+
+પ્રકરણ 0–7નાં **દરેક 66 દૃશ્યો માટે અલગ ચિત્ર**, Gujarati caption અને વાર્તા ↔ technical જોડાણ: [ચિત્રયાત્રા — chapter પછી scene, picture પછી picture](book/images/scenes/README.md). મૂળ chapter covers, લખાણ, code, labs અને citations જાળવ્યાં છે.
+
+પહેલાં ચિત્રમાં ઘટના જુઓ, પછી એ જ દૃશ્યની વાર્તા અને code વાંચો, અને છેલ્લે ચિત્રની મદદથી નિયમ ફરી સમજાવો. Repository root માં `python3 tools/scene-images.py` ચલાવી scene coverage તથા મૂળ chapter text ના hashes ચકાસી શકો છો.
+<!-- scene-image-index:end -->

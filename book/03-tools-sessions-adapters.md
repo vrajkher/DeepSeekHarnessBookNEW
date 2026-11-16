@@ -37,6 +37,14 @@ flowchart LR
 
 ## દૃશ્ય 1 — નોકરીનું વર્ણન: seam
 
+<!-- scene-image:3:1:begin -->
+<a id="scene-3-1"></a>
+
+![પ્રકરણ 3, દૃશ્ય 1: નોકરીનું વર્ણન: seam — Capability seam • Definition / Provider / Consumer](images/scenes/03/01.webp)
+
+> **ચિત્ર 3.1 — વાર્તા ↔ ટેકનિક:** દરવાજા પરનું પાટિયું → Seam: definition, provider, consumer
+<!-- scene-image:3:1:end -->
+
 🎬 કોઠારના દરવાજા પર એક પાટિયું છે: **"કોઠારી: ચિઠ્ઠી લો, સામાન આપો."** ગયા અઠવાડિયે ભીખાભાઈ બીમાર હતા; તેમની જગ્યાએ બીજા ભાઈ આવ્યા હતા. મહારાજને ખબર પણ ન પડી: તેમની ચિઠ્ઠી એ જ રહી, જવાબ એ જ રીતે આવ્યો.
 
 ❓ "મહારાજને ખબર કેમ ન પડી?"
@@ -71,6 +79,14 @@ flowchart LR
 
 ## દૃશ્ય 2 — ચિઠ્ઠીનું ફોર્મ: input schema
 
+<!-- scene-image:3:2:begin -->
+<a id="scene-3-2"></a>
+
+![પ્રકરણ 3, દૃશ્ય 2: ચિઠ્ઠીનું ફોર્મ: input schema — Input schema • Required / Optional](images/scenes/03/02.webp)
+
+> **ચિત્ર 3.2 — વાર્તા ↔ ટેકનિક:** ચિઠ્ઠીનું ફોર્મ → Tool schema model ને જાય; description model માટેની સૂચના
+<!-- scene-image:3:2:end -->
+
 🎬 કોઠારની બારી પર છાપેલાં ફોર્મની થોકડી છે. દરેક ખાના માટે અલગ ફોર્મ; "રેસીપી-ચોપડી" ના ફોર્મમાં ત્રણ ખાનાં: *કઈ ચોપડી* (ફરજિયાત), *કયા પાનાથી*, *કેટલાં પાનાં*. મહારાજ કોરા કાગળ પર મનફાવે તેમ નથી લખતા; આ ફોર્મ ભરે છે.
 
 ❓ "મહારાજને કેવી રીતે ખબર કે ફોર્મમાં કયાં ખાનાં છે? તે તો કોઠાર જોઈ શકતા નથી."
@@ -100,6 +116,14 @@ flowchart LR
 
 ## દૃશ્ય 3 — નવો કોઠારી બે નોંધ કરાવે: registration
 
+<!-- scene-image:3:3:begin -->
+<a id="scene-3-3"></a>
+
+![પ્રકરણ 3, દૃશ્ય 3: નવો કોઠારી બે નોંધ કરાવે: registration — Tool registration + Prompt guidance](images/scenes/03/03.webp)
+
+> **ચિત્ર 3.3 — વાર્તા ↔ ટેકનિક:** બે નોંધ → Tool + system prompt section, બંને effects
+<!-- scene-image:3:3:end -->
+
 🎬 નવું ખાનું ખૂલે ત્યારે કોઠારી બે જગ્યાએ નોંધ કરાવે છે. એક, **કોઠાર-યાદીમાં** પોતાનું ખાનું. બે, **નિયમોની પોથીમાં** એક લીટી: "રેસીપી જોઈતી હોય તો મને ચિઠ્ઠી આપો; જાતે કબાટ ફંફોસવાનું ન કહેશો."
 
 ❓ "યાદીમાં નોંધ પૂરતી નથી? પોથીમાં પણ કેમ?"
@@ -116,6 +140,14 @@ flowchart LR
 🔬 **Expert નજર.** બંને નોંધ effects છે, એટલે plugin unload થાય ત્યારે **બંને સાથે** જાય. વિચારો કે ફક્ત tool જાય અને પોથીની લીટી રહી જાય: મહારાજ એવા ખાના માટે ચિઠ્ઠી લખે જે છે જ નહીં. અને શરત "ફક્ત ત્યારે જ જ્યારે `read` દેખાતું હોય" એ જ ભૂલને scope ના સ્તરે રોકે છે. System prompt અને tool યાદી **સુસંગત** રહેવાં જોઈએ; બંને અલગ પડે તે model ને ગૂંચવવાની સૌથી સહેલી રીત છે.
 
 ## દૃશ્ય 4 — ડબ્બો ખોલ્યા વગર લેબલ: execution
+
+<!-- scene-image:3:4:begin -->
+<a id="scene-3-4"></a>
+
+![પ્રકરણ 3, દૃશ્ય 4: ડબ્બો ખોલ્યા વગર લેબલ: execution — Resolve → stat → Read / Stream](images/scenes/03/04.webp)
+
+> **ચિત્ર 3.4 — વાર્તા ↔ ટેકનિક:** ડબ્બો ખોલ્યા વગર લેબલ → resolve → એક `stat` → નાની file `readText`, મોટી stream
+<!-- scene-image:3:4:end -->
 
 🎬 ચિઠ્ઠી આવે ત્યારે ભીખાભાઈ સીધો ડબ્બો નથી ખોલતા. પહેલાં નક્કી કરે છે કે "કઈ ચોપડી" એટલે **કયા કબાટની** (ફરી બિલ-બુક!). પછી ડબ્બો ખોલ્યા વગર **લેબલ** જુએ છે: ચીજ છે? ચોપડી છે કે આખું ખાનું? કેટલી મોટી? અને બહુ મોટી હોય તો એક ખેપમાં નથી લાવતા; **થોડી થોડી** લાવે છે.
 
@@ -140,6 +172,14 @@ flowchart LR
 🔬 **Expert નજર.** ધ્યાનથી જુઓ કે `read` tool ક્યાંય સીધી disk ને અડતું નથી: `ctx.fs.readText`, `ctx.fs.streamText`. તે seam (દૃશ્ય 1) માંથી જાય છે. એટલે પ્રકરણ 5 ની sandbox સીમા **આપોઆપ** લાગુ પડે છે — tool લખનારે સલામતી યાદ રાખવાની નથી. અને `exec.signal` દરેક call માં આગળ અપાય છે: લાલ દીવો (પ્રવેશ, દૃશ્ય 5) કોઠારની અંદર સુધી પહોંચે છે.
 
 ## દૃશ્ય 5 — ત્રણ જાતની "ના", અને લાલ ચિઠ્ઠી: errors
+
+<!-- scene-image:3:5:begin -->
+<a id="scene-3-5"></a>
+
+![પ્રકરણ 3, દૃશ્ય 5: ત્રણ જાતની "ના", અને લાલ ચિઠ્ઠી: errors — Tool error → Useful result](images/scenes/03/05.webp)
+
+> **ચિત્ર 3.5 — વાર્તા ↔ ટેકનિક:** ત્રણ "ના", લાલ ચિઠ્ઠી → Tool error = `tool/result` (`isError`); code log માં, text model ને
+<!-- scene-image:3:5:end -->
 
 🎬 આજે ભીખાભાઈએ ત્રણ ચિઠ્ઠી પાછી મોકલી, અને ત્રણેયનું કારણ જુદું:
 
@@ -181,6 +221,14 @@ function toolErrorResult(error: unknown): ToolExecutionResult {
 
 ## દૃશ્ય 6 — સામાન અને લેબલ: canonical value અને render
 
+<!-- scene-image:3:6:begin -->
+<a id="scene-3-6"></a>
+
+![પ્રકરણ 3, દૃશ્ય 6: સામાન અને લેબલ: canonical value અને render — Canonical value → Validate → Render](images/scenes/03/06.webp)
+
+> **ચિત્ર 3.6 — વાર્તા ↔ ટેકનિક:** સામાન અને લેબલ → Canonical value (validated) ≠ render
+<!-- scene-image:3:6:end -->
+
 🎬 ભીખાભાઈ રેસીપી-ચોપડી આપતી વખતે બે વસ્તુ આપે છે: **ચોપડી પોતે** (ગલ્લા પર પપ્પા પણ જોઈ શકે), અને તેના પર ચોંટાડેલું **સાફ લેબલ** — કઈ ચોપડી, અને દરેક લીટી આગળ નંબર — જે મહારાજ વાંચે.
 
 💻
@@ -204,6 +252,14 @@ function toolErrorResult(error: unknown): ToolExecutionResult {
 🔬 **Expert નજર.** Output પણ schema સામે **validate** થાય છે — ફક્ત input નહીં. Tool નું પોતાનું પરિણામ ખોટા આકારનું હોય, તો તે model સુધી પહોંચતાં પહેલાં પકડાય. અને value/render અલગ રાખવાનો ફાયદો: model માટેનું લખાણ કાલે બદલો (દા.ત. line numbers નો format), તો ચોપડામાં સચવાયેલી જૂની values અને UI cards તૂટતાં નથી.
 
 ## દૃશ્ય 7 — ચિઠ્ઠીનો આખો રસ્તો: tool pipeline
+
+<!-- scene-image:3:7:begin -->
+<a id="scene-3-7"></a>
+
+![પ્રકરણ 3, દૃશ્ય 7: ચિઠ્ઠીનો આખો રસ્તો: tool pipeline — Pipeline • One result per call](images/scenes/03/07.webp)
+
+> **ચિત્ર 3.7 — વાર્તા ↔ ટેકનિક:** ચિઠ્ઠીનો રસ્તો → parse → `tool/call` → pre-execute → execute → `tool/result`
+<!-- scene-image:3:7:end -->
 
 🎬 આરવ એક ચિઠ્ઠીની પાછળ પાછળ ચાલે છે, રસોડાથી કોઠાર અને પાછી. તે સાત પડાવ ગણે છે:
 
@@ -262,6 +318,14 @@ flowchart LR
 
 ## દૃશ્ય 8 — દુભાષિયો: request
 
+<!-- scene-image:3:8:begin -->
+<a id="scene-3-8"></a>
+
+![પ્રકરણ 3, દૃશ્ય 8: દુભાષિયો: request — Adapter • Canonical request → Provider wire](images/scenes/03/08.webp)
+
+> **ચિત્ર 3.8 — વાર્તા ↔ ટેકનિક:** દુભાષિયો → `GenerateOptions` → `llm/stream` waterfall → HTTP POST
+<!-- scene-image:3:8:end -->
+
 🎬 ફોન-રૂમમાં એક જણ બેઠો છે જે બે ભાષા જાણે છે. રમેશભાઈ ભોજનાલયની બોલીમાં કાગળ આપે; દુભાષિયો તેને agency ની ભાષામાં ફેરવી ફોન પર બોલે. આરવ નોંધે છે: રમેશભાઈ કદી ફોન ઉપાડતા નથી, અને દુભાષિયાએ કદી ચોપડો જોયો નથી.
 
 અને દુભાષિયો એક ઘડિયાળ સામે રાખે છે: સામે છેડેથી બહુ વાર કંઈ ન સંભળાય, તો "લાઈન મરી ગઈ" ગણીને ફોન મૂકી દે.
@@ -313,6 +377,14 @@ flowchart LR
 
 ## દૃશ્ય 9 — મહારાજ ટુકડે ટુકડે બોલે: SSE → `StreamChunk`
 
+<!-- scene-image:3:9:begin -->
+<a id="scene-3-9"></a>
+
+![પ્રકરણ 3, દૃશ્ય 9: મહારાજ ટુકડે ટુકડે બોલે: SSE → StreamChunk — SSE → StreamChunk](images/scenes/03/09.webp)
+
+> **ચિત્ર 3.9 — વાર્તા ↔ ટેકનિક:** ટુકડે ટુકડે → SSE → સાત `StreamChunk`
+<!-- scene-image:3:9:end -->
+
 🎬 ફોન પર મહારાજ એક શ્વાસે નથી બોલતા: "હવે એક વાત શરૂ કરું છું… આ તેનો ટુકડો… બીજો ટુકડો… એ વાત પૂરી… હવે એક ચિઠ્ઠી લખાવું છું… પૂરી… કુલ આટલા શબ્દ બોલ્યો… બસ." દુભાષિયો દરેક ટુકડાને ભોજનાલયની બોલીના **સાતમાંથી એક** છાપેલા કાર્ડમાં ફેરવીને રમેશભાઈને આપતો જાય છે.
 
 💻 Provider HTTP 200 સાથે Server-Sent Events મોકલે છે. [`parseSse`][deepseek-sse] દરેક `data:` line ને JSON બનાવે છે, અને [`translate`][deepseek-translate] તેને harness ના provider-neutral [`StreamChunk`][llm-streamchunk] માં ફેરવે છે:
@@ -341,6 +413,14 @@ Provider ના `stop_reason` નું mapping ([source][deepseek-finish]): `en
 
 ## દૃશ્ય 10 — agency બદલાય તો? adapter boundary
 
+<!-- scene-image:3:10:begin -->
+<a id="scene-3-10"></a>
+
+![પ્રકરણ 3, દૃશ્ય 10: agency બદલાય તો? adapter boundary — Adapter boundary • Replace provider](images/scenes/03/10.webp)
+
+> **ચિત્ર 3.10 — વાર્તા ↔ ટેકનિક:** ચોકની લીટી → ઉપર wire નથી જાણતા; નીચે log નથી જાણતા
+<!-- scene-image:3:10:end -->
+
 🎬 પપ્પા વિચારે છે: "આવતા વર્ષે બીજી agency સસ્તી પડે તો?" આરવ ગભરાય છે: આખું ભોજનાલય ફરી ગોઠવવું પડશે? દીદી ફોન-રૂમના ઉંબરા પર ચોકથી લીટી દોરે છે.
 
 "લીટીની આ બાજુ કોઈને agency ની ભાષા નથી આવડતી. પેલી બાજુ કોઈએ ચોપડો નથી જોયો. Agency બદલાય, તો ફક્ત **દુભાષિયો** બદલાય."
@@ -363,6 +443,14 @@ Provider ના `stop_reason` નું mapping ([source][deepseek-finish]): `en
 ## ઓરડો 3: ચોપડા-ઘર
 
 ## દૃશ્ય 11 — શાહીથી, નંબર સાથે, તાળાબંધ: `Session.append`
+
+<!-- scene-image:3:11:begin -->
+<a id="scene-3-11"></a>
+
+![પ્રકરણ 3, દૃશ્ય 11: શાહીથી, નંબર સાથે, તાળાબંધ: Session.append — Session.append • Ordered immutable facts](images/scenes/03/11.webp)
+
+> **ચિત્ર 3.11 — વાર્તા ↔ ટેકનિક:** શાહી, નંબર, તાળું → JSON-serializable (fail fast), frozen, `seq` ક્રમમાં
+<!-- scene-image:3:11:end -->
 
 🎬 ચોપડા-ઘરમાં પપ્પાના ત્રણ નિયમ દીવાલ પર લખેલા છે:
 
@@ -407,6 +495,14 @@ Provider ના `stop_reason` નું mapping ([source][deepseek-finish]): `en
 
 ## દૃશ્ય 12 — મહારાજ માટે કઈ લીટીઓ? surface અને `deriveMessages`
 
+<!-- scene-image:3:12:begin -->
+<a id="scene-3-12"></a>
+
+![પ્રકરણ 3, દૃશ્ય 12: મહારાજ માટે કઈ લીટીઓ? surface અને deriveMessages — Session surface → deriveMessages](images/scenes/03/12.webp)
+
+> **ચિત્ર 3.12 — વાર્તા ↔ ટેકનિક:** વાતચીત vs વહીવટ → પાંચ surface types જ model history બને
+<!-- scene-image:3:12:end -->
+
 🎬 રમેશભાઈ મહારાજ માટે નકલ ઉતારે છે. આરવ જુએ છે કે તે ચોપડાની **દરેક** લીટી નથી ઉતારતા. "ઓર્ડર શરૂ", "કોઠારમાં ચિઠ્ઠી ગઈ", "ઓર્ડર બંધ" — આ છોડી દે છે. ફક્ત **વાતચીતની** લીટીઓ લે છે.
 
 ❓ "તો 'જે મહારાજને કહ્યું તે ચોપડામાં' — ઊલટું સાચું નથી? ચોપડાનું બધું મહારાજને નથી જતું?"
@@ -422,6 +518,14 @@ Provider ના `stop_reason` નું mapping ([source][deepseek-finish]): `en
 🔬 **Expert નજર.** પ્રકરણ 1 ના Lab ના આંકડા હવે સમજાય છે: 24 થી વધુ events ચોપડામાં હતા, પણ call #2 માં ફક્ત 7 messages ગયા. `turn/start`, `tool/call`, `request/header` surface નથી. (હા, `tool/call` surface નથી: model ની માંગ `assistant/message` ની અંદર tool-call block તરીકે જ history માં છે.) "Model ને શું દેખાશે?" નો જવાબ: પાંચ surface types, બીજું કશું નહીં. તમારો plugin model ને કંઈક બતાવવા માગે, તો તેણે આ પાંચમાંથી એક event append કરવી પડે.
 
 ## દૃશ્ય 13 — તિજોરી: persistence
+
+<!-- scene-image:3:13:begin -->
+<a id="scene-3-13"></a>
+
+![પ્રકરણ 3, દૃશ્ય 13: તિજોરી: persistence — Persistence • JSONL • Flush](images/scenes/03/13.webp)
+
+> **ચિત્ર 3.13 — વાર્તા ↔ ટેકનિક:** તિજોરી → `session.v4.jsonl.zstd`; committed files કદી બદલાય નહીં
+<!-- scene-image:3:13:end -->
 
 🎬 રાત્રે રમેશભાઈ કાચી નોંધો પાકા ચોપડામાં ઉતારે છે (flush — પ્રકરણ 1), ચોપડો તિજોરીમાં મૂકે છે, અને તિજોરી પર એક ટૅગ લટકાવે છે: "લખાણ ચાલુ છે" — જેથી બે જણ એકસાથે એ જ ચોપડામાં ન લખે. અને પપ્પાનો બીજો નિયમ: ભરાઈ ગયેલો જૂનો ચોપડો **કદી ફેંકાતો કે ફરી લખાતો નથી**. નવું ફોર્મ આવે તો જૂના ચોપડાની નકલ નવા ફોર્મમાં થાય; મૂળ અકબંધ.
 
@@ -441,6 +545,14 @@ Architecture doc મુજબ v1 અને પછીના format `session.vN.js
 🔬 **Expert નજર.** File ના નામમાં `v4` છે. Format નો version **data ની સાથે** રહે છે, code માં નહીં. બે વર્ષ પછી કોઈ આ file ખોલે, તો તેને ખબર હોય કે કયા નિયમથી વાંચવી. અને "committed files કદી rename/replace/delete નહીં" એ append-only નો વિચાર (દૃશ્ય 11) file ના સ્તરે છે: migration નિષ્ફળ જાય તો પણ મૂળ ચોપડો સલામત. જે data ગુમાવવો પોસાય નહીં, તેના માટે expert હંમેશા આ બે વાત જુએ છે: versioned format, અને "મૂળને અડ્યા વગર" migration.
 
 ## દૃશ્ય 14 — લાઈટ ગયા પછી: recovery અને resume
+
+<!-- scene-image:3:14:begin -->
+<a id="scene-3-14"></a>
+
+![પ્રકરણ 3, દૃશ્ય 14: લાઈટ ગયા પછી: recovery અને resume — Recovery • Resume from log](images/scenes/03/14.webp)
+
+> **ચિત્ર 3.14 — વાર્તા ↔ ટેકનિક:** લાઈટ ગયા પછી → ખૂટતા `tool/result` ભરાય; `--session-id` થી resume
+<!-- scene-image:3:14:end -->
 
 🎬 સવારનું દૃશ્ય, હવે આખું. ગઈ રાત્રે લાઈટ ગઈ ત્યારે બે વસ્તુ અધૂરી હોઈ શકતી હતી: એક **ચિઠ્ઠી** કોઠારમાં ગયેલી અને જવાબ વગરની, અને આખો **ઓર્ડર**. રમેશભાઈએ જતાં પહેલાં બંને ચોપડામાં બંધ કર્યાં. આજે ગ્રાહક પાછો આવ્યો; રમેશભાઈએ **એ જ ચોપડો** ખોલ્યો, નવો ઓર્ડર-નંબર પાડ્યો, અને મહારાજને ગઈકાલની આખી વાત સાથે નવી માંગ કહી.
 

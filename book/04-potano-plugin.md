@@ -44,6 +44,14 @@ flowchart LR
 
 ## દૃશ્ય 1 — નવું કાઉન્ટર ખોલતાં પહેલાં ચાર પ્રશ્ન
 
+<!-- scene-image:4:1:begin -->
+<a id="scene-4-1"></a>
+
+![પ્રકરણ 4, દૃશ્ય 1: નવું કાઉન્ટર ખોલતાં પહેલાં ચાર પ્રશ્ન — Plugin design • Four readers](images/scenes/04/01.webp)
+
+> **ચિત્ર 4.1 — વાર્તા ↔ ટેકનિક:** કાંતિકાકાના ચાર પ્રશ્ન → Tool plugin = `inject`, `Config`, `parameters`, `output`
+<!-- scene-image:4:1:end -->
+
 🎬 આરવ કાંતિકાકા પાસે જાય છે: "મારે નવું કાઉન્ટર ખોલવું છે." કાંતિકાકા હા કે ના નથી કહેતા. તે ચાર પ્રશ્ન પૂછે છે:
 
 1. "તારે **કોની જરૂર** છે? કોના વગર તું કામ શરૂ નહીં કરી શકે?"
@@ -77,6 +85,14 @@ flowchart LR
 🔬 **Expert નજર.** ચાર ભાગ એ ચાર **વાચક** છે: `inject` Cordis વાંચે, `Config` deployment કરનાર વાંચે, `parameters` model વાંચે, `output` model અને log બંને વાંચે. Tool design કરતી વખતે expert દરેક ભાગ માટે પૂછે છે: "આ કોણ વાંચશે, અને તેને ભૂલ કરતાં કેવી રીતે રોકું?" Schema એ દરેક વાચક માટેની વાડ છે.
 
 ## દૃશ્ય 2 — સ્વાગત-કાઉન્ટર: સૌથી નાનો ફેરફાર
+
+<!-- scene-image:4:2:begin -->
+<a id="scene-4-2"></a>
+
+![પ્રકરણ 4, દૃશ્ય 2: સ્વાગત-કાઉન્ટર: સૌથી નાનો ફેરફાર — Small plugin • Config • apply](images/scenes/04/02.webp)
+
+> **ચિત્ર 4.2 — વાર્તા ↔ ટેકનિક:** નવરંગપુરાનું "કેમ છો" → No hardcoded tunables; validated `Config` + default
+<!-- scene-image:4:2:end -->
 
 🎬 દરવાજે એક સ્વાગત-કાઉન્ટર છે જે દરેક ગ્રાહકને "Hello" કહે છે. પપ્પા: "અમદાવાદમાં 'Hello'? 'નમસ્તે' કહો." અને તરત ઉમેરે છે: "પણ નવરંગપુરા શાખાવાળા 'કેમ છો' ઇચ્છે છે."
 
@@ -132,6 +148,14 @@ TOOL_NAME=greet TOOL_ARGS='{"name":"Ada"}' SUCCESS_TEXT=done EXTRA_PATCH=$O TASK
 🔬 **Expert નજર.** બે lines નો ફેરફાર, પણ તેમાં plugin નું આખું જીવનચક્ર છે: schema → default → overlay માંથી value → `apply` ને validated `config` → tool ની અંદર ઉપયોગ. અને `default` ધ્યાનથી જુઓ: config ન આપનાર માટે પણ વર્તન **નક્કી અને લખેલું** છે. "Config નથી" એ undefined વર્તન ન હોવું જોઈએ.
 
 ## દૃશ્ય 3 — પપ્પાના છ નિયમ: `csv_compare`, નિયમો પહેલાં
+
+<!-- scene-image:4:3:begin -->
+<a id="scene-4-3"></a>
+
+![પ્રકરણ 4, દૃશ્ય 3: પપ્પાના છ નિયમ: csv_compare, નિયમો પહેલાં — csv_compare • Rules before code](images/scenes/04/03.webp)
+
+> **ચિત્ર 4.3 — વાર્તા ↔ ટેકનિક:** "કોઈ સાથે નહીં — બાજુ પર કાઢું" → Duplicate પર guess નહીં; છ deterministic નિયમ + invariant
+<!-- scene-image:4:3:end -->
 
 🎬 આરવ code લખવા બેસે છે. દીદી laptop બંધ કરે છે: "પહેલાં પપ્પાને પૂછ કે તે **કેવી રીતે** સરખાવે છે. Code એ નિયમોનું ભાષાંતર છે; નિયમ ન હોય તો ભાષાંતર શેનું?"
 
@@ -194,6 +218,14 @@ flowchart TD
 
 ## દૃશ્ય 4 — પોતાની ચાવી નહીં: harness wiring
 
+<!-- scene-image:4:4:begin -->
+<a id="scene-4-4"></a>
+
+![પ્રકરણ 4, દૃશ્ય 4: પોતાની ચાવી નહીં: harness wiring — Harness wiring • ctx.fs • signal](images/scenes/04/04.webp)
+
+> **ચિત્ર 4.4 — વાર્તા ↔ ટેકનિક:** "કબાટ હું ખોલીશ" → `ctx.fs` seam દ્વારા, read-only; pure logic અને wiring અલગ
+<!-- scene-image:4:4:end -->
+
 🎬 આરવનું કાઉન્ટર તૈયાર છે. યાદીઓ કબાટમાં છે. આરવ ખિસ્સામાંથી પોતાની ચાવી કાઢે છે. ભીખાભાઈ હાથ આડો ધરે છે: "કબાટ હું ખોલીશ. તું ચિઠ્ઠી આપ."
 
 ❓ "મારી પાસે ચાવી છે, તો તમને તકલીફ કેમ આપું?"
@@ -237,6 +269,14 @@ async function readCsvFile(ctx: Context, exec: ToolExecution, path: string, maxB
 🔬 **Expert નજર.** Pure અને wiring અલગ રાખવાનું કારણ ઝડપ કરતાં ઊંડું છે. પપ્પાના છ નિયમ (દૃશ્ય 3) માં harness નો **એક પણ શબ્દ** નથી — એટલે તેના tests માં harness ની જરૂર નથી, અને કાલે harness બદલાય તો નિયમો અડ્યા વગર રહે. અને બીજો નિર્ણય એક **trade-off** છે, મફત ભોજન નહીં: `workingDirectory` ને optional રાખવાથી tests સરળ બને છે, પણ તે service ગેરહાજર હોય તેવી composition માં path session directory ને બદલે process ની cwd સામે resolve થાય. Expert trade-off લખીને રાખે છે (Mastery check નો પ્રશ્ન 3).
 
 ## દૃશ્ય 5 — ત્રણ ચૂપ ભૂલ: code review
+
+<!-- scene-image:4:5:begin -->
+<a id="scene-4-5"></a>
+
+![પ્રકરણ 4, દૃશ્ય 5: ત્રણ ચૂપ ભૂલ: code review — Code review • Avoid silent correctness](images/scenes/04/05.webp)
+
+> **ચિત્ર 4.5 — વાર્તા ↔ ટેકનિક:** ત્રણ ચૂપ ભૂલ → ખૂટતી માહિતીને default થી ન ભરો; દરેક row નો હિસાબ test થી
+<!-- scene-image:4:5:end -->
 
 🎬 આરવ ખુશ છે: બધા tests લીલા. દીદી code એક બીજા તપાસનારને મોકલે છે (આ labs ના PR નો automated reviewer — Codex). જવાબમાં ત્રણ ભૂલ આવે છે, અને ત્રણેય એવી કે આરવનું કાઉન્ટર **કોઈ error વગર, આત્મવિશ્વાસથી ખોટો હિસાબ** આપતું હતું.
 

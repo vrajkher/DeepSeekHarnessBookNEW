@@ -48,6 +48,14 @@ flowchart TD
 
 ## દૃશ્ય 1 — પહેલો ભેદ: ચિઠ્ઠી પાછી, કે ઓર્ડર બંધ?
 
+<!-- scene-image:5:1:begin -->
+<a id="scene-5-1"></a>
+
+![પ્રકરણ 5, દૃશ્ય 1: પહેલો ભેદ: ચિઠ્ઠી પાછી, કે ઓર્ડર બંધ? — Error scope • Tool / Turn](images/scenes/05/01.webp)
+
+> **ચિત્ર 5.1 — વાર્તા ↔ ટેકનિક:** થાળી પીરસાઈ કે ઓર્ડર અટક્યો → Tool-level error → `tool/result`; turn-level → retry કે `turn/end`
+<!-- scene-image:5:1:end -->
+
 🎬 આરવ શનિવારની પાંચ ઘટના નોટબુકમાં એક નીચે એક લખે છે. દીદી વચ્ચે એક લીટી દોરે છે: "ઉપરની બે માં **થાળી પીરસાઈ**. નીચેની બે માં **ઓર્ડર જ અટક્યો**. કેમ?"
 
 આરવ વિચારે છે. "ઉપરની બે માં ભૂલ **કોઠારમાં** હતી. મહારાજને લાલ ચિઠ્ઠી મળી, અને તેમણે બીજો રસ્તો લીધો. નીચેની બે માં **મહારાજ સુધી પહોંચાયું જ નહીં** — ફોન કે લાઈટ."
@@ -64,6 +72,14 @@ flowchart TD
 🔬 **Expert નજર.** આ ભેદ પાછળ એક સાદો તર્ક છે: **ભૂલ વિશે કોણ કંઈ કરી શકે?** કોઠારની ભૂલ model સુધારી શકે (બીજી ચિઠ્ઠી લખીને), એટલે ભૂલ model ને અપાય. ફોન ન લાગે ત્યારે model કશું ન કરી શકે — તે તો ફોનની પેલી બાજુ છે — એટલે નિર્ણય harness લે: ફરી પ્રયત્ન, કે બંધ. કોઈ પણ error જોતાં પહેલો પ્રશ્ન: "આ કયા સ્તરની છે?" એનો જવાબ કહી દે છે કે ચોપડામાં કઈ event શોધવી: `tool/result`, કે `turn/end`.
 
 ## દૃશ્ય 2 — "દાળ ખારી કેમ થઈ?": છ સાધન
+
+<!-- scene-image:5:2:begin -->
+<a id="scene-5-2"></a>
+
+![પ્રકરણ 5, દૃશ્ય 2: "દાળ ખારી કેમ થઈ?": છ સાધન — Debugging evidence • Identify the owner](images/scenes/05/02.webp)
+
+> **ચિત્ર 5.2 — વાર્તા ↔ ટેકનિક:** "દાળ ખારી કેમ?" → છ સાધન, છ સ્તર; અનુમાન નહીં
+<!-- scene-image:5:2:end -->
 
 🎬 ગયા અઠવાડિયે દાળ ખારી થઈ. બધા પાસે અભિપ્રાય હતો: "મહારાજે બે વાર મીઠું નાખ્યું", "નવું મીઠું વધારે ખારું છે". પપ્પાએ કોઈનું ન સાંભળ્યું. તેમણે **સીસીટીવી** જોયો, **ચોપડો** ખોલ્યો, agency ને ગયેલા સંદેશની **નકલ** મંગાવી, અને **હાજરીપત્રક** તપાસ્યું. દસ મિનિટમાં જવાબ: મીઠાનો ચમચો બદલાયો હતો.
 
@@ -93,6 +109,14 @@ flowchart TD
 
 ## દૃશ્ય 3 — "એવું કોઈ ખાનું જ નથી": unavailable tool
 
+<!-- scene-image:5:3:begin -->
+<a id="scene-5-3"></a>
+
+![પ્રકરણ 5, દૃશ્ય 3: "એવું કોઈ ખાનું જ નથી": unavailable tool — Unavailable tool • UNKNOWN_TOOL](images/scenes/05/03.webp)
+
+> **ચિત્ર 5.3 — વાર્તા ↔ ટેકનિક:** ખોટું ખાનું → `UNKNOWN_TOOL`; turn `completed`
+<!-- scene-image:5:3:end -->
+
 🎬 શનિવાર બપોર: મહારાજની ચિઠ્ઠી — "`read_everything` ખાનામાંથી બધું લાવો." ભીખાભાઈ યાદી જુએ છે; એવું ખાનું નથી. લાલ ચિઠ્ઠી પાછી જાય છે. મહારાજ બીજી ચિઠ્ઠી લખે છે, અને થાળી પીરસાય છે.
 
 **પહેલાં ધારો:** turn નું reason? Exit code?
@@ -115,6 +139,14 @@ TOOL_NAME=read_everything bash tmp/book-labs/request-trace/run-mock.sh
 
 ## દૃશ્ય 4 — "ફોર્મ અધૂરું": invalid input
 
+<!-- scene-image:5:4:begin -->
+<a id="scene-5-4"></a>
+
+![પ્રકરણ 5, દૃશ્ય 4: "ફોર્મ અધૂરું": invalid input — Invalid input • Schema / Value](images/scenes/05/04.webp)
+
+> **ચિત્ર 5.4 — વાર્તા ↔ ટેકનિક:** અધૂરું ફોર્મ → `INVALID_ARGS`; tool body પહેલાં
+<!-- scene-image:5:4:end -->
+
 🎬 બીજી ચિઠ્ઠી: ખાનું સાચું છે, પણ મહારાજે `file_path` ને બદલે `path` લખ્યું છે. ભીખાભાઈ ફોર્મ પાછું મોકલે છે, અને કઈ લીટી ખૂટે છે તે લખે છે.
 
 💻
@@ -133,6 +165,14 @@ TOOL_ARGS='{"path":"README.md"}' bash tmp/book-labs/request-trace/run-mock.sh
 🔬 **Expert નજર.** દૃશ્ય 3 અને 4 ના માલિક **જુદા** છે, ભલે બંને "ખરાબ ચિઠ્ઠી" લાગે: ખાનું શોધવું pipeline નું કામ છે; ફોર્મ તપાસવું `defineTool` ના wrapper નું. અને ફોર્મની તપાસ tool body **પહેલાં** થાય છે — તમારા `execute` function સુધી ખોટા arguments કદી પહોંચતા નથી. એટલે tool લખતી વખતે તમારે "ખાનું ખાલી હોય તો?" ની ચિંતા કરવાની નથી; schema માં `required: true` લખો, અને એ ચિંતા harness ની.
 
 ## દૃશ્ય 5 — ફોનની ત્રણ મુશ્કેલી: provider error
+
+<!-- scene-image:5:5:begin -->
+<a id="scene-5-5"></a>
+
+![પ્રકરણ 5, દૃશ્ય 5: ફોનની ત્રણ મુશ્કેલી: provider error — Provider errors • Classify before retry](images/scenes/05/05.webp)
+
+> **ચિત્ર 5.5 — વાર્તા ↔ ટેકનિક:** વ્યસ્ત લાઈન vs ખોટું card → Retryable codes જ retry; 5 વાર, backoff + jitter
+<!-- scene-image:5:5:end -->
 
 🎬 શનિવાર સાંજ. રમેશભાઈ agency ને ફોન કરે છે.
 
@@ -191,6 +231,14 @@ Observed delays (0.5 → 1 → 2 → 4 → 8 s, થોડો jitter) આ backoff
 
 ## દૃશ્ય 6 — લાઈટ ગઈ: interrupted execution
 
+<!-- scene-image:5:6:begin -->
+<a id="scene-5-6"></a>
+
+![પ્રકરણ 5, દૃશ્ય 6: લાઈટ ગઈ: interrupted execution — Cancellation • Propagate signal](images/scenes/05/06.webp)
+
+> **ચિત્ર 5.6 — વાર્તા ↔ ટેકનિક:** લાઈટ ગઈ → `SIGINT` → exit 130; cancel → abort → throw → `finally`
+<!-- scene-image:5:6:end -->
+
 🎬 રાત્રે નવ વાગ્યે લાઈટ જાય છે. અંધારામાં, ક્રમમાં, ચાર વાત બને છે:
 
 1. પપ્પા બૂમ પાડે છે: "**દુકાન બંધ!**"
@@ -240,6 +288,14 @@ SIGINT → `shutdown.interrupt(130)` → root fiber dispose → agent loop ન�
 🔬 **Expert નજર.** Cancellation **સહકારી** (cooperative) છે: કોઈ મહારાજનો હાથ પકડીને રોકતું નથી; તે પોતે દીવો જુએ છે. એટલે code માં `signal.throwIfAborted()` દરેક `await` પછી **હાથે લખેલું** છે (પ્રકરણ 1, દૃશ્ય 7 (d)). લાંબું ચાલતું tool લખો અને signal જોવાનું ભૂલો, તો Ctrl+C પછી પણ તે ચાલ્યા કરે. અને quiescence નો નિયમ એ invariant ("દરેક `tool/call` નું એક `tool/result`") નો રક્ષક છે: અધવચ્ચે છોડેલું tool કદાચ અડધી file લખી ચૂક્યું હોય; harness તેને ઠરવા દે, **પછી** પરિણામ `ABORTED` નોંધે — જેથી ચોપડો અને disk એક વાત કહે.
 
 ## દૃશ્ય 7 — રાતની પાળી: permissions અને sandbox
+
+<!-- scene-image:5:7:begin -->
+<a id="scene-5-7"></a>
+
+![પ્રકરણ 5, દૃશ્ય 7: રાતની પાળી: permissions અને sandbox — Approval • Sandbox boundary](images/scenes/05/07.webp)
+
+> **ચિત્ર 5.7 — વાર્તા ↔ ટેકનિક:** રાતની પાળી → Fail closed; લખવા પર વાડ, **વાંચવું ખુલ્લું**
+<!-- scene-image:5:7:end -->
 
 🎬 રાતની પાળી. પપ્પા ઘરે છે. પપ્પાએ દીવાલ પર ત્રણ સ્તરની રજા લખી છે:
 
@@ -322,6 +378,14 @@ Base bundle `DSH_PERMISSION_MODE` ન હોય તો `workspace-write` અન�
 
 ## દૃશ્ય 8 — agency ને ચોપડાનાં પાનાં: data boundary
 
+<!-- scene-image:5:8:begin -->
+<a id="scene-5-8"></a>
+
+![પ્રકરણ 5, દૃશ્ય 8: agency ને ચોપડાનાં પાનાં: data boundary — Data boundary • Model request leaves process](images/scenes/05/08.webp)
+
+> **ચિત્ર 5.8 — વાર્તા ↔ ટેકનિક:** ચોપડાનાં પાનાં બહાર → Data boundary ≠ permission; row disable
+<!-- scene-image:5:8:end -->
+
 🎬 પ્રકરણ 3 માં આરવે ફોન પરની વાતમાં `dsh_session_log` જોયું હતું. હવે તે દૃશ્ય 7 સાથે જોડે છે: "મહારાજ ઓફિસનો કાગળ **વાંચી** શકે. અને ચોપડાનાં પાનાં **agency ને જાય** છે. તો વાંચેલું બહાર જાય?"
 
 દીદી માથું હલાવે છે. "હવે તું બે અલગ પ્રશ્નને અલગ જોઈ શકે છે. **Permission**: agent શું **કરી** શકે. **Data**: કઈ માહિતી **બહાર** જાય. પહેલાની વાડ બીજાને નથી રોકતી."
@@ -343,6 +407,14 @@ Telemetry: `session-telemetry-otel` row default `FEEDBACK_ONLY` mode માં �
 🔬 **Expert નજર.** Model ને જે દેખાય છે તે provider ને **જાય જ** છે — એ તો model call ની વ્યાખ્યા છે (tool result history નો ભાગ છે). એટલે "model શું વાંચી શકે" એ પહેલેથી data નો પ્રશ્ન છે, extension હોય કે ન હોય. Extension તેમાં વહીવટી લીટીઓ ઉમેરે છે. અને ઉપાય જુઓ: code બદલવાનો નથી; **એક row** બંધ કરવાની છે. "Everything is a plugin" નો સુરક્ષા-ફાયદો આ છે: જે વર્તન તમને નથી જોઈતું, તે કોઈ file ની ઊંડાણમાં દટાયેલું નથી; તે મેનુની એક લીટી છે, જે `--dump-config` માં દેખાય છે અને ચિઠ્ઠીથી બંધ થાય છે. બંધ કર્યા પછી wire ફરી capture કરીને **સાબિત** કરો કે field ગયું.
 
 ## દૃશ્ય 9 — ત્રણ ચિઠ્ઠી એકસાથે: concurrency
+
+<!-- scene-image:5:9:begin -->
+<a id="scene-5-9"></a>
+
+![પ્રકરણ 5, દૃશ્ય 9: ત્રણ ચિઠ્ઠી એકસાથે: concurrency — Concurrency • Parallel work / Ordered results](images/scenes/05/09.webp)
+
+> **ચિત્ર 5.9 — વાર્તા ↔ ટેકનિક:** ત્રણ ચિઠ્ઠી એકસાથે → `isConcurrencySafe` → parallel; results model order માં
+<!-- scene-image:5:9:end -->
 
 🎬 મહારાજ એક જ વારમાં ત્રણ ચિઠ્ઠી લખે છે: "ખાંડ લાવો, મીઠું લાવો, રેસીપી-ચોપડી લાવો." ભીખાભાઈ ત્રણ મદદનીશને **એકસાથે** મોકલે છે. પણ ચોથી ચિઠ્ઠી હોય "કોઠારનું રજિસ્ટર સુધારો", તો તે એકલી ચાલે: જ્યાં સુધી તે પૂરી ન થાય, કોઈ અંદર ન જાય.
 

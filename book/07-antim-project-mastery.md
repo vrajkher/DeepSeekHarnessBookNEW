@@ -65,6 +65,14 @@ flowchart LR
 
 ## દૃશ્ય 1 — અરીસો: bank નું credit, તમારું debit
 
+<!-- scene-image:7:1:begin -->
+<a id="scene-7-1"></a>
+
+![પ્રકરણ 7, દૃશ્ય 1: અરીસો: bank નું credit, તમારું debit — One account perspective • Normalize signs](images/scenes/07/01.webp)
+
+> **ચિત્ર 7.1 — વાર્તા ↔ ટેકનિક:** અરીસો → Bank `credit − debit`, Tally `debit − credit` → એક signed amount
+<!-- scene-image:7:1:end -->
+
 🎬 આરવ bank statement માં ₹15,000 ની જમા શોધે છે. તે **Credit** ખાનામાં છે. પછી Tally માં એ જ entry શોધે છે. તે **Debit** ખાનામાં છે.
 
 "મુનીમજી, એક ચોપડો ખોટો છે. પૈસા **આવ્યા**; એક કહે credit, બીજો કહે debit."
@@ -90,6 +98,14 @@ flowchart LR
 
 ## દૃશ્ય 2 — એક પૈસો, બે તારીખ, ત્રણ શૂન્ય: normalize
 
+<!-- scene-image:7:2:begin -->
+<a id="scene-7-2"></a>
+
+![પ્રકરણ 7, દૃશ્ય 2: એક પૈસો, બે તારીખ, ત્રણ શૂન્ય: normalize — Normalize • Paise / Date / Reference](images/scenes/07/02.webp)
+
+> **ચિત્ર 7.2 — વાર્તા ↔ ટેકનિક:** એક પૈસો, બે તારીખ, ત્રણ શૂન્ય → Integer paise; ISO date, timezone વગર; ref uppercase, leading zeros દૂર
+<!-- scene-image:7:2:end -->
+
 🎬 મુનીમજી ત્રણ જૂની વાત કહે છે.
 
 **એક પૈસો.** "એક વાર એક computer program એ મારો સરવાળો એક પૈસો ઓછો બતાવ્યો. મેં આખી રાત શોધ્યું. ભૂલ મારી નહોતી: computer દશાંશ બરાબર ગણી શકતું નહોતું. ત્યારથી હું રૂપિયા નથી ગણતો; **પૈસા** ગણું છું. પૂર્ણાંક. ₹8,250.50 નહીં — 8,25,050 પૈસા."
@@ -107,6 +123,14 @@ flowchart LR
 🔬 **Expert નજર.** Normalize ના દરેક નિયમ પાછળ એક **ખરી ભૂલ** છે જે કોઈને ક્યારેક નડી છે: floating point, timezone, leading zeros. અને ક્રમ જુઓ: normalize **પહેલાં**, matching **પછી**. Matching ના નિયમોમાં `toUpperCase()` કે "શૂન્ય કાઢો" ક્યાંય નથી; તે સ્વચ્છ, એક જ આકારના data પર ચાલે છે. બે ચિંતા — "data સાફ કરવો" અને "નિર્ણય લેવો" — ભેળવો, તો દરેક નિયમમાં સફાઈની નકલ થાય અને એક જગ્યાએ ભૂલી જવાય. અને અશક્ય તારીખ: "સુધારવાનો" પ્રયત્ન (1 માર્ચ ગણી લેવી) નથી; **નકાર** છે. પ્રકરણ 4 નો પપ્પાનો નિયમ: ધારવું નહીં.
 
 ## દૃશ્ય 3 — મુનીમજીનો ક્રમ: છ નિયમ
+
+<!-- scene-image:7:3:begin -->
+<a id="scene-7-3"></a>
+
+![પ્રકરણ 7, દૃશ્ય 3: મુનીમજીનો ક્રમ: છ નિયમ — V1 → D1 → R1 → R2 → A1 → U1](images/scenes/07/03.webp)
+
+> **ચિત્ર 7.3 — વાર્તા ↔ ટેકનિક:** મુનીમજીનો ક્રમ → V1 → D1 → R1 → R2 → A1 → U1; મજબૂત પુરાવો પહેલાં
+<!-- scene-image:7:3:end -->
 
 🎬 આરવ મુનીમજીને મેળવતા જુએ છે, અને નોંધે છે કે તે હંમેશા **એક જ ક્રમે** ચાલે છે:
 
@@ -140,6 +164,14 @@ flowchart LR
 
 ## દૃશ્ય 4 — મણકા અને દોરા: "પહેલો આવ્યો તે લઈ ગયો" કેમ ખોટું
 
+<!-- scene-image:7:4:begin -->
+<a id="scene-7-4"></a>
+
+![પ્રકરણ 7, દૃશ્ય 4: મણકા અને દોરા: "પહેલો આવ્યો તે લઈ ગયો" કેમ ખોટું — Connected components • Ambiguity](images/scenes/07/04.webp)
+
+> **ચિત્ર 7.4 — વાર્તા ↔ ટેકનિક:** "પહેલો આવ્યો તે લઈ ગયો" → Greedy નહીં; connected components; 1+1 = match
+<!-- scene-image:7:4:end -->
+
 🎬 મુનીમજી એક જૂની વાત કહે છે. વર્ષો પહેલાં તેમનો એક મદદનીશ હતો, જે "ઝડપી" હતો: bank ની ₹12,000 ની લીટી જોઈ, ચોપડામાં **પહેલી મળી** તે ₹12,000 ની લીટી સાથે જોડી દીધી, અને આગળ વધ્યો. તે મહિને Desai ને જમા મળી.
 
 "બીજા મહિને એ જ કાગળ બીજા ક્રમે છપાયા. હવે Rana ની લીટી પહેલાં હતી. એ જ મદદનીશ, એ જ રીત — અને જમા **Rana** ને મળી. એક જ હકીકત, બે જુદા હિસાબ; ફરક ફક્ત કાગળ પર કોણ ઉપર લખાયું હતું."
@@ -172,6 +204,14 @@ flowchart LR
 🔬 **Expert નજર.** આ પુસ્તકમાં "ક્રમ પર આધાર" ત્રીજી વાર આવ્યો: પ્રકરણ 2 નો ઉતાવળિયો ગ્રાહક (કયો plugin પહેલાં load થયો), પ્રકરણ 5 ની ત્રણ ચિઠ્ઠી (કયો tool પહેલાં પૂરો થયો), અને અહીં (કઈ row પહેલાં લખાઈ). ત્રણેય વખત ઉપાયનો આકાર એક છે: **પહેલાં આખું ચિત્ર ભેગું કરો, પછી નિર્ણય લો** — `loader.await()`, "model order માં commit", connected components. Greedy algorithm લખવામાં સહેલો છે અને મોટે ભાગે સાચો જવાબ આપે છે; તેની ભૂલ ફક્ત ત્યારે દેખાય જ્યારે ambiguity હોય — એટલે કે બરાબર ત્યારે, જ્યારે માણસનું ધ્યાન સૌથી વધુ જોઈતું હોય. Expert "મોટે ભાગે સાચું" algorithm જુએ ત્યારે પૂછે છે: "કયા input પર તે **ચૂપચાપ ખોટું** છે?"
 
 ## દૃશ્ય 5 — આંગળીની ચકાસણી: fixtures અને golden report
+
+<!-- scene-image:7:5:begin -->
+<a id="scene-7-5"></a>
+
+![પ્રકરણ 7, દૃશ્ય 5: આંગળીની ચકાસણી: fixtures અને golden report — Fixtures • Golden report • Invariant](images/scenes/07/05.webp)
+
+> **ચિત્ર 7.5 — વાર્તા ↔ ટેકનિક:** આંગળીની ચકાસણી → હાથથી ચકાસેલો golden report + સ્વતંત્ર invariant
+<!-- scene-image:7:5:end -->
 
 🎬 દીદી મુનીમજીની દરેક ગૂંચ માટે **નમૂનાના કાગળ** માં એક-એક લીટી મૂકે છે. પછી મુનીમજીને કહે છે: "તમે હાથથી મેળવો. તમારો જવાબ આપણે સાચવી રાખીશું. આરવનું કાઉન્ટર હંમેશા **અક્ષરશઃ** એ જ જવાબ આપવું જોઈએ."
 
@@ -223,6 +263,14 @@ REJECTED [V1] bank L11: COLUMN_COUNT: expected 7 fields, found 3
 🔬 **Expert નજર.** Golden report નો ખતરો: tool ખોટો હોય અને તમે તેનું output જ "golden" તરીકે સાચવી લો, તો test ભૂલને **સિમેન્ટ** કરી દે. એટલે અહીં golden **હાથથી** ચકાસેલું છે, અને સાથે એક invariant test છે ("every input row appears in exactly one result") જે golden પર આધાર નથી રાખતો. બે સ્વતંત્ર પુરાવા એક કરતાં ઘણા મજબૂત છે. અને tally L7 ની લીટી ફરી વાંચો: tool match નથી કરતું, પણ **મદદ** કરે છે — "આ જ reference બાજુ પર કાઢેલી bank duplicates (lines 7, 8) માં છે". Guess નહીં કરવું એનો અર્થ ચૂપ રહેવું નથી; જે ખબર છે તે બધું કહેવું, અને જે ખબર નથી તે ન ધારવું.
 
 ## દૃશ્ય 6 — બીજી bank નો કાગળ: harness wiring
+
+<!-- scene-image:7:6:begin -->
+<a id="scene-7-6"></a>
+
+![પ્રકરણ 7, દૃશ્ય 6: બીજી bank નો કાગળ: harness wiring — Column mapping • Fail loud](images/scenes/07/06.webp)
+
+> **ચિત્ર 7.6 — વાર્તા ↔ ટેકનિક:** ગાયબ ₹900 → ખૂટતો column = config error, શૂન્ય નહીં
+<!-- scene-image:7:6:end -->
 
 🎬 મુનીમજી બીજા ખાતાનું export લાવે છે, બીજી bank નું. તેમાં ખાનાનાં નામ જુદાં છે: `Date` ને બદલે `Txn Date`. અને એક કાગળમાં `Debit` ખાનું છે જ નહીં.
 
@@ -276,6 +324,14 @@ TOOL_NAME=reconcile_bank_tally TOOL_ARGS='{"bank_path":"tmp/book-labs/reconcile/
 ⚠️ **વાર્તા અને technical વચ્ચે ફરક:** મુનીમજી ફોન કરીને પૂછી શકે છે. Tool **ફક્ત વાંચે અને અહેવાલ આપે**; કોઈ voucher બનાવતો કે બદલતો નથી.
 
 ## દૃશ્ય 7 — ફક્ત વાંચવાની ચાવી: ભવિષ્યનો Tally connector
+
+<!-- scene-image:7:7:begin -->
+<a id="scene-7-7"></a>
+
+![પ્રકરણ 7, દૃશ્ય 7: ફક્ત વાંચવાની ચાવી: ભવિષ્યનો Tally connector — Future design only • Read-only capability](images/scenes/07/07.webp)
+
+> **ચિત્ર 7.7 — વાર્તા ↔ ટેકનિક:** ફક્ત વાંચવાની ચાવી → Interface માં write method જ નહીં; provider swap = config **ફક્ત ભવિષ્યની design; અમલમાં મૂક્યું નથી.**
+<!-- scene-image:7:7:end -->
 
 > **આ દૃશ્ય extension design છે — અમલમાં મૂક્યો નથી, ચલાવ્યો નથી.** ⚠️ Tally ની કોઈ API વિગત અહીં ચકાસેલી નથી.
 
