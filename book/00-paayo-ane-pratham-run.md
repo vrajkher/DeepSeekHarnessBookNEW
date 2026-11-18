@@ -44,6 +44,8 @@ flowchart LR
 
 ![પ્રકરણ 0, દૃશ્ય 1: રમેશભાઈ રજા પર: દરેક જણ બદલી શકાય — Same contract • Replaceable plugin](images/scenes/00/01.webp)
 
+![પ્રકરણ 0, દૃશ્ય 1 — ટેકનિકલ સમજ](images/scenes/technical/00/01.webp)
+
 > **ચિત્ર 0.1 — વાર્તા ↔ ટેકનિક:** રમેશભાઈની જગ્યાએ બીજો વેઈટર → નિયમ એ જ રાખીને plugin બદલી શકાય; unload થાય ત્યારે નોંધણી પણ પાછી ખેંચાય.
 <!-- scene-image:0:1:end -->
 
@@ -80,6 +82,8 @@ flowchart LR
 <a id="scene-0-2"></a>
 
 ![પ્રકરણ 0, દૃશ્ય 2: ગયા મહિનાનું મેનુ-કાર્ડ: pin — Pinned commit • Reproducible setup](images/scenes/00/02.webp)
+
+![પ્રકરણ 0, દૃશ્ય 2 — ટેકનિકલ સમજ](images/scenes/technical/00/02.webp)
 
 > **ચિત્ર 0.2 — વાર્તા ↔ ટેકનિક:** મેનુ અને રસોડું એક જ તારીખનાં → પુસ્તક અને code એક pinned commit તથા નોંધેલા વાતાવરણ પર મેળ ખાતાં રહે.
 <!-- scene-image:0:2:end -->
@@ -143,6 +147,8 @@ git -C deepseek-harness log -1 --format='%H %ci %s'
 <a id="scene-0-3"></a>
 
 ![પ્રકરણ 0, દૃશ્ય 3: ત્રણ ચાવી: Node.js, Corepack, pnpm — Node.js → Corepack → pnpm](images/scenes/00/03.webp)
+
+![પ્રકરણ 0, દૃશ્ય 3 — ટેકનિકલ સમજ](images/scenes/technical/00/03.webp)
 
 > **ચિત્ર 0.3 — વાર્તા ↔ ટેકનિક:** દરવાજો, ખરીદી કરનાર અને સામાનની યાદી → Node.js runtime, Corepack અને ચોક્કસ pnpm version ની જુદી ભૂમિકા.
 <!-- scene-image:0:3:end -->
@@ -226,6 +232,8 @@ WSL ની અંદર ઉપરના Linux steps જ ચાલે. અમે 
 
 ![પ્રકરણ 0, દૃશ્ય 4: દસ સ્વિચ: build — Build gates • Passed / failed / skipped](images/scenes/00/04.webp)
 
+![પ્રકરણ 0, દૃશ્ય 4 — ટેકનિકલ સમજ](images/scenes/technical/00/04.webp)
+
 > **ચિત્ર 0.4 — વાર્તા ↔ ટેકનિક:** દસ સ્વિચની તપાસ → build માં passed, failed અને skipped ત્રણેય આંકડા જુઓ.
 <!-- scene-image:0:4:end -->
 
@@ -254,6 +262,8 @@ pnpm run build
 <a id="scene-0-5"></a>
 
 ![પ્રકરણ 0, દૃશ્ય 5: રસોડાની બોલી: TypeScript ના પાંચ pattern — TypeScript patterns • Contracts](images/scenes/00/05.webp)
+
+![પ્રકરણ 0, દૃશ્ય 5 — ટેકનિકલ સમજ](images/scenes/technical/00/05.webp)
 
 > **ચિત્ર 0.5 — વાર્તા ↔ ટેકનિક:** રસોડાની બોલી → TypeScript ના પાંચ pattern interface, type checking અને cancellation સમજવામાં મદદ કરે.
 <!-- scene-image:0:5:end -->
@@ -298,6 +308,8 @@ import type {} from '@deepseek-ai/dsh-tools' // dsh-tools ના merge (દા.�
 <a id="scene-0-6"></a>
 
 ![પ્રકરણ 0, દૃશ્ય 6: ઇમારતનો નકશો: repository — Repository map • apps / vendor / packages](images/scenes/00/06.webp)
+
+![પ્રકરણ 0, દૃશ્ય 6 — ટેકનિકલ સમજ](images/scenes/technical/00/06.webp)
 
 > **ચિત્ર 0.6 — વાર્તા ↔ ટેકનિક:** ઇમારતના ઓરડા → apps/ launchers, vendor/ Cordis અને packages/ plugins ઓળખો; તીર આધાર બતાવે છે.
 <!-- scene-image:0:6:end -->

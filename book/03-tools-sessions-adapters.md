@@ -42,6 +42,8 @@ flowchart LR
 
 ![પ્રકરણ 3, દૃશ્ય 1: નોકરીનું વર્ણન: seam — Capability seam • Definition / Provider / Consumer](images/scenes/03/01.webp)
 
+![પ્રકરણ 3, દૃશ્ય 1 — ટેકનિકલ સમજ](images/scenes/technical/03/01.webp)
+
 > **ચિત્ર 3.1 — વાર્તા ↔ ટેકનિક:** દરવાજા પરનું પાટિયું → Seam: definition, provider, consumer
 <!-- scene-image:3:1:end -->
 
@@ -84,6 +86,8 @@ flowchart LR
 
 ![પ્રકરણ 3, દૃશ્ય 2: ચિઠ્ઠીનું ફોર્મ: input schema — Input schema • Required / Optional](images/scenes/03/02.webp)
 
+![પ્રકરણ 3, દૃશ્ય 2 — ટેકનિકલ સમજ](images/scenes/technical/03/02.webp)
+
 > **ચિત્ર 3.2 — વાર્તા ↔ ટેકનિક:** ચિઠ્ઠીનું ફોર્મ → Tool schema model ને જાય; description model માટેની સૂચના
 <!-- scene-image:3:2:end -->
 
@@ -121,6 +125,8 @@ flowchart LR
 
 ![પ્રકરણ 3, દૃશ્ય 3: નવો કોઠારી બે નોંધ કરાવે: registration — Tool registration + Prompt guidance](images/scenes/03/03.webp)
 
+![પ્રકરણ 3, દૃશ્ય 3 — ટેકનિકલ સમજ](images/scenes/technical/03/03.webp)
+
 > **ચિત્ર 3.3 — વાર્તા ↔ ટેકનિક:** બે નોંધ → Tool + system prompt section, બંને effects
 <!-- scene-image:3:3:end -->
 
@@ -145,6 +151,8 @@ flowchart LR
 <a id="scene-3-4"></a>
 
 ![પ્રકરણ 3, દૃશ્ય 4: ડબ્બો ખોલ્યા વગર લેબલ: execution — Resolve → stat → Read / Stream](images/scenes/03/04.webp)
+
+![પ્રકરણ 3, દૃશ્ય 4 — ટેકનિકલ સમજ](images/scenes/technical/03/04.webp)
 
 > **ચિત્ર 3.4 — વાર્તા ↔ ટેકનિક:** ડબ્બો ખોલ્યા વગર લેબલ → resolve → એક `stat` → નાની file `readText`, મોટી stream
 <!-- scene-image:3:4:end -->
@@ -177,6 +185,8 @@ flowchart LR
 <a id="scene-3-5"></a>
 
 ![પ્રકરણ 3, દૃશ્ય 5: ત્રણ જાતની "ના", અને લાલ ચિઠ્ઠી: errors — Tool error → Useful result](images/scenes/03/05.webp)
+
+![પ્રકરણ 3, દૃશ્ય 5 — ટેકનિકલ સમજ](images/scenes/technical/03/05.webp)
 
 > **ચિત્ર 3.5 — વાર્તા ↔ ટેકનિક:** ત્રણ "ના", લાલ ચિઠ્ઠી → Tool error = `tool/result` (`isError`); code log માં, text model ને
 <!-- scene-image:3:5:end -->
@@ -226,6 +236,8 @@ function toolErrorResult(error: unknown): ToolExecutionResult {
 
 ![પ્રકરણ 3, દૃશ્ય 6: સામાન અને લેબલ: canonical value અને render — Canonical value → Validate → Render](images/scenes/03/06.webp)
 
+![પ્રકરણ 3, દૃશ્ય 6 — ટેકનિકલ સમજ](images/scenes/technical/03/06.webp)
+
 > **ચિત્ર 3.6 — વાર્તા ↔ ટેકનિક:** સામાન અને લેબલ → Canonical value (validated) ≠ render
 <!-- scene-image:3:6:end -->
 
@@ -257,6 +269,8 @@ function toolErrorResult(error: unknown): ToolExecutionResult {
 <a id="scene-3-7"></a>
 
 ![પ્રકરણ 3, દૃશ્ય 7: ચિઠ્ઠીનો આખો રસ્તો: tool pipeline — Pipeline • One result per call](images/scenes/03/07.webp)
+
+![પ્રકરણ 3, દૃશ્ય 7 — ટેકનિકલ સમજ](images/scenes/technical/03/07.webp)
 
 > **ચિત્ર 3.7 — વાર્તા ↔ ટેકનિક:** ચિઠ્ઠીનો રસ્તો → parse → `tool/call` → pre-execute → execute → `tool/result`
 <!-- scene-image:3:7:end -->
@@ -323,6 +337,8 @@ flowchart LR
 
 ![પ્રકરણ 3, દૃશ્ય 8: દુભાષિયો: request — Adapter • Canonical request → Provider wire](images/scenes/03/08.webp)
 
+![પ્રકરણ 3, દૃશ્ય 8 — ટેકનિકલ સમજ](images/scenes/technical/03/08.webp)
+
 > **ચિત્ર 3.8 — વાર્તા ↔ ટેકનિક:** દુભાષિયો → `GenerateOptions` → `llm/stream` waterfall → HTTP POST
 <!-- scene-image:3:8:end -->
 
@@ -382,6 +398,8 @@ flowchart LR
 
 ![પ્રકરણ 3, દૃશ્ય 9: મહારાજ ટુકડે ટુકડે બોલે: SSE → StreamChunk — SSE → StreamChunk](images/scenes/03/09.webp)
 
+![પ્રકરણ 3, દૃશ્ય 9 — ટેકનિકલ સમજ](images/scenes/technical/03/09.webp)
+
 > **ચિત્ર 3.9 — વાર્તા ↔ ટેકનિક:** ટુકડે ટુકડે → SSE → સાત `StreamChunk`
 <!-- scene-image:3:9:end -->
 
@@ -418,6 +436,8 @@ Provider ના `stop_reason` નું mapping ([source][deepseek-finish]): `en
 
 ![પ્રકરણ 3, દૃશ્ય 10: agency બદલાય તો? adapter boundary — Adapter boundary • Replace provider](images/scenes/03/10.webp)
 
+![પ્રકરણ 3, દૃશ્ય 10 — ટેકનિકલ સમજ](images/scenes/technical/03/10.webp)
+
 > **ચિત્ર 3.10 — વાર્તા ↔ ટેકનિક:** ચોકની લીટી → ઉપર wire નથી જાણતા; નીચે log નથી જાણતા
 <!-- scene-image:3:10:end -->
 
@@ -448,6 +468,8 @@ Provider ના `stop_reason` નું mapping ([source][deepseek-finish]): `en
 <a id="scene-3-11"></a>
 
 ![પ્રકરણ 3, દૃશ્ય 11: શાહીથી, નંબર સાથે, તાળાબંધ: Session.append — Session.append • Ordered immutable facts](images/scenes/03/11.webp)
+
+![પ્રકરણ 3, દૃશ્ય 11 — ટેકનિકલ સમજ](images/scenes/technical/03/11.webp)
 
 > **ચિત્ર 3.11 — વાર્તા ↔ ટેકનિક:** શાહી, નંબર, તાળું → JSON-serializable (fail fast), frozen, `seq` ક્રમમાં
 <!-- scene-image:3:11:end -->
@@ -500,6 +522,8 @@ Provider ના `stop_reason` નું mapping ([source][deepseek-finish]): `en
 
 ![પ્રકરણ 3, દૃશ્ય 12: મહારાજ માટે કઈ લીટીઓ? surface અને deriveMessages — Session surface → deriveMessages](images/scenes/03/12.webp)
 
+![પ્રકરણ 3, દૃશ્ય 12 — ટેકનિકલ સમજ](images/scenes/technical/03/12.webp)
+
 > **ચિત્ર 3.12 — વાર્તા ↔ ટેકનિક:** વાતચીત vs વહીવટ → પાંચ surface types જ model history બને
 <!-- scene-image:3:12:end -->
 
@@ -523,6 +547,8 @@ Provider ના `stop_reason` નું mapping ([source][deepseek-finish]): `en
 <a id="scene-3-13"></a>
 
 ![પ્રકરણ 3, દૃશ્ય 13: તિજોરી: persistence — Persistence • JSONL • Flush](images/scenes/03/13.webp)
+
+![પ્રકરણ 3, દૃશ્ય 13 — ટેકનિકલ સમજ](images/scenes/technical/03/13.webp)
 
 > **ચિત્ર 3.13 — વાર્તા ↔ ટેકનિક:** તિજોરી → `session.v4.jsonl.zstd`; committed files કદી બદલાય નહીં
 <!-- scene-image:3:13:end -->
@@ -550,6 +576,8 @@ Architecture doc મુજબ v1 અને પછીના format `session.vN.js
 <a id="scene-3-14"></a>
 
 ![પ્રકરણ 3, દૃશ્ય 14: લાઈટ ગયા પછી: recovery અને resume — Recovery • Resume from log](images/scenes/03/14.webp)
+
+![પ્રકરણ 3, દૃશ્ય 14 — ટેકનિકલ સમજ](images/scenes/technical/03/14.webp)
 
 > **ચિત્ર 3.14 — વાર્તા ↔ ટેકનિક:** લાઈટ ગયા પછી → ખૂટતા `tool/result` ભરાય; `--session-id` થી resume
 <!-- scene-image:3:14:end -->

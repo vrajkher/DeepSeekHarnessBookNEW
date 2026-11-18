@@ -49,6 +49,8 @@ flowchart LR
 
 ![પ્રકરણ 4, દૃશ્ય 1: નવું કાઉન્ટર ખોલતાં પહેલાં ચાર પ્રશ્ન — Plugin design • Four readers](images/scenes/04/01.webp)
 
+![પ્રકરણ 4, દૃશ્ય 1 — ટેકનિકલ સમજ](images/scenes/technical/04/01.webp)
+
 > **ચિત્ર 4.1 — વાર્તા ↔ ટેકનિક:** કાંતિકાકાના ચાર પ્રશ્ન → Tool plugin = `inject`, `Config`, `parameters`, `output`
 <!-- scene-image:4:1:end -->
 
@@ -90,6 +92,8 @@ flowchart LR
 <a id="scene-4-2"></a>
 
 ![પ્રકરણ 4, દૃશ્ય 2: સ્વાગત-કાઉન્ટર: સૌથી નાનો ફેરફાર — Small plugin • Config • apply](images/scenes/04/02.webp)
+
+![પ્રકરણ 4, દૃશ્ય 2 — ટેકનિકલ સમજ](images/scenes/technical/04/02.webp)
 
 > **ચિત્ર 4.2 — વાર્તા ↔ ટેકનિક:** નવરંગપુરાનું "કેમ છો" → No hardcoded tunables; validated `Config` + default
 <!-- scene-image:4:2:end -->
@@ -153,6 +157,8 @@ TOOL_NAME=greet TOOL_ARGS='{"name":"Ada"}' SUCCESS_TEXT=done EXTRA_PATCH=$O TASK
 <a id="scene-4-3"></a>
 
 ![પ્રકરણ 4, દૃશ્ય 3: પપ્પાના છ નિયમ: csv_compare, નિયમો પહેલાં — csv_compare • Rules before code](images/scenes/04/03.webp)
+
+![પ્રકરણ 4, દૃશ્ય 3 — ટેકનિકલ સમજ](images/scenes/technical/04/03.webp)
 
 > **ચિત્ર 4.3 — વાર્તા ↔ ટેકનિક:** "કોઈ સાથે નહીં — બાજુ પર કાઢું" → Duplicate પર guess નહીં; છ deterministic નિયમ + invariant
 <!-- scene-image:4:3:end -->
@@ -223,6 +229,8 @@ flowchart TD
 
 ![પ્રકરણ 4, દૃશ્ય 4: પોતાની ચાવી નહીં: harness wiring — Harness wiring • ctx.fs • signal](images/scenes/04/04.webp)
 
+![પ્રકરણ 4, દૃશ્ય 4 — ટેકનિકલ સમજ](images/scenes/technical/04/04.webp)
+
 > **ચિત્ર 4.4 — વાર્તા ↔ ટેકનિક:** "કબાટ હું ખોલીશ" → `ctx.fs` seam દ્વારા, read-only; pure logic અને wiring અલગ
 <!-- scene-image:4:4:end -->
 
@@ -274,6 +282,8 @@ async function readCsvFile(ctx: Context, exec: ToolExecution, path: string, maxB
 <a id="scene-4-5"></a>
 
 ![પ્રકરણ 4, દૃશ્ય 5: ત્રણ ચૂપ ભૂલ: code review — Code review • Avoid silent correctness](images/scenes/04/05.webp)
+
+![પ્રકરણ 4, દૃશ્ય 5 — ટેકનિકલ સમજ](images/scenes/technical/04/05.webp)
 
 > **ચિત્ર 4.5 — વાર્તા ↔ ટેકનિક:** ત્રણ ચૂપ ભૂલ → ખૂટતી માહિતીને default થી ન ભરો; દરેક row નો હિસાબ test થી
 <!-- scene-image:4:5:end -->

@@ -42,6 +42,8 @@ flowchart LR
 
 ![પ્રકરણ 6, દૃશ્ય 1: એક સવાર, ત્રણ વિનંતી: ત્રણ extension માર્ગ — Config • Plugin • Patch](images/scenes/06/01.webp)
 
+![પ્રકરણ 6, દૃશ્ય 1 — ટેકનિકલ સમજ](images/scenes/technical/06/01.webp)
+
 > **ચિત્ર 6.1 — વાર્તા ↔ ટેકનિક:** એક સવાર, ત્રણ વિનંતી → Config → plugin → core patch; નિર્ણય source પુરાવાથી
 <!-- scene-image:6:1:end -->
 
@@ -107,6 +109,8 @@ flowchart TD
 <a id="scene-6-2"></a>
 
 ![પ્રકરણ 6, દૃશ્ય 2: ખૂણાનો નિરીક્ષક: માપન, અને તેની પ્રામાણિકતા — Metrics • Around-wrapper](images/scenes/06/02.webp)
+
+![પ્રકરણ 6, દૃશ્ય 2 — ટેકનિકલ સમજ](images/scenes/technical/06/02.webp)
 
 > **ચિત્ર 6.2 — વાર્તા ↔ ટેકનિક:** ખૂણાનો નિરીક્ષક → વર્તન બદલ્યા વગર માપો; ગણતરી પાકી, સમય કાચો
 <!-- scene-image:6:2:end -->
@@ -175,6 +179,8 @@ flowchart TD
 
 ![પ્રકરણ 6, દૃશ્ય 3: સૂચન-પત્ર, પગલું 1: પ્રશ્ન — Maintainer step 1 • State the problem](images/scenes/06/03.webp)
 
+![પ્રકરણ 6, દૃશ્ય 3 — ટેકનિકલ સમજ](images/scenes/technical/06/03.webp)
+
 > **ચિત્ર 6.3 — વાર્તા ↔ ટેકનિક:** પાછો આવેલો પત્ર → Problem statement: ક્યારે, શું સાચું, શું ખોટું, કોને નુકસાન
 <!-- scene-image:6:3:end -->
 
@@ -200,6 +206,8 @@ flowchart TD
 
 ![પ્રકરણ 6, દૃશ્ય 4: પગલું 2: ફરી ઉત્પન્ન — Maintainer step 2 • Reproduce](images/scenes/06/04.webp)
 
+![પ્રકરણ 6, દૃશ્ય 4 — ટેકનિકલ સમજ](images/scenes/technical/06/04.webp)
+
 > **ચિત્ર 6.4 — વાર્તા ↔ ટેકનિક:** "ક્યારેક થાય છે" → Reproduction: પગલાં + કેટલી વાર (2/2)
 <!-- scene-image:6:4:end -->
 
@@ -222,6 +230,8 @@ dsh: session "session-…": flush on a closed handle
 <a id="scene-6-5"></a>
 
 ![પ્રકરણ 6, દૃશ્ય 5: પગલું 3: મૂળ કારણ — Maintainer step 3 • Root cause](images/scenes/06/05.webp)
+
+![પ્રકરણ 6, દૃશ્ય 5 — ટેકનિકલ સમજ](images/scenes/technical/06/05.webp)
 
 > **ચિત્ર 6.5 — વાર્તા ↔ ટેકનિક:** "નવરો" = "પૂરું"? → Root cause = ખોટી ધારણા, લક્ષણ નહીં
 <!-- scene-image:6:5:end -->
@@ -272,6 +282,8 @@ sequenceDiagram
 
 ![પ્રકરણ 6, દૃશ્ય 6: પગલું 4: સુધાર. "દુકાન બંધ" અને "ઓર્ડર રદ" એક નથી — Maintainer step 4 • Correct lifetime](images/scenes/06/06.webp)
 
+![પ્રકરણ 6, દૃશ્ય 6 — ટેકનિકલ સમજ](images/scenes/technical/06/06.webp)
+
 > **ચિત્ર 6.6 — વાર્તા ↔ ટેકનિક:** દુકાન બંધ ≠ ઓર્ડર રદ → Fiber state (plugin નું જીવન), `signal.aborted` (turn) નહીં
 <!-- scene-image:6:6:end -->
 
@@ -315,6 +327,8 @@ Design: runner નું પોતાનું fiber `ACTIVE` ન હોય ([`F
 <a id="scene-6-7"></a>
 
 ![પ્રકરણ 6, દૃશ્ય 7: પગલું 5: સાબિતી, અને એક પ્રામાણિક કબૂલાત — Maintainer step 5 • Proof and limits](images/scenes/06/07.webp)
+
+![પ્રકરણ 6, દૃશ્ય 7 — ટેકનિકલ સમજ](images/scenes/technical/06/07.webp)
 
 > **ચિત્ર 6.7 — વાર્તા ↔ ટેકનિક:** નકલી તિજોરી પણ ઉતરી ગઈ → Test fix વગર fail થાય; નામ જે ખરેખર ચકાસે તે કહે
 <!-- scene-image:6:7:end -->
@@ -363,6 +377,8 @@ Design: runner નું પોતાનું fiber `ACTIVE` ન હોય ([`F
 <a id="scene-6-8"></a>
 
 ![પ્રકરણ 6, દૃશ્ય 8: પગલું 6: અસર. "છેલ્લી ઘંટડી" ની રાહ જોનારા — Maintainer step 6 • Downstream contract](images/scenes/06/08.webp)
+
+![પ્રકરણ 6, દૃશ્ય 8 — ટેકનિકલ સમજ](images/scenes/technical/06/08.webp)
 
 > **ચિત્ર 6.8 — વાર્તા ↔ ટેકનિક:** છેલ્લી ઘંટડી → Machine-readable output બદલાય = callers પર અસર; લખો
 <!-- scene-image:6:8:end -->

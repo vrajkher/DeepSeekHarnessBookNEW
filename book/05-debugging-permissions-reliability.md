@@ -53,6 +53,8 @@ flowchart TD
 
 ![પ્રકરણ 5, દૃશ્ય 1: પહેલો ભેદ: ચિઠ્ઠી પાછી, કે ઓર્ડર બંધ? — Error scope • Tool / Turn](images/scenes/05/01.webp)
 
+![પ્રકરણ 5, દૃશ્ય 1 — ટેકનિકલ સમજ](images/scenes/technical/05/01.webp)
+
 > **ચિત્ર 5.1 — વાર્તા ↔ ટેકનિક:** થાળી પીરસાઈ કે ઓર્ડર અટક્યો → Tool-level error → `tool/result`; turn-level → retry કે `turn/end`
 <!-- scene-image:5:1:end -->
 
@@ -77,6 +79,8 @@ flowchart TD
 <a id="scene-5-2"></a>
 
 ![પ્રકરણ 5, દૃશ્ય 2: "દાળ ખારી કેમ થઈ?": છ સાધન — Debugging evidence • Identify the owner](images/scenes/05/02.webp)
+
+![પ્રકરણ 5, દૃશ્ય 2 — ટેકનિકલ સમજ](images/scenes/technical/05/02.webp)
 
 > **ચિત્ર 5.2 — વાર્તા ↔ ટેકનિક:** "દાળ ખારી કેમ?" → છ સાધન, છ સ્તર; અનુમાન નહીં
 <!-- scene-image:5:2:end -->
@@ -114,6 +118,8 @@ flowchart TD
 
 ![પ્રકરણ 5, દૃશ્ય 3: "એવું કોઈ ખાનું જ નથી": unavailable tool — Unavailable tool • UNKNOWN_TOOL](images/scenes/05/03.webp)
 
+![પ્રકરણ 5, દૃશ્ય 3 — ટેકનિકલ સમજ](images/scenes/technical/05/03.webp)
+
 > **ચિત્ર 5.3 — વાર્તા ↔ ટેકનિક:** ખોટું ખાનું → `UNKNOWN_TOOL`; turn `completed`
 <!-- scene-image:5:3:end -->
 
@@ -144,6 +150,8 @@ TOOL_NAME=read_everything bash tmp/book-labs/request-trace/run-mock.sh
 
 ![પ્રકરણ 5, દૃશ્ય 4: "ફોર્મ અધૂરું": invalid input — Invalid input • Schema / Value](images/scenes/05/04.webp)
 
+![પ્રકરણ 5, દૃશ્ય 4 — ટેકનિકલ સમજ](images/scenes/technical/05/04.webp)
+
 > **ચિત્ર 5.4 — વાર્તા ↔ ટેકનિક:** અધૂરું ફોર્મ → `INVALID_ARGS`; tool body પહેલાં
 <!-- scene-image:5:4:end -->
 
@@ -170,6 +178,8 @@ TOOL_ARGS='{"path":"README.md"}' bash tmp/book-labs/request-trace/run-mock.sh
 <a id="scene-5-5"></a>
 
 ![પ્રકરણ 5, દૃશ્ય 5: ફોનની ત્રણ મુશ્કેલી: provider error — Provider errors • Classify before retry](images/scenes/05/05.webp)
+
+![પ્રકરણ 5, દૃશ્ય 5 — ટેકનિકલ સમજ](images/scenes/technical/05/05.webp)
 
 > **ચિત્ર 5.5 — વાર્તા ↔ ટેકનિક:** વ્યસ્ત લાઈન vs ખોટું card → Retryable codes જ retry; 5 વાર, backoff + jitter
 <!-- scene-image:5:5:end -->
@@ -236,6 +246,8 @@ Observed delays (0.5 → 1 → 2 → 4 → 8 s, થોડો jitter) આ backoff
 
 ![પ્રકરણ 5, દૃશ્ય 6: લાઈટ ગઈ: interrupted execution — Cancellation • Propagate signal](images/scenes/05/06.webp)
 
+![પ્રકરણ 5, દૃશ્ય 6 — ટેકનિકલ સમજ](images/scenes/technical/05/06.webp)
+
 > **ચિત્ર 5.6 — વાર્તા ↔ ટેકનિક:** લાઈટ ગઈ → `SIGINT` → exit 130; cancel → abort → throw → `finally`
 <!-- scene-image:5:6:end -->
 
@@ -293,6 +305,8 @@ SIGINT → `shutdown.interrupt(130)` → root fiber dispose → agent loop ન�
 <a id="scene-5-7"></a>
 
 ![પ્રકરણ 5, દૃશ્ય 7: રાતની પાળી: permissions અને sandbox — Approval • Sandbox boundary](images/scenes/05/07.webp)
+
+![પ્રકરણ 5, દૃશ્ય 7 — ટેકનિકલ સમજ](images/scenes/technical/05/07.webp)
 
 > **ચિત્ર 5.7 — વાર્તા ↔ ટેકનિક:** રાતની પાળી → Fail closed; લખવા પર વાડ, **વાંચવું ખુલ્લું**
 <!-- scene-image:5:7:end -->
@@ -383,6 +397,8 @@ Base bundle `DSH_PERMISSION_MODE` ન હોય તો `workspace-write` અન�
 
 ![પ્રકરણ 5, દૃશ્ય 8: agency ને ચોપડાનાં પાનાં: data boundary — Data boundary • Model request leaves process](images/scenes/05/08.webp)
 
+![પ્રકરણ 5, દૃશ્ય 8 — ટેકનિકલ સમજ](images/scenes/technical/05/08.webp)
+
 > **ચિત્ર 5.8 — વાર્તા ↔ ટેકનિક:** ચોપડાનાં પાનાં બહાર → Data boundary ≠ permission; row disable
 <!-- scene-image:5:8:end -->
 
@@ -412,6 +428,8 @@ Telemetry: `session-telemetry-otel` row default `FEEDBACK_ONLY` mode માં �
 <a id="scene-5-9"></a>
 
 ![પ્રકરણ 5, દૃશ્ય 9: ત્રણ ચિઠ્ઠી એકસાથે: concurrency — Concurrency • Parallel work / Ordered results](images/scenes/05/09.webp)
+
+![પ્રકરણ 5, દૃશ્ય 9 — ટેકનિકલ સમજ](images/scenes/technical/05/09.webp)
 
 > **ચિત્ર 5.9 — વાર્તા ↔ ટેકનિક:** ત્રણ ચિઠ્ઠી એકસાથે → `isConcurrencySafe` → parallel; results model order માં
 <!-- scene-image:5:9:end -->

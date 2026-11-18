@@ -38,6 +38,8 @@ flowchart LR
 
 ![પ્રકરણ 2, દૃશ્ય 1: સવારે છ વાગ્યે: બે ઘડિયાળ — Startup • Runtime](images/scenes/02/01.webp)
 
+![પ્રકરણ 2, દૃશ્ય 1 — ટેકનિકલ સમજ](images/scenes/technical/02/01.webp)
+
 > **ચિત્ર 2.1 — વાર્તા ↔ ટેકનિક:** બે ઘડિયાળ → Startup અને request અલગ સમય, અલગ નિષ્ફળતા
 <!-- scene-image:2:1:end -->
 
@@ -67,6 +69,8 @@ flowchart LR
 <a id="scene-2-2"></a>
 
 ![પ્રકરણ 2, દૃશ્ય 2: ક્રમ નથી, ફક્ત શરત: context, service, inject — Context • Service • inject](images/scenes/02/02.webp)
+
+![પ્રકરણ 2, દૃશ્ય 2 — ટેકનિકલ સમજ](images/scenes/technical/02/02.webp)
 
 > **ચિત્ર 2.2 — વાર્તા ↔ ટેકનિક:** ક્રમ નહીં, શરત → ક્રમ ફક્ત `inject` થી; rows એકસાથે શરૂ થાય
 <!-- scene-image:2:2:end -->
@@ -100,6 +104,8 @@ flowchart LR
 <a id="scene-2-3"></a>
 
 ![પ્રકરણ 2, દૃશ્ય 3: આજનું મેનુ: પાંચ થર — Composition layers • Patch by id](images/scenes/02/03.webp)
+
+![પ્રકરણ 2, દૃશ્ય 3 — ટેકનિકલ સમજ](images/scenes/technical/02/03.webp)
 
 > **ચિત્ર 2.3 — વાર્તા ↔ ટેકનિક:** મેનુના પાંચ થર → બંડલ → પ્રોફાઇલ → ઘર → પેચ → ટેલિમેટ્રી; પાછળનો જીતે
 <!-- scene-image:2:3:end -->
@@ -212,6 +218,8 @@ Headless profile ના પહેલા boot પર Harness આ file બના�
 
 ![પ્રકરણ 2, દૃશ્ય 4: એક ખુરશી પર બે જણ: service registration — One service name • Duplicate is error](images/scenes/02/04.webp)
 
+![પ્રકરણ 2, દૃશ્ય 4 — ટેકનિકલ સમજ](images/scenes/technical/02/04.webp)
+
 > **ચિત્ર 2.4 — વાર્તા ↔ ટેકનિક:** એક ખુરશી પર બે જણ → Duplicate service = error, નામ સાથે
 <!-- scene-image:2:4:end -->
 
@@ -245,6 +253,8 @@ Headless profile ના પહેલા boot પર Harness આ file બના�
 <a id="scene-2-5"></a>
 
 ![પ્રકરણ 2, દૃશ્ય 5: હાજરી-કાર્ડ: fiber — Fiber lifecycle • PENDING ≠ FAILED](images/scenes/02/05.webp)
+
+![પ્રકરણ 2, દૃશ્ય 5 — ટેકનિકલ સમજ](images/scenes/technical/02/05.webp)
 
 > **ચિત્ર 2.5 — વાર્તા ↔ ટેકનિક:** હાજરી-કાર્ડ → `PENDING` (રાહ) ≠ `FAILED` (throw)
 <!-- scene-image:2:5:end -->
@@ -289,6 +299,8 @@ stateDiagram-v2
 
 ![પ્રકરણ 2, દૃશ્ય 6: નોકરી છોડતો કર્મચારી: effects અને cleanup — Effects • LIFO cleanup](images/scenes/02/06.webp)
 
+![પ્રકરણ 2, દૃશ્ય 6 — ટેકનિકલ સમજ](images/scenes/technical/02/06.webp)
+
 > **ચિત્ર 2.6 — વાર્તા ↔ ટેકનિક:** નોકરી છોડતો કર્મચારી → Registrations are effects; disposal LIFO
 <!-- scene-image:2:6:end -->
 
@@ -312,6 +324,8 @@ stateDiagram-v2
 <a id="scene-2-7"></a>
 
 ![પ્રકરણ 2, દૃશ્ય 7: પાંચ ઘંટડી: events — Events • Five dispatch modes](images/scenes/02/07.webp)
+
+![પ્રકરણ 2, દૃશ્ય 7 — ટેકનિકલ સમજ](images/scenes/technical/02/07.webp)
 
 > **ચિત્ર 2.7 — વાર્તા ↔ ટેકનિક:** પાંચ ઘંટડી → Dispatch mode = event નો contract
 <!-- scene-image:2:7:end -->
@@ -346,6 +360,8 @@ Event નો dispatch mode તેના public contract નો ભાગ છે;
 <a id="scene-2-8"></a>
 
 ![પ્રકરણ 2, દૃશ્ય 8: ખાલી ઇમારત અને ચાલતું ભોજનાલય: Cordis vs Harness — Cordis framework • Harness composition • Scope](images/scenes/02/08.webp)
+
+![પ્રકરણ 2, દૃશ્ય 8 — ટેકનિકલ સમજ](images/scenes/technical/02/08.webp)
 
 > **ચિત્ર 2.8 — વાર્તા ↔ ટેકનિક:** ખાલી ઇમારત → Cordis નું માળખું; ચાલતું ભોજનાલય → Harness ની ગોઠવણી. Scope chain પહેલાં, root પછી, નહીં તો error.
 <!-- scene-image:2:8:end -->

@@ -49,6 +49,8 @@
 
 ![પ્રકરણ 1, દૃશ્ય 1: ટેબલ 4: મહારાજ પાસે બે વાર કેમ જવું પડ્યું? — 1 turn • 2 steps • Harness runs tools](images/scenes/01/01.webp)
 
+![પ્રકરણ 1, દૃશ્ય 1 — ટેકનિકલ સમજ](images/scenes/technical/01/01.webp)
+
 > **ચિત્ર 1.1 — વાર્તા ↔ ટેકનિક:** મહારાજ બે વાર બોલે, વચ્ચે કોઠારમાંથી ચોપડી આવે → એક turn માં બે steps; tool model નહીં, harness ચલાવે.
 <!-- scene-image:1:1:end -->
 
@@ -88,6 +90,8 @@ README ઓર્ડરમાં:
 <a id="scene-1-2"></a>
 
 ![પ્રકરણ 1, દૃશ્ય 2: ફરજ-પત્રક: દરેક કામનો એક માલિક — Ownership • Request sequence](images/scenes/01/02.webp)
+
+![પ્રકરણ 1, દૃશ્ય 2 — ટેકનિકલ સમજ](images/scenes/technical/01/02.webp)
 
 > **ચિત્ર 1.2 — વાર્તા ↔ ટેકનિક:** ફરજ-પત્રક → દરેક પગલાનો માલિક ઓળખો: loop, session, prompt, adapter, tools અને filesystem.
 <!-- scene-image:1:2:end -->
@@ -158,6 +162,8 @@ sequenceDiagram
 
 ![પ્રકરણ 1, દૃશ્ય 3: દરવાજો: ગ્રાહકના શબ્દો અંદર કેવી રીતે પહોંચે? — CLI → Profile → Plugins](images/scenes/01/03.webp)
 
+![પ્રકરણ 1, દૃશ્ય 3 — ટેકનિકલ સમજ](images/scenes/technical/01/03.webp)
+
 > **ચિત્ર 1.3 — વાર્તા ↔ ટેકનિક:** Parcel બારી → CLI task સ્વીકારે છે; headless profile plugins ની ગોઠવણી છે.
 <!-- scene-image:1:3:end -->
 
@@ -204,6 +210,8 @@ Headless profile ના અંતે મેનુમાં એક લીટી �
 
 ![પ્રકરણ 1, દૃશ્ય 4: ઓર્ડર-પેટી: રમેશભાઈ વ્યસ્ત હોય તો ઓર્ડર ક્યાં જાય? — inject • Inbox • followup / claim](images/scenes/01/04.webp)
 
+![પ્રકરણ 1, દૃશ્ય 4 — ટેકનિકલ સમજ](images/scenes/technical/01/04.webp)
+
 > **ચિત્ર 1.4 — વાર્તા ↔ ટેકનિક:** ઓર્ડર-પેટી → followup સંદેશ મૂકે છે; loop સલામત ક્ષણે claim કરે છે; inject જરૂરી services ની રાહ જુએ છે.
 <!-- scene-image:1:4:end -->
 
@@ -243,6 +251,8 @@ Headless profile ના અંતે મેનુમાં એક લીટી �
 <a id="scene-1-5"></a>
 
 ![પ્રકરણ 1, દૃશ્ય 5: લાઈટ ગઈ: અધૂરો ઓર્ડર અને પપ્પાનો નિયમ — Lifecycle pairs • finally](images/scenes/01/05.webp)
+
+![પ્રકરણ 1, દૃશ્ય 5 — ટેકનિકલ સમજ](images/scenes/technical/01/05.webp)
 
 > **ચિત્ર 1.5 — વાર્તા ↔ ટેકનિક:** અધૂરો ઓર્ડર પણ ચોપડામાં બંધ થાય → start/end અને tool call/result ની જોડી finally તથા recovery જાળવે છે.
 <!-- scene-image:1:5:end -->
@@ -302,6 +312,8 @@ session.append('turn/end', { turn, reason })            // અંત — error �
 
 ![પ્રકરણ 1, દૃશ્ય 6: રમેશભાઈની તૈયારી: મહારાજ પાસે ખાલી હાથે ન જવાય — preStep • Resolve • Assemble • Guard](images/scenes/01/06.webp)
 
+![પ્રકરણ 1, દૃશ્ય 6 — ટેકનિકલ સમજ](images/scenes/technical/01/06.webp)
+
 > **ચિત્ર 1.6 — વાર્તા ↔ ટેકનિક:** મહારાજ પાસે જતાં પહેલાં તૈયારી → દરેક step માં model, tools અને prompt ફરી નક્કી થાય; waterfall રોકી શકે છે.
 <!-- scene-image:1:6:end -->
 
@@ -337,6 +349,8 @@ session.append('turn/end', { turn, reason })            // અંત — error �
 <a id="scene-1-7"></a>
 
 ![પ્રકરણ 1, દૃશ્ય 7: "લસણ વગર" નો ઝઘડો: step() ના છ ભાગ — Log → Derive → Freeze → Stream → Settle](images/scenes/01/07.webp)
+
+![પ્રકરણ 1, દૃશ્ય 7 — ટેકનિકલ સમજ](images/scenes/technical/01/07.webp)
 
 > **ચિત્ર 1.7 — વાર્તા ↔ ટેકનિક:** લસણ વગરની વાત પહેલાં લખો, પછી નકલ પર સિક્કો → model history log માંથી derive અને freeze થાય છે.
 <!-- scene-image:1:7:end -->
@@ -440,6 +454,8 @@ flowchart LR
 
 ![પ્રકરણ 1, દૃશ્ય 8: કોઠાર: ચિઠ્ઠીથી સામાન સુધી (ટૂંકમાં) — Tool call → Pipeline → Tool result](images/scenes/01/08.webp)
 
+![પ્રકરણ 1, દૃશ્ય 8 — ટેકનિકલ સમજ](images/scenes/technical/01/08.webp)
+
 > **ચિત્ર 1.8 — વાર્તા ↔ ટેકનિક:** ચિઠ્ઠીથી સામાન અને પાછો જવાબ → પહેલાં tool/call, પછી policy અને execution, છેલ્લે tool/result.
 <!-- scene-image:1:8:end -->
 
@@ -457,6 +473,8 @@ flowchart LR
 <a id="scene-1-9"></a>
 
 ![પ્રકરણ 1, દૃશ્ય 9: વાત હવામાં, હિસાબ ચોપડામાં — Live stream • Durable log](images/scenes/01/09.webp)
+
+![પ્રકરણ 1, દૃશ્ય 9 — ટેકનિકલ સમજ](images/scenes/technical/01/09.webp)
 
 > **ચિત્ર 1.9 — વાર્તા ↔ ટેકનિક:** Intercom ની વાત અને ચોપડાની પાકી નોંધ → live chunks ક્ષણિક છે; session ની નોંધ persist થાય છે.
 <!-- scene-image:1:9:end -->

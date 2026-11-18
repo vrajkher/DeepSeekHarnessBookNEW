@@ -70,6 +70,8 @@ flowchart LR
 
 ![પ્રકરણ 7, દૃશ્ય 1: અરીસો: bank નું credit, તમારું debit — One account perspective • Normalize signs](images/scenes/07/01.webp)
 
+![પ્રકરણ 7, દૃશ્ય 1 — ટેકનિકલ સમજ](images/scenes/technical/07/01.webp)
+
 > **ચિત્ર 7.1 — વાર્તા ↔ ટેકનિક:** અરીસો → Bank `credit − debit`, Tally `debit − credit` → એક signed amount
 <!-- scene-image:7:1:end -->
 
@@ -103,6 +105,8 @@ flowchart LR
 
 ![પ્રકરણ 7, દૃશ્ય 2: એક પૈસો, બે તારીખ, ત્રણ શૂન્ય: normalize — Normalize • Paise / Date / Reference](images/scenes/07/02.webp)
 
+![પ્રકરણ 7, દૃશ્ય 2 — ટેકનિકલ સમજ](images/scenes/technical/07/02.webp)
+
 > **ચિત્ર 7.2 — વાર્તા ↔ ટેકનિક:** એક પૈસો, બે તારીખ, ત્રણ શૂન્ય → Integer paise; ISO date, timezone વગર; ref uppercase, leading zeros દૂર
 <!-- scene-image:7:2:end -->
 
@@ -128,6 +132,8 @@ flowchart LR
 <a id="scene-7-3"></a>
 
 ![પ્રકરણ 7, દૃશ્ય 3: મુનીમજીનો ક્રમ: છ નિયમ — V1 → D1 → R1 → R2 → A1 → U1](images/scenes/07/03.webp)
+
+![પ્રકરણ 7, દૃશ્ય 3 — ટેકનિકલ સમજ](images/scenes/technical/07/03.webp)
 
 > **ચિત્ર 7.3 — વાર્તા ↔ ટેકનિક:** મુનીમજીનો ક્રમ → V1 → D1 → R1 → R2 → A1 → U1; મજબૂત પુરાવો પહેલાં
 <!-- scene-image:7:3:end -->
@@ -169,6 +175,8 @@ flowchart LR
 
 ![પ્રકરણ 7, દૃશ્ય 4: મણકા અને દોરા: "પહેલો આવ્યો તે લઈ ગયો" કેમ ખોટું — Connected components • Ambiguity](images/scenes/07/04.webp)
 
+![પ્રકરણ 7, દૃશ્ય 4 — ટેકનિકલ સમજ](images/scenes/technical/07/04.webp)
+
 > **ચિત્ર 7.4 — વાર્તા ↔ ટેકનિક:** "પહેલો આવ્યો તે લઈ ગયો" → Greedy નહીં; connected components; 1+1 = match
 <!-- scene-image:7:4:end -->
 
@@ -209,6 +217,8 @@ flowchart LR
 <a id="scene-7-5"></a>
 
 ![પ્રકરણ 7, દૃશ્ય 5: આંગળીની ચકાસણી: fixtures અને golden report — Fixtures • Golden report • Invariant](images/scenes/07/05.webp)
+
+![પ્રકરણ 7, દૃશ્ય 5 — ટેકનિકલ સમજ](images/scenes/technical/07/05.webp)
 
 > **ચિત્ર 7.5 — વાર્તા ↔ ટેકનિક:** આંગળીની ચકાસણી → હાથથી ચકાસેલો golden report + સ્વતંત્ર invariant
 <!-- scene-image:7:5:end -->
@@ -268,6 +278,8 @@ REJECTED [V1] bank L11: COLUMN_COUNT: expected 7 fields, found 3
 <a id="scene-7-6"></a>
 
 ![પ્રકરણ 7, દૃશ્ય 6: બીજી bank નો કાગળ: harness wiring — Column mapping • Fail loud](images/scenes/07/06.webp)
+
+![પ્રકરણ 7, દૃશ્ય 6 — ટેકનિકલ સમજ](images/scenes/technical/07/06.webp)
 
 > **ચિત્ર 7.6 — વાર્તા ↔ ટેકનિક:** ગાયબ ₹900 → ખૂટતો column = config error, શૂન્ય નહીં
 <!-- scene-image:7:6:end -->
@@ -329,6 +341,8 @@ TOOL_NAME=reconcile_bank_tally TOOL_ARGS='{"bank_path":"tmp/book-labs/reconcile/
 <a id="scene-7-7"></a>
 
 ![પ્રકરણ 7, દૃશ્ય 7: ફક્ત વાંચવાની ચાવી: ભવિષ્યનો Tally connector — Future design only • Read-only capability](images/scenes/07/07.webp)
+
+![પ્રકરણ 7, દૃશ્ય 7 — ટેકનિકલ સમજ](images/scenes/technical/07/07.webp)
 
 > **ચિત્ર 7.7 — વાર્તા ↔ ટેકનિક:** ફક્ત વાંચવાની ચાવી → Interface માં write method જ નહીં; provider swap = config **ફક્ત ભવિષ્યની design; અમલમાં મૂક્યું નથી.**
 <!-- scene-image:7:7:end -->
