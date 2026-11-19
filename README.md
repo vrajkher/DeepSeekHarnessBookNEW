@@ -8,7 +8,7 @@
 - **API key જરૂરી નથી.** બધી labs repository ના keyless mock provider સાથે ચાલે છે.
 
 > 📖 **રંગીન web આવૃત્તિ — online વાંચો:** <https://claude.ai/artifact/53w4tkgs3LB5a3KYDwsUNT>
-> આખું પુસ્તક એક સુંદર પાનામાં: થાળીનું ચિત્ર, રંગીન વાર્તા-ખાનાં, chapter cards, diagrams, light/dark mode, અક્ષરનું કદ નાનું-મોટું, અને phone પર પણ સરસ દેખાય. આ પાનું [`tools/build-artifact.mjs`](tools/build-artifact.mjs) આ repository ની files પરથી બનાવે છે.
+> આખું પુસ્તક એક સુંદર પાનામાં: થાળીનું ચિત્ર, દરેક દૃશ્યનાં ચાર રંગીન પગથિયાં (🎬 ઘટના, ❓ પ્રશ્ન, 💻 code, 🔬 expert નજર), chapter cards, diagrams, light/dark mode, અક્ષરનું કદ નાનું-મોટું, અને phone પર પણ સરસ દેખાય. છેલ્લે 2026-11-10 ના "વાર્તા પોતે જ technical" પુનર્લેખન સાથે ફરી publish થયું. આ પાનું [`tools/build-artifact.mjs`](tools/build-artifact.mjs) આ repository ની files પરથી બનાવે છે.
 
 > **Verification marks:** ✅ pinned source વાંચીને ચકાસ્યું · 🧪 આ પુસ્તક લખતી વખતે ચલાવીને ચકાસ્યું · ⚠️ ચકાસ્યું નથી.
 > Repository ની [SAFETY.md](https://github.com/deepseek-ai/deepseek-harness/blob/fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159/SAFETY.md) પહેલાં વાંચો: આ developer-preview software model-generated commands ચલાવી શકે છે.
