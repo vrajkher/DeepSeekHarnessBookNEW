@@ -10,6 +10,9 @@
 > 📖 **રંગીન web આવૃત્તિ — online વાંચો:** <https://claude.ai/artifact/53w4tkgs3LB5a3KYDwsUNT>
 > આખું પુસ્તક એક સુંદર પાનામાં: થાળીનું ચિત્ર, રંગીન વાર્તા-ખાનાં, chapter cards, diagrams, light/dark mode, અક્ષરનું કદ નાનું-મોટું, અને phone પર પણ સરસ દેખાય. આ પાનું [`tools/build-artifact.mjs`](tools/build-artifact.mjs) આ repository ની files પરથી બનાવે છે.
 
+> 🎛️ **Harness Explainer — interactive ચિત્ર:** <https://claude.ai/artifact/1GbV4CgP7Gbxksu7JAT8aZ>
+> Transformer Explainer ની શૈલીમાં: ▶ દબાવો અને એક task ને દરવાજાથી થાળી સુધી વહેતો જુઓ, box પર click કરી અંદર zoom કરો, 9 ઘટનાઓ (429 retry, 401, Ctrl+C, sandbox…) બદલો, અને દરેક પ્રકરણનું નાનું interactive ચિત્ર જુઓ. બધું પુસ્તકના સાચા recorded runs (`evidence/`) માંથી — [`tools/build-explainer.mjs`](tools/build-explainer.mjs) બનાવે છે.
+
 > **Verification marks:** ✅ pinned source વાંચીને ચકાસ્યું · 🧪 આ પુસ્તક લખતી વખતે ચલાવીને ચકાસ્યું · ⚠️ ચકાસ્યું નથી.
 > Repository ની [SAFETY.md](https://github.com/deepseek-ai/deepseek-harness/blob/fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159/SAFETY.md) પહેલાં વાંચો: આ developer-preview software model-generated commands ચલાવી શકે છે.
 
@@ -128,6 +131,12 @@ node tools/verify-mermaid.mjs <directory with mermaid and jsdom in node_modules>
 
 ```bash
 node tools/build-artifact.mjs <path to marked.esm.js> book.html
+```
+
+Interactive Harness Explainer ફરી બનાવવા (કોઈ dependency નહીં):
+
+```bash
+node tools/build-explainer.mjs harness-explainer.html
 ```
 
 ## License
