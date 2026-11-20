@@ -1,0 +1,908 @@
+<title>DeepSeek Harness Explainer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@500;700;800&family=Hind+Vadodara:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: Transformer-Explainer style. A sticky control bar, one big left-to-right flow of the
+   harness (the "river"), a detail panel that zooms into whatever you click, a live order book,
+   then an article with one small interactive picture per chapter. Same colour language as the
+   book: haldi = story/model, indigo = term/ledger, leaf = analogy/tools, chili = failure, sky = tip. */
+:root {
+  --bg: #f4f5fa; --surface: #ffffff; --ink: #1e1b31; --muted: #5e5a76; --rule: #e1e0ec;
+  --accent: #3f33a6; --accent-tint: #ecebfb;
+  --haldi: #b97a06; --haldi-tint: #fff4d6; --haldi-strong: #e9a71a;
+  --kesar: #c4561b; --kesar-tint: #fde9dc;
+  --leaf: #2c7a4b; --leaf-tint: #e3f3e8;
+  --chili: #bd3329; --chili-tint: #fde6e3;
+  --sky: #1d6b86; --sky-tint: #e1f1f7;
+  --dim: #c9c7d8;
+  --term-bg: #1d1a30; --term-fg: #e8e6f6; --term-muted: #9c98bd;
+  --shadow: 0 1px 2px rgba(30,27,49,.06), 0 8px 24px rgba(30,27,49,.07);
+  --font-display: "Anek Gujarati", "Noto Sans Gujarati", system-ui, sans-serif;
+  --font-body: "Hind Vadodara", "Noto Sans Gujarati", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #13121d; --surface: #1b1a29; --ink: #ecebf6; --muted: #a8a5c2; --rule: #2e2c44;
+    --accent: #aea3ff; --accent-tint: #26234a;
+    --haldi: #ffcf6b; --haldi-tint: #33290f; --haldi-strong: #f2b437;
+    --kesar: #ffab7a; --kesar-tint: #3a2216;
+    --leaf: #82d9a3; --leaf-tint: #15301f;
+    --chili: #ff958b; --chili-tint: #3b1916;
+    --sky: #86d3ec; --sky-tint: #102f3a;
+    --dim: #3d3b55;
+    --term-bg: #0e0d17; --term-fg: #e8e6f6; --term-muted: #8f8bb3;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #13121d; --surface: #1b1a29; --ink: #ecebf6; --muted: #a8a5c2; --rule: #2e2c44;
+  --accent: #aea3ff; --accent-tint: #26234a;
+  --haldi: #ffcf6b; --haldi-tint: #33290f; --haldi-strong: #f2b437;
+  --kesar: #ffab7a; --kesar-tint: #3a2216;
+  --leaf: #82d9a3; --leaf-tint: #15301f;
+  --chili: #ff958b; --chili-tint: #3b1916;
+  --sky: #86d3ec; --sky-tint: #102f3a;
+  --dim: #3d3b55;
+  --term-bg: #0e0d17; --term-fg: #e8e6f6; --term-muted: #8f8bb3;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.7; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--surface); }
+.wrap { max-width: 82rem; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* ---------- control bar ---------- */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--rule); }
+.bar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; padding-block: .55rem; }
+.brand { font: 800 1.15rem/1.1 var(--font-display); margin: 0; white-space: nowrap; }
+.brand span { color: var(--haldi); }
+.ctl { display: flex; align-items: center; gap: .35rem; flex-wrap: wrap; }
+.ctl label { font-size: .78rem; color: var(--muted); }
+button, select { font: 600 .88rem var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 10px; padding: .35rem .7rem; cursor: pointer; }
+button:hover, select:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+button[aria-pressed="true"] { background: var(--accent-tint); border-color: var(--accent); color: var(--accent); }
+button:focus-visible, select:focus-visible, a:focus-visible, .node:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.seg-toggle { display: inline-flex; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+.seg-toggle button { border: 0; border-radius: 0; background: var(--surface); }
+.seg-toggle button[aria-pressed="true"] { background: var(--accent); color: var(--surface); }
+.spacer { flex: 1; }
+
+/* ---------- hero / input ---------- */
+.intro { padding-block: 1.6rem .6rem; display: grid; gap: .4rem; }
+.intro h1 { font: 800 clamp(1.7rem, 4vw, 2.6rem)/1.15 var(--font-display); margin: 0; text-wrap: balance; }
+.intro h1 em { font-style: normal; color: var(--haldi); }
+.intro p { margin: 0; color: var(--muted); max-width: 52rem; }
+.replay-note { display: inline-flex; gap: .4rem; align-items: center; font-size: .82rem; color: var(--haldi); background: var(--haldi-tint); padding: .15rem .65rem; border-radius: 999px; width: fit-content; }
+.scen { display: flex; flex-wrap: wrap; gap: .4rem; padding-block: .6rem; }
+.scen button { border-radius: 999px; font-weight: 600; }
+.scen button.bad { color: var(--chili); }
+.scen button.warn { color: var(--kesar); }
+.scen button.ok { color: var(--leaf); }
+.scen button[aria-pressed="true"] { color: var(--surface); background: var(--accent); border-color: var(--accent); }
+.scen-story { margin: 0 0 .8rem; padding: .55rem .9rem; border-radius: 12px; background: var(--haldi-tint); font-size: .95rem; }
+.scen-story b { color: var(--haldi); }
+
+.taskrow { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .6rem; align-items: center; background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: .55rem .8rem; margin-bottom: .7rem; }
+.taskrow .lbl { font: 700 .82rem var(--font-display); color: var(--muted); }
+.taskrow .task { font-family: var(--font-mono); font-size: .9rem; overflow-wrap: anywhere; }
+.msgs { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; margin-bottom: 1rem; }
+.msgs .lbl { font-size: .8rem; color: var(--muted); margin-right: .2rem; }
+.chip { font-size: .8rem; font-weight: 600; padding: .15rem .6rem; border-radius: 999px; background: var(--tone-tint); color: var(--tone); border: 1px solid transparent; transition: opacity .3s; }
+.chip.off { opacity: .35; border: 1px dashed var(--tone); background: transparent; }
+.chip.hl { box-shadow: 0 0 0 2px var(--tone); }
+.count { font: 600 .8rem var(--font-mono); color: var(--accent); margin-left: .3rem; }
+
+.t-haldi { --tone: var(--haldi); --tone-tint: var(--haldi-tint); }
+.t-kesar { --tone: var(--kesar); --tone-tint: var(--kesar-tint); }
+.t-leaf  { --tone: var(--leaf);  --tone-tint: var(--leaf-tint); }
+.t-chili { --tone: var(--chili); --tone-tint: var(--chili-tint); }
+.t-sky   { --tone: var(--sky);   --tone-tint: var(--sky-tint); }
+.t-ink   { --tone: var(--accent); --tone-tint: var(--accent-tint); }
+
+/* ---------- stage ---------- */
+.stage { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 1rem; align-items: start; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 18px; box-shadow: var(--shadow); min-width: 0; }
+.flow-card { padding: .6rem; }
+.flow-head { display: flex; justify-content: space-between; gap: .5rem; flex-wrap: wrap; padding: .2rem .5rem .4rem; font-size: .8rem; color: var(--muted); }
+#flow { display: block; width: 100%; height: auto; }
+#flow text { font-family: var(--font-body); fill: var(--ink); }
+.node rect.box { fill: var(--surface); stroke: var(--dim); stroke-width: 2; transition: all .25s; }
+.node .l1 { font: 700 15px var(--font-display); }
+.node .l2 { font: 500 11px var(--font-mono); fill: var(--muted) !important; }
+.node { cursor: pointer; }
+.node.done rect.box { fill: var(--tone-tint); stroke: var(--tone); }
+.node.cur rect.box { fill: var(--tone-tint); stroke: var(--tone); stroke-width: 4; filter: drop-shadow(0 0 8px var(--tone)); }
+.node.sel rect.box { stroke-dasharray: 6 4; }
+.node.err rect.box { fill: var(--chili-tint); stroke: var(--chili); }
+.node.warn rect.box { fill: var(--kesar-tint); stroke: var(--kesar); }
+.node.todo { opacity: .55; }
+.node .badge { font: 700 12px var(--font-mono); }
+.node .badge-bg { fill: var(--kesar); }
+.node .badge-err { fill: var(--chili); }
+.node .badge-txt { fill: #fff !important; }
+.edge { fill: none; stroke: var(--dim); stroke-linecap: round; transition: stroke .3s; }
+.edge.lit { stroke: var(--haldi-strong); }
+.edge.dash { stroke-dasharray: 5 6; }
+.edge.err { stroke: var(--chili); }
+.edge-lbl { font: 600 11px var(--font-mono); fill: var(--muted) !important; }
+.lane { fill: var(--accent-tint); opacity: .55; }
+.lane-lbl { font: 700 12px var(--font-display); fill: var(--accent) !important; }
+#token { fill: var(--haldi-strong); filter: drop-shadow(0 0 6px var(--haldi-strong)); }
+
+.result { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .5rem; padding: .7rem; border-top: 1px solid var(--rule); }
+.res { background: var(--bg); border-radius: 12px; padding: .5rem .7rem; min-width: 0; }
+.res small { display: block; font-size: .72rem; color: var(--muted); letter-spacing: .04em; }
+.res b { font: 700 1.05rem var(--font-display); overflow-wrap: anywhere; }
+.res.wide { grid-column: 1 / -1; }
+.res .mono { font-family: var(--font-mono); font-size: .82rem; font-weight: 500; }
+.pill { display: inline-block; padding: .05rem .55rem; border-radius: 999px; font-weight: 700; background: var(--tone-tint); color: var(--tone); }
+
+.side { display: grid; gap: 1rem; }
+.detail { padding: 1rem 1.1rem; }
+.crumb { font-size: .78rem; color: var(--muted); display: flex; gap: .3rem; flex-wrap: wrap; align-items: center; }
+.crumb button { padding: .05rem .45rem; font-size: .76rem; border-radius: 6px; }
+.detail h2 { font: 800 1.35rem/1.25 var(--font-display); margin: .3rem 0 .2rem; }
+.detail .tech { font: 500 .82rem var(--font-mono); color: var(--muted); margin: 0 0 .6rem; }
+.co { border-radius: 12px; padding: .55rem .8rem; margin: .5rem 0; background: var(--tone-tint); }
+.co b { color: var(--tone); }
+.zoom { display: grid; gap: .3rem; margin: .6rem 0; padding: 0; list-style: none; counter-reset: z; }
+.zoom li { margin: 0; }
+.zoom button { width: 100%; text-align: left; display: grid; grid-template-columns: 1.6rem minmax(0,1fr); gap: .4rem; align-items: start; font-weight: 500; background: var(--bg); }
+.zoom button::before { counter-increment: z; content: counter(z); display: grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--accent-tint); color: var(--accent); font-weight: 700; font-size: .78rem; }
+.zoom button.stop::before { background: var(--chili-tint); color: var(--chili); content: "✘"; }
+.zoom button.pass::before { background: var(--leaf-tint); color: var(--leaf); }
+.code { background: var(--term-bg); color: var(--term-fg); border-radius: 12px; overflow-x: auto; margin: .5rem 0; }
+.code pre { margin: 0; padding: .7rem .9rem; font: .78rem/1.6 var(--font-mono); white-space: pre; }
+.src { font-size: .8rem; }
+a { color: var(--accent); text-underline-offset: .2em; overflow-wrap: anywhere; }
+
+.log { padding: .6rem .3rem .6rem .8rem; }
+.log h3, .mat h3 { font: 700 1rem var(--font-display); margin: 0 0 .4rem; }
+.log ol { list-style: none; margin: 0; padding: 0 .4rem 0 0; max-height: 22rem; overflow-y: auto; display: grid; gap: .15rem; }
+.log li { display: grid; grid-template-columns: 4.3rem minmax(0,1fr); gap: .5rem; font-size: .82rem; line-height: 1.45; padding: .2rem .35rem; border-radius: 8px; cursor: pointer; }
+.log li:hover { background: var(--bg); }
+.log li.now { background: var(--tone-tint); }
+.log time { font: 500 .74rem var(--font-mono); color: var(--muted); }
+.log .raw { display: block; font: 500 .7rem var(--font-mono); color: var(--muted); overflow-wrap: anywhere; }
+.log .empty { color: var(--muted); font-size: .85rem; padding: .3rem; cursor: default; display: block; }
+
+.mat { padding: .8rem 1rem; margin-top: 1rem; }
+.mat p { margin: 0 0 .5rem; font-size: .88rem; color: var(--muted); }
+.mat-scroll { overflow-x: auto; }
+.mat table { border-collapse: separate; border-spacing: 4px; font-size: .78rem; }
+.mat th { font-weight: 600; text-align: center; padding: .2rem .3rem; color: var(--muted); white-space: nowrap; }
+.mat th.row { text-align: left; color: var(--ink); }
+.mat td { width: 3.4rem; height: 1.8rem; border-radius: 6px; background: var(--bg); text-align: center; font-weight: 700; color: var(--tone); }
+.mat td.on { background: var(--tone-tint); box-shadow: inset 0 0 0 1.5px var(--tone); }
+.mat td.hl, .mat th.hl { outline: 2px solid var(--accent); }
+
+/* ---------- article ---------- */
+.article { padding-block: 2.5rem 3rem; display: grid; gap: 1.4rem; }
+.article > h2 { font: 800 1.7rem var(--font-display); margin: 0; }
+.sec { background: var(--surface); border: 1px solid var(--rule); border-radius: 20px; padding: clamp(1rem, 3vw, 2rem); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 1.5rem; align-items: start; }
+.sec-text h3 { font: 800 1.35rem/1.25 var(--font-display); margin: 0 0 .5rem; display: flex; gap: .55rem; align-items: center; }
+.sec-text h3 .n { display: grid; place-items: center; flex: none; width: 2.2rem; height: 2.2rem; border-radius: 50%; background: var(--tone-tint); color: var(--tone); font-size: 1.1rem; }
+.sec-text p { margin: 0 0 .7rem; }
+.sec-text .story { background: var(--haldi-tint); border-radius: 12px; padding: .5rem .8rem; font-size: .95rem; }
+.sec-text .more { font-size: .88rem; }
+.viz { min-width: 0; display: grid; gap: .6rem; }
+.viz .tools { display: flex; flex-wrap: wrap; gap: .35rem; }
+.viz svg { width: 100%; height: auto; display: block; }
+.viz svg text { font-family: var(--font-body); fill: var(--ink); }
+.viz .cap { font-size: .82rem; color: var(--muted); margin: 0; }
+.dots { display: grid; grid-template-columns: repeat(auto-fill, minmax(14px, 1fr)); gap: 5px; }
+.dot { aspect-ratio: 1; border-radius: 50%; background: var(--leaf); cursor: help; }
+.dot.pend { background: var(--haldi-strong); }
+.dot.fatal { background: var(--chili); box-shadow: 0 0 0 3px var(--chili-tint); }
+.dot.off { background: var(--dim); }
+.legend { display: flex; flex-wrap: wrap; gap: .3rem .9rem; font-size: .8rem; color: var(--muted); }
+.legend i { display: inline-block; width: .7rem; height: .7rem; border-radius: 50%; margin-right: .3rem; vertical-align: -1px; }
+.statusline { font-size: .9rem; padding: .45rem .75rem; border-radius: 10px; background: var(--bg); }
+.statusline b { color: var(--tone, var(--accent)); }
+.layers { display: grid; gap: .3rem; }
+.layer { padding: .35rem .7rem; border-radius: 10px; background: var(--tone-tint); color: var(--tone); font-weight: 600; font-size: .85rem; display: flex; justify-content: space-between; gap: .5rem; }
+.layer span { font: 500 .75rem var(--font-mono); color: var(--muted); }
+.stages { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; }
+.stage-chip { font-size: .8rem; font-weight: 600; padding: .25rem .6rem; border-radius: 10px; background: var(--bg); border: 1px solid var(--rule); }
+.stage-chip.pass { background: var(--leaf-tint); color: var(--leaf); border-color: transparent; }
+.stage-chip.stop { background: var(--chili-tint); color: var(--chili); border-color: var(--chili); }
+.stage-chip.skip { opacity: .35; }
+.arrow { color: var(--muted); font-size: .8rem; }
+.tbls { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.tbl { overflow-x: auto; border: 1px solid var(--rule); border-radius: 12px; }
+.tbl table { border-collapse: collapse; width: 100%; font-size: .74rem; font-variant-numeric: tabular-nums; }
+.tbl th, .tbl td { padding: .25rem .4rem; text-align: left; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+.tbl th { background: var(--accent-tint); color: var(--accent); }
+.tbl tr.r td { background: var(--tone-tint); color: var(--ink); }
+.tbl td.ln { color: var(--muted); font-family: var(--font-mono); }
+.report { background: var(--term-bg); color: var(--term-fg); border-radius: 12px; padding: .6rem .8rem; font: .74rem/1.55 var(--font-mono); white-space: pre; overflow-x: auto; margin: 0; }
+.toy { background: var(--term-bg); color: var(--term-fg); border-radius: 12px; padding: .6rem .8rem; font: .78rem/1.65 var(--font-mono); min-height: 14rem; overflow-x: auto; white-space: pre; margin: 0; }
+.toy .new { color: var(--haldi-strong); }
+.footer { text-align: center; color: var(--muted); font-size: .88rem; padding-block: 0 2.5rem; }
+
+@media (max-width: 960px) {
+  .stage { grid-template-columns: minmax(0, 1fr); }
+  .sec { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .tbls { grid-template-columns: minmax(0, 1fr); }
+  .bar .wrap { gap: .4rem .6rem; }
+  .brand { font-size: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="bar">
+  <div class="wrap">
+    <p class="brand">DeepSeek Harness <span>Explainer</span></p>
+    <div class="ctl" role="group" aria-label="Playback">
+      <button type="button" id="b-reset" title="શરૂઆતથી">⏮</button>
+      <button type="button" id="b-play" class="primary">▶ ચલાવો</button>
+      <button type="button" id="b-step" title="એક પગલું">⏭ એક પગલું</button>
+      <label for="speed">ઝડપ</label>
+      <select id="speed"><option value="1400">ધીમું</option><option value="700" selected>સામાન્ય</option><option value="300">ઝડપી</option></select>
+    </div>
+    <span class="spacer"></span>
+    <div class="seg-toggle" role="group" aria-label="નામ">
+      <button type="button" id="m-dish" aria-pressed="true">🍽️ ભોજનાલય</button>
+      <button type="button" id="m-tech" aria-pressed="false">⚙️ Technical</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro" aria-labelledby="h1">
+    <h1 id="h1">એક task harness માં <em>ક્યાં-ક્યાં</em> જાય છે?</h1>
+    <p>ઉપર ▶ દબાવો અને ઓર્ડરને દરવાજાથી થાળી સુધી વહેતો જુઓ. કોઈ પણ box પર click કરો એટલે તે અંદરથી ખૂલે. ઘટના બદલો એટલે રસ્તો બદલાય. નીચે દરેક પ્રકરણનું નાનું interactive ચિત્ર છે.</p>
+    <span class="replay-note">🧪 આ પુસ્તકના સાચા recorded runs નું replay છે — દરેક event અને સમય <code>evidence/</code> માંથી. Live harness નથી.</span>
+  </section>
+
+  <div class="scen" id="scen" role="group" aria-label="ઘટના પસંદ કરો"></div>
+  <p class="scen-story" id="scen-story"></p>
+
+  <div class="taskrow"><span class="lbl">Task</span><span class="task" id="task">આ repositoryનું README વાંચીને ગુજરાતી સાર આપો.</span></div>
+  <div class="msgs" id="msgs"></div>
+
+  <div class="stage">
+    <div>
+      <div class="card flow-card">
+        <div class="flow-head"><span id="flow-caption">▶ દબાવો — અથવા કોઈ box પર click કરો</span><span id="clock">+0ms</span></div>
+        <svg id="flow" role="img" aria-label="Harness માં request નો પ્રવાહ"></svg>
+        <div class="result" id="result"></div>
+      </div>
+      <div class="card mat" id="matrix"></div>
+    </div>
+    <div class="side">
+      <div class="card detail" id="detail" aria-live="polite"></div>
+      <div class="card log"><h3>📒 ઓર્ડર-ચોપડો (session log + trace)</h3><ol id="log"></ol></div>
+    </div>
+  </div>
+
+  <section class="article" aria-labelledby="art-h">
+    <h2 id="art-h">પ્રકરણ પ્રમાણે ચિત્રો</h2>
+    <div id="sections"></div>
+  </section>
+  <p class="footer">પુસ્તક: <a href="https://claude.ai/artifact/53w4tkgs3LB5a3KYDwsUNT" rel="noopener">રંગીન web આવૃત્તિ</a> · Source: <a href="https://github.com/vrajkher/DeepSeekHarnessBookNEW" rel="noopener">github.com/vrajkher/DeepSeekHarnessBookNEW</a> · Harness pinned <code>fcc0ad4</code></p>
+</main>
+
+<script>
+const DATA = /*DATA*/null
+const BOOK = 'https://github.com/vrajkher/DeepSeekHarnessBookNEW/blob/main/book/'
+const $ = s => document.querySelector(s)
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+const cite = id => DATA.cites[id] ? `<a class="src" href="${DATA.cites[id].url}" rel="noopener">${esc(DATA.cites[id].file)} · ${esc(DATA.cites[id].symbol)} ↗</a>` : ''
+const code = s => `<div class="code"><pre>${esc(s)}</pre></div>`
+
+/* ======================= scenarios ======================= */
+const SCEN = {
+  normal:   { label: 'સામાન્ય · 2 calls', cls: 'ok', ch: '01-request-ni-musafari.md', story: '<b>ટેબલ 4 નો ઓર્ડર:</b> મહારાજને બે વાર પૂછાય — વચ્ચે એક વાર કોઠારમાંથી README લવાય. 1 turn, 2 steps, 2 model calls.' },
+  title:    { label: 'Title ચાલુ · 8 calls', cls: 'bad', ch: '01-request-ni-musafari.md', story: '<b>વધારાનો પ્રશ્ન:</b> session નું નામ પાડવા મહારાજને અલગથી પુછાયું, અને રિહર્સલ મહારાજના બે જ લખેલા જવાબ વહેલા ખૂટી ગયા. Step 2 માં 500 → 5 retries (0.5→8 સેકન્ડ) → SERVER, exit 1.' },
+  unknown:  { label: 'ખોટું ખાનું', cls: 'warn', ch: '05-debugging-permissions-reliability.md', story: '<b>મહારાજની ચિઠ્ઠી:</b> "read_everything ખાનામાંથી લાવો" — એવું ખાનું જ નથી. કોઠારી લાલ ચિઠ્ઠી પાછી મોકલે (UNKNOWN_TOOL); ઓર્ડર ચાલુ રહે.' },
+  invalid:  { label: 'અધૂરું ફોર્મ', cls: 'warn', ch: '05-debugging-permissions-reliability.md', story: '<b>ફોર્મમાં ફરજિયાત ખાનું ખાલી:</b> file_path ને બદલે path લખ્યું. Schema તપાસમાં જ અટકે (INVALID_ARGS); મહારાજને સુધારવાની તક.' },
+  ratelimit:{ label: 'લાઇન વ્યસ્ત · 429', cls: 'warn', ch: '05-debugging-permissions-reliability.md', story: '<b>ફોન વ્યસ્ત:</b> agency એ 429 કહ્યું. llm-retry અડધી સેકન્ડથી શરૂ કરીને રાહ જુએ અને એ જ step માં ફરી ફોન કરે — સફળ, exit 0, 3 calls.' },
+  auth:     { label: 'ખોટું card · 401', cls: 'bad', ch: '05-debugging-permissions-reliability.md', story: '<b>Membership card ખોટું:</b> 401 AUTH. ફરી ફોન કરવાથી card સાચું નહીં થાય — retry નહીં, turn error, exit 1.' },
+  sigint:   { label: 'લાઈટ ગઈ · Ctrl+C', cls: 'bad', ch: '05-debugging-permissions-reliability.md', story: '<b>લાઈટ ગઈ:</b> મહારાજ ફોન પર ચૂપ (stall), 4 સેકન્ડે Ctrl+C. ચોપડામાં "રદ" (turn/end aborted) બરાબર લખાય; exit 130.' },
+  sandbox:  { label: 'રસોડાની બહાર લખવું', cls: 'warn', ch: '05-debugging-permissions-reliability.md', story: '<b>રસોડાની સીમા:</b> /etc માં file લખવાની ચિઠ્ઠી. fs-sandbox કહે "ના" (FS_SANDBOX_DENIED). વાંચવું ખુલ્લું, લખવા પર વાડ.' },
+  escalate: { label: 'પપ્પા હાજર નથી', cls: 'warn', ch: '05-debugging-permissions-reliability.md', story: '<b>રાતની પાળી:</b> વધુ છૂટ (danger-full-access) માંગી, પણ headless માં મંજૂરી આપનાર કોઈ નથી → fail closed → ના.' },
+}
+
+/* ======================= stations (the river) ======================= */
+const ST = {
+  cli:   { tone: 'ink', dish: 'દરવાજો', tech: 'dsh CLI', sub: 'apps/cli', cite: 'cli-runCli',
+    expl: 'તમે terminal માં <code>pnpm dsh --profile headless "…"</code> લખો. <code>runCli</code> arguments વાંચી profile boot શરૂ કરે.',
+    dishLine: 'ગ્રાહક દરવાજે આવ્યો.',
+    zoom: [
+      { n: 'pnpm dsh શું ચલાવે?', t: 'root package.json નો script: TypeScript સીધું tsx થી ચાલે.', c: '"dsh": "node --import tsx/esm apps/cli/src/bin.ts"' },
+      { n: 'invocation.mode પર switch', t: 'દરેક mode handle થયો તેનો compiler પુરાવો — satisfies never.', c: 'default:\n  invocation satisfies never\n  throw new Error(`dsh: unhandled invocation mode ${JSON.stringify(invocation)}`)', cite: 'cli-runCli' },
+      { n: "'profile' → runProfile(...)", t: 'signals (SIGINT → 130) અને profile boot અહીંથી.', cite: 'cli-runProfile' } ] },
+  boot:  { tone: 'sky', dish: 'ભોજનાલય ખૂલે', tech: 'Profile boot · Cordis', sub: '101 config rows', cite: 'boot-boot',
+    expl: '5 layers ભેગાં થઈ "આજનું મેનુ" બને (101 rows). Cordis દરેક plugin ને ત્યારે જ ચાલુ કરે જ્યારે તેની <code>inject</code> શરત પૂરી થાય. અંતે હાજરીપત્રક (startup audit).',
+    dishLine: 'કાંતિકાકા સવારે સ્ટાફને કામ પર લે — જેનાં સાધન તૈયાર તેને જ.',
+    zoom: [
+      { n: 'readProfilePatches: 5 layers', t: 'બંડલ → પ્રોફાઇલ → ઘર → --patch → ટેલિમેટ્રી. પાછળનું જીતે.', c: 'const patches = structuredClone([\n  ...readBundlePatches(binName, context, initialProfile),\n  ...(initialProfile?.patches ?? loadOptionalPatches(...) ?? []),\n  ...(loadOptionalPatches(binName, join(context.home, PROFILE_PATCH_FILENAME)) ?? []),\n  ...context.overlays,\n])', cite: 'boot-readProfilePatches' },
+      { n: 'mountRootInclude', t: 'ખાલી cordis.yml + patches → rows. Rows એક સાથે શરૂ થાય; ક્રમ ફક્ત inject થી.', cite: 'boot-mountRootInclude' },
+      { n: 'auditStartupEntries', t: 'Required entry (agent-loop, tool-executor-native) ગેરહાજર → StartupError, exit 1. નીચે પ્રકરણ 2 નું ટપકાં-ચિત્ર જુઓ.', cite: 'boot-audit' } ] },
+  runner:{ tone: 'kesar', dish: 'ઓર્ડર લખાયો', tech: 'Headless runner', sub: 'bundle/headless', cite: 'headless-run',
+    expl: 'Runner agent બનાવે અને તમારું task inbox માં મૂકે. શરૂઆતમાં ચોપડામાં સીમા નોંધાય: workspace-write, approval ask.',
+    dishLine: 'ઓર્ડર-પેટીમાં ઓર્ડર.',
+    zoom: [
+      { n: 'task વાંચો (ખાલી હોય તો ભૂલ)' }, { n: 'default model: deepseek-official / deepseek-flash' },
+      { n: 'agents.create({ sessionId, meta: { cwd } })', cite: 'headless-create' },
+      { n: 'agent.followup(task) → inbox', c: "agent.followup(createUserMessage({\n  content: [{ type: 'text', text: task }],\n  source: { kind: 'user' },\n}))", cite: 'headless-followup' },
+      { n: 'whenIdle → flush → stdout → io.exit', cite: 'headless-flush' } ] },
+  turn:  { tone: 'ink', dish: 'ઓર્ડર નંબર', tech: 'turn/start', sub: 'ReactLoopAgent.turn', cite: 'loop-turn',
+    expl: 'Turn = એક ઓર્ડરનું આખું કામ. <code>turn/start</code> પહેલા step પહેલાં લખાય, અને <code>turn/end</code> <code>finally</code> માં — ગમે તે થાય.',
+    dishLine: 'રમેશભાઈ ચોપડામાં "ઓર્ડર નં. 1 શરૂ" લખે.',
+    zoom: [
+      { n: 'turn() નું હાડપિંજર', c: "session.append('turn/start', { turn })\nwhile (true) {\n  const decision = await preStep(target, { turn, step })\n  session.append('step/start', { turn, step })\n  const stepEnd = await step(decision)\n  session.append('step/end', { turn, step })\n  if (turnEnds && inbox.nextStep.length === 0) break\n}\n// finally:\nsession.append('turn/end', { turn, reason })", cite: 'loop-turn' },
+      { n: 'પાંચ અંત: completed · error · aborted · blocked · max-tokens', cite: 'loop-turn-end' } ] },
+  model1:{ tone: 'haldi', dish: 'મહારાજને પૂછ્યું', tech: 'Model call · step 1', sub: 'llm/stream #1', cite: 'loop-step',
+    expl: 'Step 1: system + 4 user messages + 25 tools મોકલાય. મહારાજ text ને બદલે ચિઠ્ઠી (tool call) લખે. Model ને યાદ નથી — બધું ચોપડામાંથી ફરી મોકલાય.',
+    dishLine: 'રમેશભાઈ મહારાજ પાસે નિયમો, ઓર્ડર અને કોઠારની યાદી લઈ જાય.',
+    zoom: 'model' },
+  title: { tone: 'kesar', dish: 'નામ માટે પ્રશ્ન', tech: 'Title call', sub: 'session-title', cite: 'bundle-base-title',
+    expl: 'Base bundle નવા session ને નામ આપવા મહારાજને એક વધારાનો નાનો call કરે (purpose: session-title). Lab માં આ row બંધ હોય ત્યારે 2 calls.',
+    dishLine: 'ઓર્ડરને "ટેબલ 4 — ખાસ દાળ" જેવું નામ આપવા અલગથી પૂછવું.' },
+  tool:  { tone: 'leaf', dish: 'મહારાજની ચિઠ્ઠી', tech: 'Tool call', sub: 'assistant → tool-call', cite: 'loop-tools-execute',
+    expl: 'Model નો જવાબ: <code>read {"file_path":"README.md"}</code>. Tool call હોય તો <code>step()</code> <code>null</code> આપે — "turn પૂરો નથી".',
+    dishLine: '"રેસીપી-ચોપડી લાવો."' },
+  pipe:  { tone: 'leaf', dish: 'કોઠારી તપાસે', tech: 'Tool pipeline', sub: 'executeToolBatch', cite: 'batch-execute',
+    expl: 'ચિઠ્ઠી → તપાસ → નીતિ → ખરું કામ → લેબલ → ચોપડો. કોઈ પણ ભૂલ crash નથી — લાલ ચિઠ્ઠી (<code>isError: true</code>) બની model પાસે પાછી જાય.',
+    dishLine: 'ભીખાભાઈ સામાન આપે — ન મળે તો "નથી" ની ચિઠ્ઠી.',
+    zoom: 'pipe' },
+  model2:{ tone: 'haldi', dish: 'મહારાજને ફરી પૂછ્યું', tech: 'Model call · step 2', sub: 'llm/stream #2', cite: 'loop-buildRequest',
+    expl: 'Step 2: એ જ 5 + assistant ની ચિઠ્ઠી + tool result = 7 messages. હવે મહારાજ text લખે, કોઈ ચિઠ્ઠી નહીં → <code>{ kind: \'completed\' }</code>.',
+    dishLine: 'રેસીપી વાંચીને મહારાજ રાંધે.', zoom: 'model' },
+  end:   { tone: 'ink', dish: 'થાળી તૈયાર', tech: 'turn/end', sub: 'finally', cite: 'loop-turn-end',
+    expl: '<code>turn/end</code> કારણ સાથે: completed, error કે aborted. <code>finally</code> ને લીધે દરેક શરૂ થયેલા ઓર્ડરનો અંત ચોપડામાં હોય જ.',
+    dishLine: '"ઓર્ડર નં. 1 પૂર્ણ."' },
+  out:   { tone: 'kesar', dish: 'ગ્રાહકને બિલ', tech: 'stdout + exit', sub: 'io.exit', cite: 'headless-flush',
+    expl: 'Runner flush કરી જવાબ stdout માં છાપે અને exit code આપે: 0 સફળ, 1 ભૂલ, 130 Ctrl+C.',
+    dishLine: 'થાળી પીરસાઈ.' },
+}
+const MODEL_ZOOM = [
+  { n: 'preStep: inbox, model, tools, system prompt, agent/pre-step waterfall', cite: 'loop-preStep' },
+  { n: '(a) adapter બાંધો — prepareCall', cite: 'loop-prepareRequest' },
+  { n: '(b) model ને દેખાય તે બધું ચોપડામાં (Model-visible ⟺ logged)', c: "if (firstAttempt) {\n  for (const message of decision.messages) {\n    ...\n      this.session.append('user/message', context, { surfaceOp: 'append' })", cite: 'loop-admit' },
+  { n: '(c) ચોપડામાંથી history: deriveMessages + deepFreeze', cite: 'loop-derive' },
+  { n: '(d) દુભાષિયો: POST /messages → SSE → StreamChunk', c: "const response = await fetch(`${messagesApiRoot(connection.baseURL)}/messages`, {\n  method: 'POST', signal, body: extensions.payload,\n  headers: { 'content-type': 'application/json', 'accept': 'text/event-stream', ... },\n})\n// SSE data: {...}  →  translate  →  text-delta | tool-call-delta | finish ...", cite: 'deepseek-fetch' },
+  { n: '(e) settle: assistant/message — નિષ્ફળ તો assistant/attempt + retry નિર્ણય', cite: 'loop-request-error' },
+  { n: '(f) tool calls? હા → tools.execute, null · ના → completed', c: "const toolCalls = message.content.filter(block => block.type === 'tool-call')\nif (toolCalls.length === 0) return { kind: 'completed' }", cite: 'loop-tools-execute' },
+]
+const PIPE = [
+  { id: 'parse', n: 'parseArguments: JSON વાંચો (ખરાબ હોય તો પણ ફેંકો નહીં)', cite: 'batch-parse' },
+  { id: 'call', n: 'tool/call ચોપડામાં' },
+  { id: 'policy', n: 'tools/pre-execute: નીતિ અને મંજૂરી (approval)', cite: 'pipeline-prepare' },
+  { id: 'resolve', n: 'registry માં tool શોધો (ન મળે → UNKNOWN_TOOL)', cite: 'contracts-notfound' },
+  { id: 'validate', n: 'schema તપાસ (ખોટું → INVALID_ARGS)', cite: 'schema-defineTool-validate' },
+  { id: 'body', n: 'tool body: read → ctx.fs (sandbox નીતિ અહીં)', cite: 'read-tool' },
+  { id: 'render', n: 'validate + render — અથવા toolErrorResult "Error: …"', c: "function toolErrorResult(error) {\n  return {\n    content: [{ type: 'text', text: `Error: ${message}` }],\n    isError: true,\n    error: { message, ...info ? { info } : {} },\n  }\n}", cite: 'pipeline-errorResult' },
+  { id: 'result', n: 'tool/result ચોપડામાં' },
+]
+
+/* ======================= event classification ======================= */
+const USER_MSG = ['task (તમારું કામ)', 'AGENTS.md (ઘરના નિયમ)', 'runtime context (સ્થળ-સમય)', 'skill catalog (કૌશલ્ય-યાદી)']
+function classify(events) {
+  let step = 1, users = 0, lastNode = 'runner', calls = 0
+  const out = [
+    { t: 0, node: 'cli', raw: 'pnpm dsh --profile headless "…"', gu: 'દરવાજો: dsh શરૂ', synth: true },
+    { t: 0, node: 'boot', raw: 'profile headless: 101 rows (evidence/dump.yml)', gu: 'ભોજનાલય ખૂલ્યું: 101 plugins mount', synth: true },
+  ]
+  for (const e of events) {
+    const x = e.text
+    let node = lastNode, gu = '', kind = ''
+    const m = x.match(/session\/event #(\d+) ([\w/-]+)(.*)$/)
+    if (m) {
+      const type = m[2], rest = m[3]
+      if (/^(permission\/preset|sandbox\/mode|approval\/policy)$/.test(type)) { node = 'runner'; gu = 'રસોડાની સીમા નોંધાઈ: ' + type }
+      else if (type === 'agent/inbox/spliced') { node = lastNode === 'runner' ? 'runner' : lastNode; gu = 'ઓર્ડર-પેટીમાં ફેરફાર' }
+      else if (type === 'turn/start') { node = 'turn'; gu = 'ઓર્ડર નંબર પડ્યો — turn શરૂ' }
+      else if (type === 'step/start') { step = Number((rest.match(/"step":(\d+)/) || [])[1] || step); node = step === 1 ? 'model1' : 'model2'; gu = `મહારાજ સાથે વાતચીત ${step} શરૂ (step ${step})` }
+      else if (type === 'system/message') { gu = 'નિયમોની પોથી (system prompt) ચોપડામાં'; kind = 'msg0' }
+      else if (type === 'user/message') { gu = 'user message: ' + (USER_MSG[users] || 'નવો સંદેશ'); kind = 'msg' + (users + 1); users++ }
+      else if (type === 'request/header') gu = 'request નું મથાળું: provider, model, 25 tools'
+      else if (type === 'request/context') gu = 'context window નોંધાઈ'
+      else if (type === 'session/title') gu = 'session નું નામ'
+      else if (type === 'session/title-llm-request') { node = 'title'; gu = 'નામ પાડવા મહારાજને અલગ પ્રશ્ન' }
+      else if (type === 'session-log-deepseek/delivery-accepted') gu = 'ચોપડાનો ભાગ agency ને ગયો (dsh_session_log)'
+      else if (type === 'assistant/message') { gu = 'મહારાજનો જવાબ ચોપડામાં'; kind = 'ok' }
+      else if (type === 'assistant/attempt') { gu = 'નિષ્ફળ પ્રયાસ નોંધાયો (assistant/attempt)'; kind = 'fail' }
+      else if (type === 'llm/retry') { gu = '🔁 retry નક્કી — રાહ જુઓ'; kind = 'retry' }
+      else if (type === 'llm/retry-started') { gu = '🔁 ફરી ફોન'; kind = 'retry2' }
+      else if (type === 'tool/call') { node = 'tool'; gu = 'ચિઠ્ઠી: ' + rest.replace(/^ name=/, '').replace(' arguments=', ' '); kind = 'toolcall' }
+      else if (type === 'approval/asked') { node = 'pipe'; gu = 'પપ્પાને પૂછ્યું (approval/asked)' }
+      else if (type === 'approval/decided') { node = 'pipe'; gu = 'જવાબ: મંજૂરી આપનાર નથી → ના'; kind = 'deny' }
+      else if (type === 'tool/result') { node = 'pipe'; gu = 'ચોપડામાં "આ મળ્યું" (tool/result)'; kind = 'toolres' }
+      else if (type === 'step/end') gu = `વાતચીત ${step} પૂરી (step/end)`
+      else if (type === 'turn/end') {
+        node = 'end'
+        const k = (rest.match(/"kind":"(\w+)"/) || [])[1]
+        gu = k === 'completed' ? 'ઓર્ડર પૂર્ણ (completed)' : k === 'aborted' ? 'ઓર્ડર રદ (aborted) — છતાં ચોપડામાં લખાયું' : 'ઓર્ડર ભૂલથી બંધ (' + ((rest.match(/"code":"(\w+)"/) || [])[1] || k) + ')'
+        kind = 'end-' + k
+      } else gu = type
+    } else if (/^llm\/stream call #(\d+)/.test(x)) {
+      const n = Number(x.match(/#(\d+)/)[1]), msgs = Number((x.match(/messages=(\d+)/) || [])[1])
+      calls = n
+      if (msgs === 1) { node = 'title'; gu = `📞 call #${n}: title માટે 1 message` }
+      else { gu = `📞 model call #${n}: ${msgs} messages + tools મોકલ્યા`; node = step === 1 ? 'model1' : 'model2' }
+      kind = 'call'
+    } else if (/^live\s+stream start/.test(x)) gu = 'જવાબ ટીપે ટીપે શરૂ (stream)'
+    else if (/^live\s+stream end/.test(x)) gu = 'stream પૂરો: ' + (x.match(/chunks=\d+/) || [''])[0] + ' (live — ફક્ત હવામાં)'
+    else if (/^tools\/result/.test(x)) { node = 'pipe'; const err = /isError=true/.test(x); gu = err ? 'કોઠારનો જવાબ: ✘ લાલ ચિઠ્ઠી' : 'કોઠારનો જવાબ: ✔ સામાન મળ્યો'; kind = err ? 'toolerr' : 'toolok' }
+    else if (/^dispose/.test(x)) { node = 'out'; gu = 'દુકાન બંધ — કુલ ' + (x.match(/= (\d+)/) || [])[1] + ' model calls'; kind = 'dispose' }
+    else gu = x
+    if (node === 'title' && kind !== 'call' && !/title/.test(x)) node = lastNode
+    out.push({ t: e.t, node, raw: x, gu, kind, step })
+    if (node !== 'title') lastNode = node
+  }
+  return out
+}
+
+/* ======================= state ======================= */
+let mode = 'dish', scen = 'normal', evs = [], idx = -1, timer = null, selected = null, zoomPick = null
+const S = () => DATA.scenarios.find(s => s.id === scen)
+
+/* ======================= flow layout ======================= */
+const LAYOUT = {
+  wide: { w: 1000, h: 400, nw: 128, nh: 60, pos: { cli: [75, 90], boot: [215, 90], runner: [355, 90], turn: [495, 90], model1: [640, 90], tool: [780, 90], pipe: [920, 90], title: [640, 215], model2: [920, 320], end: [710, 320], out: [495, 320] },
+    lanes: [[575, 45, 415, 95, 'Step 1'], [850, 275, 140, 95, 'Step 2']] },
+  tall: { w: 400, h: 1010, nw: 210, nh: 58, pos: { cli: [200, 45], boot: [200, 135], runner: [200, 225], turn: [200, 315], model1: [130, 420], title: [325, 420], tool: [130, 515], pipe: [130, 610], model2: [130, 720], end: [200, 830], out: [200, 935] },
+    lanes: [[15, 380, 245, 275, 'Step 1'], [15, 680, 245, 80, 'Step 2']] },
+}
+const EDGES = [['cli', 'boot', 3], ['boot', 'runner', 3], ['runner', 'turn', 4], ['turn', 'model1', 9, '5 messages'], ['model1', 'tool', 4], ['tool', 'pipe', 4], ['pipe', 'model2', 13, '7 messages'], ['model2', 'end', 4], ['end', 'out', 4], ['model1', 'title', 2, '', 'dash'], ['model1', 'end', 3, '', 'dash err', 'early']]
+let L = LAYOUT.wide
+function edgePath(a, b) {
+  const [x1, y1] = L.pos[a], [x2, y2] = L.pos[b]
+  if (L === LAYOUT.wide) {
+    if (a === 'pipe' && b === 'model2') return `M${x1},${y1 + L.nh / 2} C${x1 + 60},${y1 + 120} ${x2 + 60},${y2 - 120} ${x2},${y2 - L.nh / 2}`
+    if (a === 'model1' && b === 'end') return `M${x1},${y1 + L.nh / 2} C${x1},${y1 + 150} ${x2},${y2 - 150} ${x2},${y2 - L.nh / 2}`
+    if (a === 'model1' && b === 'title') return `M${x1},${y1 + L.nh / 2} L${x2},${y2 - L.nh / 2}`
+    if (y1 === y2) { const dir = x2 > x1 ? 1 : -1; return `M${x1 + dir * L.nw / 2},${y1} L${x2 - dir * L.nw / 2},${y2}` }
+  } else {
+    if (a === 'model1' && b === 'title') return `M${x1 + L.nw / 2 * 0.62},${y1} L${x2 - 70},${y2}`
+    if (a === 'model1' && b === 'end') return `M${x1 + 80},${y1 + L.nh / 2} C${330},${y1 + 120} ${330},${y2 - 120} ${x2 + 60},${y2 - L.nh / 2}`
+  }
+  return `M${x1},${y1 + L.nh / 2} C${x1},${(y1 + y2) / 2} ${x2},${(y1 + y2) / 2} ${x2},${y2 - L.nh / 2}`
+}
+function nodeW(id) { return L === LAYOUT.tall && (id === 'title') ? 130 : (L === LAYOUT.tall && ['model1', 'tool', 'pipe', 'model2'].includes(id) ? 210 : L.nw) }
+function renderFlow() {
+  L = $('#flow').getBoundingClientRect().width < 620 ? LAYOUT.tall : LAYOUT.wide
+  const svg = $('#flow')
+  svg.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`)
+  let h = ''
+  for (const [x, y, w, hh, lbl] of L.lanes) h += `<rect class="lane" x="${x}" y="${y}" width="${w}" height="${hh}" rx="16"/><text class="lane-lbl" x="${x + 10}" y="${y + hh - 7}">${lbl}</text>`
+  for (const [a, b, w, lbl, cls = '', tag] of EDGES) {
+    const d = edgePath(a, b)
+    h += `<path id="e-${a}-${b}" class="edge ${cls}" d="${d}" stroke-width="${w}" ${tag === 'early' ? 'data-early="1"' : ''}/>`
+    if (lbl) {
+      const [x1, y1] = L.pos[a], [x2, y2] = L.pos[b]
+      const lx = L === LAYOUT.wide ? (a === 'pipe' ? x1 - 70 : (x1 + x2) / 2) : x1 + 70
+      const ly = L === LAYOUT.wide ? (a === 'pipe' ? (y1 + y2) / 2 : y1 - 40) : (y1 + y2) / 2 + 4
+      h += `<text class="edge-lbl" id="lbl-${a}-${b}" x="${lx}" y="${ly}" text-anchor="middle">${lbl}</text>`
+    }
+  }
+  for (const id of Object.keys(L.pos)) {
+    const [x, y] = L.pos[id], w = nodeW(id), s = ST[id]
+    h += `<g class="node t-${s.tone}" id="n-${id}" data-id="${id}" tabindex="0" role="button" aria-label="${esc(s.dish)} / ${esc(s.tech)}">
+      <rect class="box" x="${x - w / 2}" y="${y - L.nh / 2}" width="${w}" height="${L.nh}" rx="14"/>
+      <text class="l1" x="${x}" y="${y - 3}" text-anchor="middle">${esc(mode === 'dish' ? s.dish : s.tech)}</text>
+      <text class="l2" x="${x}" y="${y + 16}" text-anchor="middle">${esc(mode === 'dish' ? s.tech : s.sub)}</text>
+      <g class="badge" id="bd-${id}"></g></g>`
+  }
+  h += '<circle id="token" r="9" cx="-50" cy="-50"/>'
+  svg.innerHTML = h
+  svg.querySelectorAll('.node').forEach(n => {
+    n.addEventListener('click', () => select(n.dataset.id))
+    n.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(n.dataset.id) } })
+  })
+  paint(false)
+}
+
+/* ======================= painting ======================= */
+function stateAt(i) {
+  const st = { visited: new Set(), retries: {}, err: {}, cur: null, msgs: 5, step2: false, calls: 0, end: null, early: false, toolErr: false, approval: false }
+  for (let k = 0; k <= i && k < evs.length; k++) {
+    const e = evs[k]
+    st.visited.add(e.node); st.cur = e.node
+    if (e.kind === 'retry2') st.retries[e.node] = (st.retries[e.node] || 0) + 1
+    if (e.kind === 'fail') st.err[e.node] = true
+    if (e.kind === 'ok') delete st.err[e.node]
+    if (e.kind === 'toolerr') { st.err.pipe = true; st.toolErr = true }
+    if (e.kind === 'deny') st.approval = true
+    if (e.kind === 'toolres' || e.node === 'model2') st.step2 = true
+    if (e.kind === 'call') st.calls++
+    if (e.kind && e.kind.startsWith('end-')) { st.end = e.kind.slice(4); if (!st.visited.has('tool')) st.early = true }
+  }
+  return st
+}
+function paint(animate = true) {
+  const st = stateAt(idx)
+  for (const id of Object.keys(ST)) {
+    const g = document.getElementById('n-' + id); if (!g) continue
+    g.classList.toggle('done', st.visited.has(id) && st.cur !== id)
+    g.classList.toggle('cur', st.cur === id)
+    g.classList.toggle('todo', idx >= 0 && !st.visited.has(id))
+    g.classList.toggle('sel', selected === id)
+    const errHere = !!st.err[id] || (id === 'end' && st.end && st.end !== 'completed')
+    g.classList.toggle('err', errHere && !(id === 'end' && st.end === 'aborted'))
+    g.classList.toggle('warn', id === 'end' && st.end === 'aborted')
+    const [x, y] = L.pos[id], w = nodeW(id)
+    let b = ''
+    if (st.retries[id]) b = `<circle class="badge-bg" cx="${x + w / 2 - 6}" cy="${y - L.nh / 2 + 4}" r="15"/><text class="badge-txt" x="${x + w / 2 - 6}" y="${y - L.nh / 2 + 8}" text-anchor="middle">🔁${st.retries[id]}</text>`
+    else if (errHere) b = `<circle class="badge-err" cx="${x + w / 2 - 6}" cy="${y - L.nh / 2 + 4}" r="11"/><text class="badge-txt" x="${x + w / 2 - 6}" y="${y - L.nh / 2 + 8}" text-anchor="middle">✘</text>`
+    document.getElementById('bd-' + id).innerHTML = b
+  }
+  // edges: light those whose both ends are visited
+  document.querySelectorAll('#flow .edge').forEach(p => {
+    const [, a, b] = p.id.split('-')
+    const lit = st.visited.has(a) && st.visited.has(b) && (p.dataset.early ? st.early : !(a === 'model1' && b === 'end'))
+    p.classList.toggle('lit', lit && !p.dataset.early)
+    p.style.opacity = p.dataset.early ? (st.early ? 1 : 0) : (a === 'model1' && b === 'title' ? (st.visited.has('title') ? 1 : .35) : 1)
+  })
+  const e = evs[idx]
+  $('#clock').textContent = e ? '+' + e.t + 'ms' : '+0ms'
+  $('#flow-caption').textContent = e ? (e.synth ? '🔧 ' : '') + e.gu : '▶ દબાવો — અથવા કોઈ box પર click કરો'
+  // message chips
+  const msgN = st.visited.has('model2') ? 7 : 5
+  document.querySelectorAll('#msgs .chip').forEach((c, i) => c.classList.toggle('off', i >= 5 && !st.step2))
+  $('#msgcount').textContent = (st.step2 ? 7 : 5) + ' messages · ' + (st.calls) + ' model calls'
+  renderResult(st)
+  renderLog()
+  renderMatrix()
+  if (animate && e && idx > 0) moveToken(evs[idx - 1].node, e.node)
+  else placeToken(e ? e.node : null)
+}
+function placeToken(id) {
+  const t = document.getElementById('token'); if (!t) return
+  if (!id) { t.setAttribute('cx', -50); t.setAttribute('cy', -50); return }
+  const [x, y] = L.pos[id]; t.setAttribute('cx', x); t.setAttribute('cy', y - L.nh / 2)
+}
+let anim = null
+function moveToken(a, b) {
+  if (a === b || matchMedia('(prefers-reduced-motion: reduce)').matches) return placeToken(b)
+  const p = document.getElementById(`e-${a}-${b}`)
+  if (!p) return placeToken(b)
+  const len = p.getTotalLength(), t0 = performance.now(), dur = Math.min(600, Number($('#speed').value) * .8)
+  cancelAnimationFrame(anim)
+  const tok = document.getElementById('token')
+  const f = now => {
+    const k = Math.min(1, (now - t0) / dur), pt = p.getPointAtLength(len * k)
+    tok.setAttribute('cx', pt.x); tok.setAttribute('cy', pt.y)
+    if (k < 1) anim = requestAnimationFrame(f)
+  }
+  anim = requestAnimationFrame(f)
+}
+
+/* ======================= result, log, matrix ======================= */
+function renderResult(st) {
+  const s = S(), done = st.end !== null
+  const exitTone = s.exit === 0 ? 'leaf' : s.exit === 130 ? 'kesar' : 'chili'
+  const endTone = st.end === 'completed' ? 'leaf' : st.end === 'aborted' ? 'kesar' : 'chili'
+  $('#result').innerHTML = `
+    <div class="res"><small>MODEL CALLS</small><b>${st.calls}</b></div>
+    <div class="res"><small>TURN નો અંત</small><b>${done ? `<span class="pill t-${endTone}">${esc(st.end)}</span>` : '—'}</b></div>
+    <div class="res"><small>EXIT CODE</small><b>${idx >= evs.length - 1 && idx >= 0 ? `<span class="pill t-${exitTone}">${s.exit}</span>` : '—'}</b></div>
+    <div class="res wide"><small>${s.stdout ? 'STDOUT (થાળી)' : 'STDERR (રસોડાની બૂમ)'}</small><b class="mono">${idx >= evs.length - 1 && idx >= 0 ? esc(s.stdout || s.stderr) : '…'}</b></div>
+    ${s.toolResult && st.visited.has('pipe') ? `<div class="res wide"><small>TOOL RESULT (model ને જે ગયું)</small><b class="mono" style="color:var(${s.toolOk ? '--leaf' : '--chili'})">${esc(s.toolResult)}</b></div>` : ''}`
+}
+function renderLog() {
+  const ol = $('#log')
+  if (idx < 0) { ol.innerHTML = '<li class="empty">▶ દબાવો — દરેક event અહીં સાચા સમય સાથે ઉમેરાશે.</li>'; return }
+  ol.innerHTML = evs.slice(0, idx + 1).map((e, i) => `<li data-i="${i}" class="t-${ST[e.node].tone}${i === idx ? ' now' : ''}"><time>${e.synth ? '🔧' : '+' + e.t + 'ms'}</time><span>${esc(e.gu)}<span class="raw">${esc(e.raw)}</span></span></li>`).join('')
+  ol.querySelectorAll('li').forEach(li => {
+    li.addEventListener('click', () => { stop(); idx = Number(li.dataset.i); select(evs[idx].node, false); paint(false) })
+    li.addEventListener('mouseenter', () => document.getElementById('n-' + evs[li.dataset.i].node)?.classList.add('sel'))
+    li.addEventListener('mouseleave', () => document.getElementById('n-' + evs[li.dataset.i].node)?.classList.toggle('sel', selected === evs[li.dataset.i].node))
+  })
+  const now = ol.querySelector('.now'); if (now) ol.scrollTop = now.offsetTop - ol.offsetTop - ol.clientHeight + now.offsetHeight + 8 // scroll the list only, never the page
+}
+const COLS = [['system', 'ink'], ['task', 'haldi'], ['AGENTS.md', 'haldi'], ['runtime', 'haldi'], ['skills', 'haldi'], ['ચિઠ્ઠી', 'leaf'], ['tool result', 'leaf']]
+function renderMatrix() {
+  const calls = evs.slice(0, idx + 1).filter(e => e.kind === 'call')
+  const rows = calls.map((e, i) => {
+    const n = Number((e.raw.match(/messages=(\d+)/) || [])[1])
+    const lbl = `call #${(e.raw.match(/#(\d+)/) || [])[1]}${n === 1 ? ' (title)' : ''}`
+    const cells = COLS.map(([c, tone], j) => {
+      const on = n === 1 ? false : j < n
+      return `<td class="t-${tone}${on ? ' on' : ''}" data-col="${j}">${on ? '●' : ''}</td>`
+    }).join('')
+    return `<tr><th class="row">${lbl}<br><small>${n} messages</small></th>${cells}</tr>`
+  }).join('')
+  $('#matrix').innerHTML = `<h3>👀 Model ને શું દેખાયું? <small style="font-weight:500;color:var(--muted)">(attention heatmap ની જેમ)</small></h3>
+    <p>દરેક હાર = એક model call. ● = એ message ચોપડામાંથી ફરી બનાવીને મોકલાયો. Model ને યાદ નથી — call #2 માં આખો ઇતિહાસ ફરી જાય છે. Column પર mouse લઈ જાઓ.</p>
+    <div class="mat-scroll"><table><thead><tr><th></th>${COLS.map(([c, t], j) => `<th class="t-${t}" data-col="${j}">${c}</th>`).join('')}</tr></thead>
+    <tbody>${rows || '<tr><td colspan="8" style="width:auto;color:var(--muted);font-weight:500;text-align:left;padding:.3rem .5rem">હજી કોઈ model call નથી — ▶ દબાવો.</td></tr>'}</tbody></table></div>`
+  $('#matrix').querySelectorAll('[data-col]').forEach(el => {
+    el.addEventListener('mouseenter', () => hlCol(el.dataset.col, true))
+    el.addEventListener('mouseleave', () => hlCol(el.dataset.col, false))
+  })
+}
+function hlCol(j, on) {
+  document.querySelectorAll(`#matrix [data-col="${j}"]`).forEach(x => x.classList.toggle('hl', on))
+  document.querySelectorAll('#msgs .chip')[j]?.classList.toggle('hl', on)
+}
+
+/* ======================= detail panel (zoom) ======================= */
+function select(id, scroll = true) {
+  selected = id; zoomPick = null
+  renderDetail(); paint(false)
+  if (scroll && innerWidth < 960) $('#detail').scrollIntoView({ block: 'nearest' })
+}
+function zoomItems(id) {
+  const s = ST[id]
+  if (s.zoom === 'model') return MODEL_ZOOM
+  if (s.zoom === 'pipe') return PIPE
+  return s.zoom || []
+}
+function renderDetail() {
+  const d = $('#detail')
+  if (!selected) {
+    d.innerHTML = `<p class="crumb">Harness</p><h2>🍽️ થાળી = Harness</h2>
+      <p>દરેક box એક ભાગ છે, અને દરેક ભાગ એક <b>plugin</b> — કાઢી-બદલી શકાય. Box પર click કરો એટલે અહીં ખૂલશે: સરળ સમજ, ભોજનાલયની ઉપમા, અંદરનાં પગલાં, અને સાચો code.</p>
+      <div class="co t-leaf"><b>🍽️ ઉપમા:</b> મહારાજ = AI model (ફક્ત ચિઠ્ઠી લખે), રમેશભાઈ = agent loop, કોઠાર = tools, ચોપડો = session log, કાંતિકાકા = Cordis.</div>
+      <div class="co t-chili"><b>⚠️ ઉપમા અહીં તૂટે છે:</b> model ને યાદશક્તિ જ નથી — દરેક call માં આખો ઇતિહાસ ચોપડામાંથી ફરી જાય છે.</div>`
+    return
+  }
+  const s = ST[selected], items = zoomItems(selected), sc = S()
+  const stop = SCEN_STOP[scen]
+  const z = zoomPick !== null ? items[zoomPick] : null
+  d.innerHTML = `
+    <p class="crumb"><button type="button" id="cr-home">Harness</button> › <button type="button" id="cr-node">${esc(s.dish)}</button>${z ? ' › ' + esc(z.n.slice(0, 40)) + (z.n.length > 40 ? '…' : '') : ''}</p>
+    <h2 class="t-${s.tone}" style="color:var(--tone)">${esc(mode === 'dish' ? s.dish : s.tech)}</h2>
+    <p class="tech">${esc(mode === 'dish' ? s.tech : s.dish)} · ${esc(s.sub)}</p>
+    ${z ? `<p>${esc(z.n)}</p>${z.t ? `<p>${z.t}</p>` : ''}${z.c ? code(z.c) : ''}${z.cite ? `<p>${cite(z.cite)}</p>` : ''}<button type="button" id="z-back">← પાછા</button>`
+      : `<p>${s.expl}</p>
+    <div class="co t-leaf"><b>🍽️ ભોજનાલયમાં:</b> ${s.dishLine}</div>
+    ${selected === 'pipe' && stop ? `<div class="co t-chili"><b>આ ઘટનામાં:</b> ${esc(sc.toolResult)}</div>` : ''}
+    ${items.length ? `<p style="margin:.6rem 0 .2rem;font-weight:600">🔍 અંદર જુઓ:</p><ol class="zoom">${items.map((it, i) => {
+      let cls = ''
+      if (selected === 'pipe' && stop) { const si = PIPE.findIndex(p => p.id === stop), ii = PIPE.findIndex(p => p.id === it.id); cls = ii === si ? 'stop' : ii < si ? 'pass' : '' }
+      return `<li><button type="button" class="${cls}" data-z="${i}">${esc(it.n)}</button></li>`
+    }).join('')}</ol>` : ''}
+    <p>${cite(s.cite)}</p>`}`
+  $('#cr-home').onclick = () => { selected = null; renderDetail(); paint(false) }
+  $('#cr-node').onclick = () => { zoomPick = null; renderDetail() }
+  d.querySelectorAll('[data-z]').forEach(b => b.onclick = () => { zoomPick = Number(b.dataset.z); renderDetail() })
+  const zb = $('#z-back'); if (zb) zb.onclick = () => { zoomPick = null; renderDetail() }
+}
+const SCEN_STOP = { unknown: 'resolve', invalid: 'validate', sandbox: 'body', escalate: 'policy' }
+
+/* ======================= playback ======================= */
+function stop() { clearInterval(timer); timer = null; $('#b-play').textContent = '▶ ચલાવો' }
+function step() {
+  if (idx >= evs.length - 1) { stop(); return }
+  idx++
+  if (evs[idx].node !== evs[idx - 1]?.node) { selected = evs[idx].node; zoomPick = null; renderDetail() }
+  paint(true)
+}
+function play() {
+  if (timer) return stop()
+  if (idx >= evs.length - 1) { idx = -1 }
+  $('#b-play').textContent = '⏸ થોભો'
+  step()
+  timer = setInterval(step, Number($('#speed').value))
+}
+function loadScenario(id) {
+  stop(); scen = id; evs = classify(S().events); idx = -1; selected = null
+  document.querySelectorAll('#scen button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.s === id)))
+  $('#scen-story').innerHTML = SCEN[id].story + ` <a href="${BOOK + SCEN[id].ch}" rel="noopener">પ્રકરણ વાંચો ↗</a>`
+  renderDetail(); paint(false)
+}
+
+/* ======================= article: one picture per chapter ======================= */
+const SECTIONS = [
+  { id: 'pravesh', n: 'પ્ર', tone: 'leaf', title: 'રમકડા-agent: turn, step અને ચોપડો', ch: 'pravesh-shunya-thi-shuruaat.md',
+    story: 'આરવે 40 lines નો રમકડા-agent ચલાવ્યો. નકલી મહારાજ પહેલાં ચિઠ્ઠી લખે, પછી જવાબ.',
+    text: 'દરેક click એ એક ચોપડા-લીટી ઉમેરે છે. જુઓ: tool વપરાયો એટલે બીજો step થયો, અને છેલ્લા call માં 3 messages ગયા. ખરા harness માં એ જ આકાર — ફક્ત 7 messages.', viz: vizToy },
+  { id: 'ch0', n: '૦', tone: 'leaf', title: 'Build: 10 gates, 129.74 સેકન્ડ', ch: '00-paayo-ane-pratham-run.md',
+    story: 'ભોજનાલય ખોલતા પહેલાં બધી લાઈટ, ગેસ, ફ્રિજ ચાલુ કરી તપાસવાં.',
+    text: '<code>pnpm run build</code> ના દસ gates — દરેક પટ્ટી તેનો સમય માપસર બતાવે છે (evidence/build.log). બધા PASS થાય તો જ build સફળ.', viz: vizGates },
+  { id: 'ch1', n: '૧', tone: 'haldi', title: 'એક request ના દસ સ્ટેશન', ch: '01-request-ni-musafari.md',
+    story: 'ટેબલ 4 નો ઓર્ડર: રમેશભાઈ મહારાજ પાસે બે વાર ગયા.',
+    text: 'સ્ટેશન પર click કરો એટલે ઉપરનું મોટું ચિત્ર એ જ પળે પહોંચે. યાદ-ચાવી <b>2-1-25-4</b>: 2 model calls, 1 tool call, 25 tools, 4 user messages.', viz: vizStations },
+  { id: 'ch2', n: '૨', tone: 'haldi', title: 'Plugins: એક ઈંટ ખેંચો, દીવાલ જુઓ', ch: '02-cordis-plugin-architecture.md',
+    story: 'કાંતિકાકાનું હાજરીપત્રક: સામાન્ય કર્મચારી રજા પર તો ચાલે, પાયાનો ગેરહાજર તો ભોજનાલય બંધ.',
+    text: '101 ટપકાં = <code>--dump-config</code> ની 101 rows. બટન દબાવો: <code>fs-sandbox</code> બંધ → 18 rows રાહ જુએ (warning). <code>system-prompt</code> બંધ → 29 રાહ જુએ, જેમાં 2 required → startup failed, exit 1. ટપકાં પર mouse લઈ જાઓ.', viz: vizPlugins },
+  { id: 'ch3', n: '૩', tone: 'haldi', title: 'કોઠારનો conveyor belt', ch: '03-tools-sessions-adapters.md',
+    story: 'ભીખાભાઈ દરેક ચિઠ્ઠી એક જ રસ્તે ચલાવે — અને ભૂલ હોય તો લાલ ચિઠ્ઠી પાછી.',
+    text: 'ચિઠ્ઠીનો પ્રકાર પસંદ કરો અને જુઓ કે pipeline માં ક્યાં અટકે છે. કોઈ પણ ભૂલ crash નથી — <code>isError: true</code> સાથે સામાન્ય <code>tool/result</code>. નીચે: દુભાષિયો (adapter) SSE ટીપાંને <code>StreamChunk</code> માં ફેરવે.', viz: vizPipe },
+  { id: 'ch4', n: '૪', tone: 'kesar', title: 'csv_compare: પપ્પાની બે યાદી', ch: '04-potano-plugin.md',
+    story: 'આપણી નોંધ અને supplier ની યાદી — કાઉન્ટર ક્યારેય અનુમાન નથી કરતું.',
+    text: 'રંગ = પરિણામ: લીલો identical, હળદર DIFF (50 પૈસા), વાદળી ફક્ત એક બાજુ, કેસર DUPLICATE, લાલ PROBLEM. દરેક input line report માં બરાબર એક જ જગ્યાએ.', viz: vizCsv },
+  { id: 'ch5', n: '૫', tone: 'kesar', title: 'Retry ની રાહ અને રસોડાની સીમા', ch: '05-debugging-permissions-reliability.md',
+    story: 'ફોન વ્યસ્ત: અડધી સેકન્ડ, પછી બમણું… અને રાત્રે પપ્પા નથી તો "ના".',
+    text: 'ઉપર: "Title ચાલુ" run ની સાચી retry રાહ, માપસર — 5 વાર, અડધીથી બમણું, 10 સેકન્ડ સુધી. નીચે: <code>workspace-write</code> ની સીમા. <b>લખવા પર વાડ, વાંચવું ઉઘાડ.</b>', viz: vizRetry },
+  { id: 'ch6', n: '૬', tone: 'chili', title: 'માપન: ગણતરી પાકી, સમય કાચો', ch: '06-maintainer-architecture.md',
+    story: 'મુખ્ય કચેરીને પત્રમાં લાગણી નહીં, આંકડા.',
+    text: 'Title બંધ vs ચાલુ, 5+5 runs (evidence/measure.jsonl). Calls હંમેશા 2 vs 3 — પાકું. <code>read</code> latency નો ફરક ફક્ત સંકેત (5 samples, એક machine). નીચે: patch on/off કરો અને regression test નું પરિણામ જુઓ.', viz: vizMeasure },
+  { id: 'ch7', n: '૭', tone: 'chili', title: 'મુનીમજીના બે ચોપડા', ch: '07-antim-project-mastery.md',
+    story: 'Bank નું credit = આપણું debit. Desai કે Rana? Guess નહીં.',
+    text: 'ડાબે bank, જમણે Tally. દોરા = મેળ (R1 નંબર+રકમ, R2 રકમ+તારીખ), કેસર = A1 શંકા. <code>window_days</code> બદલો: 3 પર Desai/Rana શંકા, 0 પર ફક્ત એ જ દિવસનો Desai મળે અને 1 દિવસ અલગ Mehta છૂટો પડે.', viz: vizRecon },
+]
+function renderSections() {
+  $('#sections').innerHTML = SECTIONS.map(s => `<article class="sec" id="sec-${s.id}" style="margin-bottom:1.4rem">
+    <div class="sec-text"><h3 class="t-${s.tone}"><span class="n">${s.n}</span>${esc(s.title)}</h3>
+      <p class="story">🎬 ${s.story}</p><p>${s.text}</p>
+      <p class="more"><a href="${BOOK + s.ch}" rel="noopener">આખું પ્રકરણ વાંચો ↗</a></p></div>
+    <div class="viz" id="viz-${s.id}"></div></article>`).join('')
+  for (const s of SECTIONS) s.viz($('#viz-' + s.id))
+}
+
+function vizToy(el) {
+  const lines = ['#0 turn/start {}', '#1 step/start {"step":1}', '#2 tool/call {"name":"read","args":{"file_path":"menu.txt"}}', '#3 tool/result {"chars":29}', '#4 step/end {"step":1}', '#5 step/start {"step":2}', '#6 step/end {"step":2}', '#7 turn/end {"reason":"completed","modelCalls":2,"messagesSentLast":3}', 'જવાબ: આજના મેનુમાં 6 વાનગી છે.']
+  let k = 0
+  el.innerHTML = `<div class="tools"><button type="button" class="primary" id="toy-next">આગલી લીટી ⏭</button><button type="button" id="toy-reset">⏮</button></div><pre class="toy" id="toy-out"></pre><p class="cap">🧪 <code>node labs/pravesh/toy-agent.mjs</code> નું સાચું output (Node v22.23).</p>`
+  const draw = () => { $('#toy-out').innerHTML = lines.slice(0, k).map((l, i) => i === k - 1 ? `<span class="new">${esc(l)}</span>` : esc(l)).join('\n') || '▶ "આગલી લીટી" દબાવો' }
+  $('#toy-next').onclick = () => { if (k < lines.length) k++; draw() }
+  $('#toy-reset').onclick = () => { k = 0; draw() }
+  draw()
+}
+function vizGates(el) {
+  const g = DATA.gates, max = Math.max(...g.map(x => x.s)), W = 560, rowH = 26
+  const bars = g.map((x, i) => `<text x="0" y="${i * rowH + 17}" font-size="12">${esc(x.name)}</text>
+    <rect x="160" y="${i * rowH + 5}" width="${(x.s / max) * (W - 230)}" height="16" rx="5" fill="var(--leaf)"/>
+    <text x="${166 + (x.s / max) * (W - 230)}" y="${i * rowH + 17}" font-size="11" fill="var(--muted)">✔ ${x.s}s</text>`).join('')
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${g.length * rowH + 6}" role="img" aria-label="Build gates">${bars}</svg><p class="cap">🧪 evidence/build.log — 10 passed, 0 failed (4 gates એક સાથે ચાલે, તેથી કુલ સમય સરવાળો નથી).</p>`
+}
+function vizStations(el) {
+  const order = ['cli', 'boot', 'runner', 'turn', 'model1', 'tool', 'pipe', 'model2', 'end', 'out']
+  el.innerHTML = `<ol class="zoom">${order.map(id => `<li><button type="button" data-st="${id}">${esc(ST[id].dish)} — <code>${esc(ST[id].tech)}</code></button></li>`).join('')}</ol><p class="cap">Click → ઉપરનું ચિત્ર "સામાન્ય" ઘટનામાં એ સ્ટેશન પર જશે.</p>`
+  el.querySelectorAll('[data-st]').forEach(b => b.onclick = () => {
+    if (scen !== 'normal') loadScenario('normal')
+    const i = evs.findIndex(e => e.node === b.dataset.st)
+    idx = i; select(b.dataset.st, false); paint(false)
+    $('#flow').scrollIntoView({ block: 'center' })
+  })
+}
+function vizPlugins(el) {
+  const pend = new Map(DATA.nofs.map(x => [x.id, x.wait])), sp = new Map(DATA.nosp.map(x => [x.id, x]))
+  let state = 'all'
+  const draw = () => {
+    const html = DATA.rows.map(r => {
+      let c = '', tip = r.id + ' · ' + r.layer
+      if (state === 'fs') { if (r.id === 'fs-sandbox') c = 'off', tip += ' — બંધ'; else if (pend.has(r.id)) c = 'pend', tip += ' — રાહ: ' + pend.get(r.id) }
+      if (state === 'sp') { if (r.id === 'system-prompt') c = 'off', tip += ' — બંધ'; else if (sp.has(r.id)) { c = sp.get(r.id).required ? 'fatal' : 'pend'; tip += ' — રાહ: ' + sp.get(r.id).wait + (sp.get(r.id).required ? ' (REQUIRED)' : '') } }
+      return `<span class="dot ${c}" title="${esc(tip)}"></span>`
+    }).join('')
+    const msg = state === 'all' ? '<b>101 rows</b> — headless profile (base + headless bundles). બધા ચાલુ.'
+      : state === 'fs' ? '<b style="color:var(--haldi)">dsh: warning: 18 entries did not activate</b> — app ચાલે, પણ file tools વગર.'
+      : '<b style="color:var(--chili)">dsh: startup failed: 2 required plugins did not activate</b> — agent-loop, tool-executor-native. Exit 1.'
+    el.querySelector('.dots').innerHTML = html
+    el.querySelector('.statusline').innerHTML = msg
+    el.querySelectorAll('[data-p]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.p === state)))
+  }
+  el.innerHTML = `<div class="tools"><button type="button" data-p="all">બધું ચાલુ</button><button type="button" data-p="fs">fs-sandbox બંધ</button><button type="button" data-p="sp">system-prompt બંધ</button></div>
+    <div class="dots"></div><div class="legend"><span><i style="background:var(--leaf)"></i>active</span><span><i style="background:var(--haldi-strong)"></i>pending (રાહ)</span><span><i style="background:var(--chili)"></i>required ગેરહાજર</span><span><i style="background:var(--dim)"></i>બંધ</span></div>
+    <p class="statusline"></p>
+    <div class="layers">${[['1 બંડલ', 'dsh-base, dsh-headless', 'sky'], ['2 પ્રોફાઇલ', 'profile cordis.patch.yml', 'sky'], ['3 ઘર', '$DSH_HOME/cordis.patch.yml', 'haldi'], ['4 પેચ', '--patch overlays', 'kesar'], ['5 ટેલિમેટ્રી', 'switch', 'chili']].map(([a, b, t]) => `<div class="layer t-${t}">${a}<span>${b}</span></div>`).join('')}</div>
+    <p class="cap">🧪 evidence/dump.yml, nofs.err, nosp.err. Layers: નીચેનું પાછળ આવે — <b>પાછળનું જીતે</b>.</p>`
+  el.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { state = b.dataset.p; draw() })
+  draw()
+}
+function vizPipe(el) {
+  const kinds = [['ok', 'સાચી ચિઠ્ઠી', null], ['unknown', 'ખોટું ખાનું', 'resolve'], ['invalid', 'અધૂરું ફોર્મ', 'validate'], ['escalate', 'વધુ છૂટ માંગી', 'policy'], ['sandbox', '/etc માં લખવું', 'body']]
+  const RES = { ok: '✔ <code>1: # DeepSeek Harness…</code>', unknown: '✘ Error: unknown tool "read_everything" (UNKNOWN_TOOL)', invalid: '✘ Error: invalid arguments: missing required property "file_path" (INVALID_ARGS)', escalate: '✘ … requires approval, but no approval channel is available', sandbox: '✘ Error: [sandbox: file access denied under workspace-write mode] (FS_SANDBOX_DENIED)' }
+  let k = 'ok'
+  const short = ['parse', 'tool/call', 'નીતિ', 'શોધ', 'schema', 'body', 'render', 'tool/result']
+  const draw = () => {
+    const stop = kinds.find(x => x[0] === k)[2], si = stop ? PIPE.findIndex(p => p.id === stop) : -1
+    el.querySelector('.stages').innerHTML = PIPE.map((p, i) => {
+      let c = 'pass'
+      if (si >= 0) c = i < si ? 'pass' : i === si ? 'stop' : (p.id === 'render' || p.id === 'result') ? 'pass' : 'skip'
+      return `<span class="stage-chip ${c}" title="${esc(p.n)}">${short[i]}</span>${i < PIPE.length - 1 ? '<span class="arrow">→</span>' : ''}`
+    }).join('')
+    el.querySelector('.statusline').innerHTML = RES[k] + (si >= 0 ? ' — <b>turn ચાલુ રહે</b>, model ને સુધારવાની તક.' : '')
+    el.querySelectorAll('[data-k]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === k)))
+  }
+  el.innerHTML = `<div class="tools">${kinds.map(([id, l]) => `<button type="button" data-k="${id}">${l}</button>`).join('')}</div>
+    <div class="stages"></div><p class="statusline"></p>
+    <svg viewBox="0 0 560 120" role="img" aria-label="SSE થી StreamChunk">
+      <text x="0" y="16" font-size="12" fill="var(--muted)">Provider (wire)</text><text x="380" y="16" font-size="12" fill="var(--muted)">Harness (StreamChunk)</text>
+      ${['data: content_block_start', 'data: input_json_delta', 'data: message_delta stop_reason=tool_use'].map((t, i) => `<rect x="0" y="${26 + i * 30}" width="230" height="22" rx="6" fill="var(--sky-tint)"/><text x="8" y="${41 + i * 30}" font-size="11" font-family="var(--font-mono)">${t}</text>`).join('')}
+      <text x="262" y="66" font-size="12" font-weight="700" fill="var(--accent)">translate →</text>
+      ${['block-start', 'tool-call-delta', 'finish: tool-calls'].map((t, i) => `<rect x="370" y="${26 + i * 30}" width="190" height="22" rx="6" fill="var(--haldi-tint)"/><text x="378" y="${41 + i * 30}" font-size="11" font-family="var(--font-mono)">${t}</text>`).join('')}
+    </svg><p class="cap">દુભાષિયો ફક્ત ભાષા બદલે, અર્થ નહીં: loop કદી DeepSeek wire format જાણતો નથી. (stop_reason mapping: tool_use → tool-calls, end_turn → stop.)</p>`
+  el.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { k = b.dataset.k; draw() })
+  draw()
+}
+function parseCsvSimple(text) {
+  return text.trim().split('\n').map(line => { const out = []; let cur = '', q = false; for (const ch of line) { if (ch === '"') q = !q; else if (ch === ',' && !q) { out.push(cur); cur = '' } else cur += ch } out.push(cur); return out })
+}
+function vizCsv(el) {
+  const A = parseCsvSimple(DATA.csvA), B = parseCsvSimple(DATA.csvB)
+  const toneA = { 2: 'leaf', 3: 'haldi', 4: 'sky', 5: 'kesar', 6: 'kesar', 7: 'chili' }, toneB = { 2: 'leaf', 3: 'haldi', 4: 'kesar', 5: 'sky' }
+  const tbl = (rows, tones, name) => `<div class="tbl"><table><thead><tr><th>L</th>${rows[0].map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.slice(1).map((r, i) => `<tr class="r t-${tones[i + 2]}"><td class="ln">${i + 2}</td>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`
+  el.innerHTML = `<div class="tbls">${tbl(A, toneA)}${tbl(B, toneB)}</div><pre class="report">${esc(DATA.csvReport)}</pre><p class="cap">🧪 export-a.csv (આપણી નોંધ) અને export-b.csv (supplier) — model ને ગયેલો સાચો report.</p>`
+}
+function vizRetry(el) {
+  const ev = DATA.scenarios.find(s => s.id === 'title').events
+  const waits = [], r = ev.filter(e => /llm\/retry/.test(e.text))
+  for (let i = 0; i < r.length - 1; i++) if (/llm\/retry$/.test(r[i].text) && /retry-started/.test(r[i + 1].text)) waits.push((r[i + 1].t - r[i].t) / 1000)
+  const max = 10, W = 560
+  const bars = waits.map((w, i) => `<text x="0" y="${i * 28 + 18}" font-size="12">retry ${i + 1}</text><rect x="64" y="${i * 28 + 6}" width="${(w / max) * (W - 140)}" height="16" rx="5" fill="var(--kesar)"/><text x="${70 + (w / max) * (W - 140)}" y="${i * 28 + 18}" font-size="11" fill="var(--muted)">${w.toFixed(2)} s</text>`).join('')
+  const exps = [['read README.md (અંદર)', 'leaf', '✔', 150, 120], ['read /etc/os-release (બહાર)', 'leaf', '✔', 470, 50], ['write /etc/book-test.txt', 'chili', '✘ FS_SANDBOX_DENIED', 470, 105], ['bash touch /etc/… (bwrap નથી)', 'chili', '✘ fail closed', 470, 160], ['escalate (પપ્પા નથી)', 'chili', '✘ approval unavailable', 470, 215]]
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${waits.length * 28 + 8}" role="img" aria-label="Retry રાહ">${bars}</svg>
+    <p class="cap">🧪 three-calls-title-on-exhausted.err: llm/retry → llm/retry-started વચ્ચેનો સાચો સમય. Defaults: 5 retries, 500ms, બમણું, 10s મહત્તમ, 10% jitter. AUTH (401) કદી retry નહીં.</p>
+    <svg viewBox="0 0 640 250" role="img" aria-label="Sandbox સીમા">
+      <circle cx="150" cy="125" r="105" fill="var(--leaf-tint)" stroke="var(--leaf)" stroke-width="2"/>
+      <text x="150" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="var(--leaf)">workspace (પોતાનું રસોડું)</text>
+      <text x="150" y="128" text-anchor="middle" font-size="12">🧑‍🍳 agent</text>
+      ${exps.map(([t, tone, res, x, y]) => `<line x1="175" y1="125" x2="${x - 8}" y2="${y}" stroke="var(--${tone})" stroke-width="2" ${tone === 'chili' ? 'stroke-dasharray="5 4"' : ''}/>
+        <text x="${x}" y="${y}" font-size="11.5" ${x < 300 ? 'text-anchor="middle"' : ''}>${esc(t)}</text><text x="${x}" y="${y + 15}" font-size="11" font-weight="700" fill="var(--${tone})" ${x < 300 ? 'text-anchor="middle"' : ''}>${esc(res)}</text>`).join('')}
+    </svg><p class="cap">🧪 પ્રકરણ 5 ના પાંચ પ્રયોગ. "This is containment, not a security boundary" — secrets વાળા machine પર disposable VM વાપરો.</p>`
+}
+function vizMeasure(el) {
+  const M = DATA.measure, W = 560, x0 = 150, maxMs = 18
+  const rows = [['off', 'Title બંધ'], ['on', 'Title ચાલુ']]
+  const med = a => { const s = [...a].sort((p, q) => p - q); return s[Math.floor(s.length / 2)] }
+  const svg = rows.map(([k, lbl], r) => {
+    const ms = M.filter(m => m.title === k).map(m => m.tools[0].ms), calls = M.find(m => m.title === k).modelCalls, md = med(ms), y = 30 + r * 70
+    return `<text x="0" y="${y + 4}" font-size="13" font-weight="700">${lbl}</text><text x="0" y="${y + 22}" font-size="11" fill="var(--muted)">${calls} model calls × 5 runs</text>
+      <line x1="${x0}" y1="${y}" x2="${W - 10}" y2="${y}" stroke="var(--rule)"/>
+      ${ms.map(v => `<circle cx="${x0 + (v / maxMs) * (W - x0 - 20)}" cy="${y}" r="7" fill="var(--${k === 'off' ? 'leaf' : 'kesar'})" opacity=".75"><title>${v} ms</title></circle>`).join('')}
+      <line x1="${x0 + (md / maxMs) * (W - x0 - 20)}" y1="${y - 14}" x2="${x0 + (md / maxMs) * (W - x0 - 20)}" y2="${y + 14}" stroke="var(--ink)" stroke-width="2"/>
+      <text x="${x0 + (md / maxMs) * (W - x0 - 20)}" y="${y + 30}" text-anchor="middle" font-size="11" fill="var(--muted)">median ${md} ms</text>`
+  }).join('') + [0, 5, 10, 15].map(v => `<text x="${x0 + (v / maxMs) * (W - x0 - 20)}" y="182" text-anchor="middle" font-size="10" fill="var(--muted)">${v}ms</text>`).join('')
+  el.innerHTML = `<svg viewBox="0 0 ${W} 190" role="img" aria-label="read latency">${svg}</svg>
+    <div class="tools"><button type="button" id="patch-btn" aria-pressed="false">headless patch: બંધ</button></div><p class="statusline" id="patch-out"></p>`
+  const out = el.querySelector('#patch-out'), btn = el.querySelector('#patch-btn')
+  const draw = on => {
+    btn.textContent = 'headless patch: ' + (on ? 'ચાલુ' : 'બંધ'); btn.setAttribute('aria-pressed', String(on))
+    out.innerHTML = on ? '<b style="color:var(--leaf)">Tests 1 passed (1)</b> · Ctrl+C પછી stderr સ્વચ્છ, exit 130 · headless suite 136/136'
+      : '<b style="color:var(--chili)">Tests 1 failed (1)</b> · AssertionError: expected [ 1 ] to deeply equal [] · stderr: flush on a closed handle'
+  }
+  let on = false; btn.onclick = () => { on = !on; draw(on) }; draw(on)
+}
+function vizRecon(el) {
+  const bank = parseCsvSimple(DATA.bank), tally = parseCsvSimple(DATA.tally)
+  const amtB = r => r[5] ? '+' + r[5] : r[4] ? '−' + r[4] : '?', amtT = r => r[5] ? '+' + r[5] : r[6] ? '−' + r[6] : '?'
+  const RES = {
+    3: { links: [[2, 2, 'R1', 'leaf'], [3, 3, 'R1', 'leaf'], [4, 4, 'R2', 'sky'], [5, 5, 'A1', 'kesar'], [5, 6, 'A1', 'kesar']], bank: { 6: 'U1', 7: 'D1', 8: 'D1', 9: 'V1', 10: 'V1', 11: 'V1' }, tally: { 7: 'U1', 8: 'U1', 9: 'V1' }, sum: 'matched 3 (₹11049.50), ambiguous 1, unmatched bank 1, unmatched tally 2, duplicates 1, rejected 4' },
+    0: { links: [[2, 2, 'R1', 'leaf'], [3, 3, 'R1', 'leaf'], [5, 5, 'R2', 'sky']], bank: { 4: 'U1', 6: 'U1', 7: 'D1', 8: 'D1', 9: 'V1', 10: 'V1', 11: 'V1' }, tally: { 4: 'U1', 6: 'U1', 7: 'U1', 8: 'U1', 9: 'V1' }, sum: 'matched 3 (₹18749.50), ambiguous 0, unmatched bank 2, unmatched tally 4 — window એ business નિર્ણય છે' },
+  }
+  const TONE = { U1: 'sky', D1: 'kesar', V1: 'chili' }
+  let w = 3
+  const draw = () => {
+    const R = RES[w], W = 640, rowH = 30, top = 30
+    const by = l => top + (l - 2) * rowH, ty = l => top + (l - 2) * rowH
+    const left = bank.slice(1).map((r, i) => { const l = i + 2, tag = R.bank[l]; return `<rect x="0" y="${by(l) - 15}" width="250" height="24" rx="6" fill="var(--${tag ? TONE[tag] + '-tint' : 'bg'})"/><text x="6" y="${by(l) + 2}" font-size="10.5">L${l} ${esc((r[2] || '').slice(0, 20))}</text><text x="244" y="${by(l) + 2}" font-size="10.5" text-anchor="end" font-family="var(--font-mono)">${esc(amtB(r))}</text>${tag ? `<text x="256" y="${by(l) + 2}" font-size="10" font-weight="700" fill="var(--${TONE[tag]})">${tag}</text>` : ''}` }).join('')
+    const right = tally.slice(1).map((r, i) => { const l = i + 2, tag = R.tally[l]; return `<rect x="390" y="${ty(l) - 15}" width="250" height="24" rx="6" fill="var(--${tag ? TONE[tag] + '-tint' : 'bg'})"/><text x="396" y="${ty(l) + 2}" font-size="10.5">L${l} ${esc((r[1] || '').slice(0, 18))}</text><text x="634" y="${ty(l) + 2}" font-size="10.5" text-anchor="end" font-family="var(--font-mono)">${esc(amtT(r))}</text>${tag ? `<text x="362" y="${ty(l) + 2}" font-size="10" font-weight="700" fill="var(--${TONE[tag]})">${tag}</text>` : ''}` }).join('')
+    const links = R.links.map(([b, t, rule, tone]) => `<path d="M250,${by(b) - 3} C320,${by(b) - 3} 320,${ty(t) - 3} 390,${ty(t) - 3}" fill="none" stroke="var(--${tone})" stroke-width="3" ${rule === 'A1' ? 'stroke-dasharray="6 4"' : ''}/><text x="320" y="${(by(b) + ty(t)) / 2 - 6}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--${tone})">${rule}</text>`).join('')
+    el.querySelector('svg').innerHTML = `<text x="0" y="12" font-size="12" font-weight="700" fill="var(--muted)">Bank statement</text><text x="640" y="12" font-size="12" font-weight="700" fill="var(--muted)" text-anchor="end">Tally bank ledger</text>${left}${right}${links}`
+    el.querySelector('svg').setAttribute('viewBox', `0 0 ${W} ${top + 10 * rowH}`)
+    el.querySelector('.statusline').textContent = R.sum
+    el.querySelectorAll('[data-w]').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.w) === w)))
+  }
+  el.innerHTML = `<div class="tools"><span style="font-size:.85rem;color:var(--muted);align-self:center">window_days:</span><button type="button" data-w="3">3 (default)</button><button type="button" data-w="0">0</button></div>
+    <svg role="img" aria-label="Bank અને Tally નો મેળ"></svg><p class="statusline"></p>
+    <details><summary>Golden report (window 3) — byte-identical 🧪</summary><pre class="report">${esc(DATA.golden)}</pre></details>
+    <p class="cap">+ = ખાતામાં આવ્યા, − = ગયા (બંને ચોપડા "bank account માં +" ની એક જ ભાષામાં). Window 0 નાં પરિણામ: પરિશિષ્ટ D, Lab 7.</p>`
+  el.querySelectorAll('[data-w]').forEach(b => b.onclick = () => { w = Number(b.dataset.w); draw() })
+  draw()
+}
+
+/* ======================= boot ======================= */
+$('#scen').innerHTML = Object.entries(SCEN).map(([id, s]) => `<button type="button" class="${s.cls}" data-s="${id}" aria-pressed="false">${s.label}</button>`).join('')
+$('#scen').querySelectorAll('button').forEach(b => b.onclick = () => loadScenario(b.dataset.s))
+$('#msgs').innerHTML = '<span class="lbl">Model ને જતા messages:</span>' + COLS.map(([c, t], j) => `<span class="chip t-${t}" data-col="${j}">${c}</span>`).join('') + '<span class="count" id="msgcount"></span>'
+$('#msgs').querySelectorAll('.chip').forEach(c => { c.onmouseenter = () => hlCol(c.dataset.col, true); c.onmouseleave = () => hlCol(c.dataset.col, false) })
+$('#b-play').onclick = play
+$('#b-step').onclick = () => { stop(); step() }
+$('#b-reset').onclick = () => { stop(); idx = -1; selected = null; renderDetail(); paint(false) }
+$('#speed').onchange = () => { if (timer) { stop(); play() } }
+const setMode = m => { mode = m; $('#m-dish').setAttribute('aria-pressed', String(m === 'dish')); $('#m-tech').setAttribute('aria-pressed', String(m === 'tech')); renderFlow(); renderDetail() }
+$('#m-dish').onclick = () => setMode('dish'); $('#m-tech').onclick = () => setMode('tech')
+let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(renderFlow, 150) })
+loadScenario('normal')
+renderFlow()
+renderSections()
+// open in a meaningful state: the first model call of the normal run, already reached
+idx = evs.findIndex(e => e.kind === 'call'); selected = 'model1'; renderDetail(); paint(false)
+</script>
