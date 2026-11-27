@@ -1,5 +1,7 @@
 # સમગ્ર નકશો — આખું પુસ્તક એક નજરે
 
+![DeepSeek Harness architecture: request, agent loop, model adapter, tools, session log, run controls, and observability.](images/deepseek-harness-overview.png)
+
 > **આ પાનું પહેલાં વાંચો.** અહીં આખું પુસ્તક એક જ **વાર્તા** અને એક જ **નકશા** માં જોડાયેલું છે.
 > આ પુસ્તકમાં વાર્તા અને technical અલગ નથી: ભોજનાલયમાં જે **ઘટના** બને છે, તે જ harness નો **નિયમ** છે, અને બંને એક જ કારણથી બન્યા છે.
 > દરેક પ્રકરણ **દૃશ્યો** માં ચાલે છે, અને દરેક દૃશ્ય ચાર પગથિયાંમાં: 🎬 ઘટના → ❓ આરવનો પ્રશ્ન → 💻 code માં → 🔬 expert નજર. પછી 🧪 Lab → 🔮 આગાહી → 🩺 નિષ્ફળતા → ✅ સાર → 🧠 Mastery check → 🎬 આગળ શું.
