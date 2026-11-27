@@ -162,9 +162,10 @@ for (const [file, view] of VIEWS) {
       },
       image({ href, text: alt, title }) {
         const path = resolve(ROOT, dirname(file), href)
-        if (!path.startsWith(illustrationRoot + '/') || !path.endsWith('.webp')) return false
+        if (!path.startsWith(illustrationRoot + '/') || !/\.(webp|png)$/.test(path)) return false
+        const mime = path.endsWith('.png') ? 'image/png' : 'image/webp'
         const data = readFileSync(path).toString('base64')
-        return `<img class="book-illustration" src="data:image/webp;base64,${data}" alt="${esc(alt)}"${title ? ` title="${esc(title)}"` : ''} loading="lazy" decoding="async">`
+        return `<img class="book-illustration" src="data:${mime};base64,${data}" alt="${esc(alt)}"${title ? ` title="${esc(title)}"` : ''} loading="lazy" decoding="async">`
       },
       code({ text, lang }) {
         if (lang === 'mermaid') return `<pre class="mermaid">${esc(text)}</pre>\n`
